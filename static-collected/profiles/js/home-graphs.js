@@ -1,4 +1,4 @@
-google.charts.load('current', { 'packages': ['corechart', 'geochart'], 'mapsApiKey': 'REDACTED_GOOGLE_KEY' });
+google.charts.load('current', { 'packages': ['corechart', 'geochart'] });
 google.charts.setOnLoadCallback(init);
 
 function drawPieChart(divId, nbProfiles, totProfiles, label, color1) {
