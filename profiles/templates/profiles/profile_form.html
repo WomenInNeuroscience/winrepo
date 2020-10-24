@@ -5,7 +5,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-	{{ block.super }} - Edit Profile
+	{{ block.super }} - Create Account
 {% endblock title %}
 
 {% block css %}
@@ -25,11 +25,10 @@
 {% endif %}
 
 {% block test %}
-  <h2>Create profile</h2>
+  <h2>Create Account</h2>
   <form method="post">
     {% csrf_token %}
-	{{ user_form|crispy }}
-    {{ profile_form|crispy }}
+	{{ form|crispy }}
     <button type="submit" class="btn btn-primary pill-btn">Sign up</button>
   </form>
 {% endblock test %}

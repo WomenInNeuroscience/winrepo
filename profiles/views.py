@@ -11,15 +11,17 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, FormView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.shortcuts import render
+from django.shortcuts import render, redirect, render_to_response
 from django.contrib import messages
 
 from dal.autocomplete import Select2QuerySetView
 from rest_framework import viewsets
 
 from .models import Profile, Recommendation, Country
-from .forms import CreateProfileModelForm, RecommendModelForm,CreateUserForm
+from .forms import CreateProfileModelForm, RecommendModelForm, CreateUserForm
 from .serializers import CountrySerializer, PositionsCountSerializer
+from django.contrib.auth import login, authenticate
+from django.template import RequestContext
 
 class Home(ListView):
     template_name = 'profiles/home.html'
@@ -122,30 +124,84 @@ class ListProfiles(ListView):
 class ProfileDetail(DetailView):
     model = Profile
 
-#@login_required
 def create_profile(request):
+    form = CreateUserForm(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()
+            user.profiles_profile.name = form.cleaned_data.get('first_name')
+            user.profiles_profile.last_name = form.cleaned_data.get('last_name')
+            user.profiles_profile.email = form.cleaned_data.get('email')
+            user.profiles_profile.country = form.cleaned_data.get('country')
+            user.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            messages.success(request, ('Your profile was successfully updated!'))
+            return redirect('profiles:index')
+        else:
+            messages.error(request, ('Profile not created!'))    
+    else:
+        form = CreateUserForm()
+    return render(request, 'profiles/profile_form.html', {'form': form})
+
+def user_login(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+          username = request.POST['username']
+          password = request.POST['password']
+          user = authenticate(username=username, password=password)
+          if user is not None:
+              if user.is_active:
+                  login(request, user)
+                  # Redirect to index page.
+                  return redirect("profiles:detail")
+              else:
+                  # Return a 'disabled account' error message
+                  messages.error(request, ('No account!'))
+          else:
+              # Return an 'invalid login' error message.
+              print("invalid login details " + username + " " + password)
+              return render_to_response('login.html', {}, context)
+    else:
+        # the login is a  GET request, so just show the user the login form.
+        return render_to_response('login.html', {}, context)
+
+"""
+def create_profile(request):
+    #context = RequestContext(request)
+    #registered = False
     if request.method == 'POST':
         #user_form = CreateUserForm(request.POST, instance=request.user)
         #profile_form = CreateProfileModelForm(request.POST, instance=request.user.profile)
-        user_form = CreateUserForm(request.POST)
-        profile_form = CreateProfileModelForm(request.POST)
+        user_form = CreateUserForm(data = request.POST)
+        profile_form = CreateProfileModelForm(data = request.POST)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
-            profile = profile_form.save(commit=False)
+            # form brings back a plain text string, not an encrypted password
+            pw = user_form.cleaned_data.get('password1')
+            # thus we need to use set password to encrypt the password string
+            user.set_password(pw)
+            user.save()
+            profile = profile_form.save(commit = False)
             profile.user = user
             profile.save()
 
-            username = profile_form.cleaned_data.get('username')
-            password = profile_form.cleaned_data.get('password1')
+            username = user_form.cleaned_data.get('username')
+            password = user_form.cleaned_data.get('password1')
             
             user = authenticate(username=username,password=password)
             login(request, user)
-
+            #registered = True
             messages.success(request, ('Your profile was successfully updated!'))
             return redirect('index')
         else:
-            messages.error(request, ('Please correct the error below.'))
+            #print(user_form.errors, profile_form.errors)
+            messages.error(request, ('Profile not created!'))
     else:
+        messages.error(request, ('Failed!'))
         #user_form = CreateUserForm(instance=request.user)
         #profile_form = CreateProfileModelForm(instance=request.user.profile)
         user_form = CreateUserForm()
@@ -153,7 +209,7 @@ def create_profile(request):
     return render(request, 'profiles/profile_form.html', {
         'user_form': user_form,
         'profile_form': profile_form
-    })
+    }) """
 
 class UpdateProfile(SuccessMessageMixin, UpdateView):
     model = Profile

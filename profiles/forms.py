@@ -5,29 +5,42 @@ from captcha.fields import ReCaptchaField
 from dal.autocomplete import ModelSelect2
 from captcha.widgets import ReCaptchaV3
 
-from .models import Profile, Recommendation, User
+from .models import Profile, Recommendation, User, Country
 from django.contrib.auth.forms import UserCreationForm
 
 
 class CaptchaForm(forms.Form):
     captcha = ReCaptchaField(widget=ReCaptchaV3, label=False)
 
+
 class CreateUserForm(UserCreationForm):
+    first_name = forms.CharField(max_length=100, help_text='First Name')
+    last_name = forms.CharField(max_length=100, help_text='Last Name')
+    email = forms.EmailField(max_length=150, help_text='Email')
+    country = forms.CharField(max_length=100, help_text='Country')
+
     class Meta:
         model = User
-        fields = ('username', 'password1','password2')
+        fields = ('first_name', 'last_name',
+                'email', 'username',
+                'password1', 'password2',
+                'country')
+
+""" class CreateUserForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'password1','password2') """    
 
 class CreateProfileModelForm(CaptchaForm, forms.ModelForm):
     use_required_attribute = False
 
     class Meta:
         model = Profile
-        fields = [
+        fields = (
             'name',
             'last_name',
             'institution',
             'country',
-            'email',
             'webpage',
             'position',
             'grad_month',
@@ -37,7 +50,7 @@ class CreateProfileModelForm(CaptchaForm, forms.ModelForm):
             'methods',
             'domains',
             'keywords',
-        ]
+        )
         labels = {
             'name': _('First Name(s)'),
             'last_name': _('Last Name(s)'),

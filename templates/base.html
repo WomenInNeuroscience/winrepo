@@ -59,11 +59,14 @@
 				<li class="nav-item {% block nav-home-classes %}{% endblock nav-home-classes %}">
 					<a class="nav-link h6" href="{% url 'profiles:home' %}">Home</a>
 				</li>
+				<li class="nav-item {% block nav-create-classes %}{% endblock nav-create-classes %}">
+					<a class="nav-link h6" href="{% url 'profiles:signup' %}">Create account</a>
+				</li>
+				<li class="nav-item {% block nav-login-classes %}{% endblock nav-login-classes %}">
+					<a class="nav-link h6" href="{% url 'profiles:login' %}">Sign In</a>
 				<li class="nav-item {% block nav-repository-classes %}{% endblock nav-repository-classes %}">
 					<a class="nav-link h6" href="{% url 'profiles:index' %}">Repository</a>
 				</li>
-				<li class="nav-item {% block nav-create-classes %}{% endblock nav-create-classes %}">
-					<a class="nav-link h6" href="{% url 'profiles:signup' %}">Create profile</a>
 				</li>
 				<li class="nav-item {% block nav-recommend-classes %}{% endblock nav-recommend-classes %}">
 					<a class="nav-link h6" href="{% url 'profiles:recommend' %}">Recommend</a>

@@ -141,26 +141,25 @@ class Profile(models.Model):
     def get_domains_choices(cls):
         return cls.DOMAINS_CHOICES
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=False)
     last_name = models.CharField(max_length=100, blank=False)
     email = models.EmailField(blank=False)
-    webpage = models.URLField(blank=True)
-    institution = models.CharField(max_length=100, blank=False)
+    webpage = models.URLField(blank=True,default='')
+    institution = models.CharField(max_length=100, blank=False,default='')
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     position = models.CharField(max_length=50, choices=POSITION_CHOICES,
-                                blank=True)
+                                blank=True,default='')
     grad_month = models.CharField(max_length=2, choices=MONTHS_CHOICES,
-                                  blank=True)
-    grad_year = models.CharField(max_length=4, blank=True)
-    brain_structure = MultiSelectField(choices=STRUCTURE_CHOICES, blank=True)
-    modalities = MultiSelectField(choices=MODALITIES_CHOICES, blank=True)
-    methods = MultiSelectField(choices=METHODS_CHOICES, blank=True)
-    domains = MultiSelectField(choices=DOMAINS_CHOICES, blank=True)
-    keywords = models.CharField(max_length=250, blank=True)
+                                  blank=True,default='')
+    grad_year = models.CharField(max_length=4, blank=True,default='')
+    brain_structure = MultiSelectField(choices=STRUCTURE_CHOICES, blank=True,default='')
+    modalities = MultiSelectField(choices=MODALITIES_CHOICES, blank=True,default='')
+    methods = MultiSelectField(choices=METHODS_CHOICES, blank=True,default='')
+    domains = MultiSelectField(choices=DOMAINS_CHOICES, blank=True,default='')
+    keywords = models.CharField(max_length=250, blank=True,default='')
     publish_date = models.DateTimeField(default=timezone.now)
     last_updated = models.DateTimeField(auto_now=True)
-
 
     class Meta:
         ordering = ['name', 'institution', 'last_updated']
@@ -197,7 +196,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save() 
+    instance.profile.save()
+
+""" @receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()  """   
 
 class Recommendation(models.Model):
     PHD = 'PhD student'

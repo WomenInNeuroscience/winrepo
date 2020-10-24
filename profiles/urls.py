@@ -1,6 +1,7 @@
 from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic import TemplateView
+from django.contrib.auth import views as auth_views
 
 from rest_framework import routers
 
@@ -29,7 +30,9 @@ urlpatterns = [
     path('list/', views.ListProfiles.as_view(),
          name='index'),
     path('signup/', views.create_profile, 
-         name='signup'),     
+         name='signup'),
+    path('login/', views.user_login, 
+         name='login'),     
     path('list/<int:pk>/', views.ProfileDetail.as_view(),
          name='detail'),
     path('list/<int:pk>/edit', views.UpdateProfile.as_view(),
