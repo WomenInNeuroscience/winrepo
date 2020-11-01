@@ -14,22 +14,29 @@ class CaptchaForm(forms.Form):
 
 
 class CreateUserForm(UserCreationForm):
-    first_name = forms.CharField(max_length=100, help_text='First Name')
-    last_name = forms.CharField(max_length=100, help_text='Last Name')
-    email = forms.EmailField(max_length=150, help_text='Email')
-    country = forms.CharField(max_length=100, help_text='Country')
+    first_name = forms.CharField(max_length=100, help_text='First Name(s)')
+    last_name = forms.CharField(max_length=100, help_text='Last Name(s)')
+    email = forms.EmailField(max_length=150)
+    institution = forms.EmailField(max_length=150)
+    country = forms.CharField(max_length=100, help_text='Country of the institution')
 
     class Meta:
         model = User
         fields = ('first_name', 'last_name',
-                'email', 'username',
+                'email', 'institution', 
+                'country','username',
                 'password1', 'password2',
-                'country')
+                )     
 
-""" class CreateUserForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ('username', 'password1','password2') """    
+        widgets = {
+                'country': ModelSelect2(
+                    url='profiles:countries_autocomplete',
+                    attrs={
+                        # 'data-minimum-input-length': 2,
+                        'data-placeholder': 'Search Country...',
+                    },
+                )
+            }            
 
 class CreateProfileModelForm(CaptchaForm, forms.ModelForm):
     use_required_attribute = False

@@ -133,6 +133,7 @@ def create_profile(request):
             user.profiles_profile.name = form.cleaned_data.get('first_name')
             user.profiles_profile.last_name = form.cleaned_data.get('last_name')
             user.profiles_profile.email = form.cleaned_data.get('email')
+            user.profiles_profile.institution = form.cleaned_data.get('institution')
             user.profiles_profile.country = form.cleaned_data.get('country')
             user.save()
             username = form.cleaned_data.get('username')

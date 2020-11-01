@@ -151,7 +151,7 @@ class Profile(models.Model):
     position = models.CharField(max_length=50, choices=POSITION_CHOICES,
                                 blank=True,default='')
     grad_month = models.CharField(max_length=2, choices=MONTHS_CHOICES,
-                                  blank=True,default='')
+                                  blank=True, default='')
     grad_year = models.CharField(max_length=4, blank=True,default='')
     brain_structure = MultiSelectField(choices=STRUCTURE_CHOICES, blank=True,default='')
     modalities = MultiSelectField(choices=MODALITIES_CHOICES, blank=True,default='')
@@ -189,20 +189,20 @@ class Profile(models.Model):
     def grad_month_labels(self):
         return dict(self.MONTHS_CHOICES).get(self.grad_month)
 
-@receiver(post_save, sender=User)
+""" @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    instance.profile.save() """
 
-""" @receiver(post_save, sender=User)
+@receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-    instance.profile.save()  """   
+    instance.profile.save()    
 
 class Recommendation(models.Model):
     PHD = 'PhD student'
