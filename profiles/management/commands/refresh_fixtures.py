@@ -5,7 +5,7 @@ from django.core.management.color import no_style
 from django.core.management.base import BaseCommand, CommandError
 
 import winrepo.settings as settings
-from profiles.models import Country, Profile
+from profiles.models import Country, Profile, Recommendation
 
 class Command(BaseCommand):
     help = 'Re-create fixtures based on models'
@@ -61,10 +61,9 @@ class Command(BaseCommand):
 
         Profile.objects.all().delete()
 
-        profiles = kwargs['profiles']
-        for _ in range(profiles):
-
-            position = random.choice(Profile.POSITION_CHOICES)[0]
+        n_profiles = kwargs['profiles']
+        profiles = []
+        for _ in range(n_profiles):
 
             brain_structure = random.choice(Profile.STRUCTURE_CHOICES)[0]
             modalities = random.choice(Profile.MODALITIES_CHOICES)[0]
@@ -74,13 +73,20 @@ class Command(BaseCommand):
             grad_month = random.choice(Profile.MONTHS_CHOICES)[0]
             grad_year = str(random.randint(1950, 2020))
 
-            fullname = random.choice(names) + ' ' + random.choice(surnames)
+            name = random.choice(names)
+            surname = random.choice(surnames)
+            fullname = name + ' ' + surname
+            institution = random.choice(institutions)
+            slug = fullname.lower().replace(' ', '-')
+            email = slug + '@' + institution.lower().replace(' ', '-') + '.edu'
 
-            Profile(
+            position = random.choice(Profile.POSITION_CHOICES)[0]
+
+            profile = Profile(
                 name=fullname,
-                email=random.choice(surnames),
-                webpage=fullname.lower().replace(' ', '-') + '.me',
-                institution=random.choice(institutions),
+                email=email,
+                webpage=slug + '.me',
+                institution=institution,
                 country=random.choice(countries),
                 position=position,
                 grad_month=grad_month,
@@ -90,6 +96,43 @@ class Command(BaseCommand):
                 methods=methods,
                 domains=domains,
                 keywords='',
+            )
+            profiles += [profile]
+            profile.save()
+
+        recommendation_words = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' \
+        'Curabitur maximus, elit in ornare convallis, eros mi pharetra erat, ' \
+        'sed dictum dolor nulla viverra odio. Vivamus pulvinar blandit massa ' \
+        'ac facilisis. Ut et odio fringilla, dictum tellus non, aliquam est.' \
+        'Maecenas aliquet in sem vel vestibulum. Nullam ornare pulvinar malesuada. ' \
+        'Donec massa urna, dapibus ut arcu ut, aliquet consequat orci. Donec ' \
+        'gravida ut ligula fringilla ullamcorper. Mauris quis lacinia augue. ' \
+        'In hac habitasse platea dictumst. Praesent et iaculis neque. ' \
+        'Vestibulum dignissim.'.split(' ')
+
+        for profile in profiles:
+
+            name = random.choice(names)
+            surname = random.choice(surnames)
+            fullname = name + ' ' + surname
+            institution = random.choice(institutions)
+            slug = fullname.lower().replace(' ', '-')
+            email = slug + '@' + institution.lower().replace(' ', '-') + '.edu'
+            position = random.choice(Profile.POSITION_CHOICES)[0]
+
+            recommendation = ' '.join(
+                recommendation_words[0:2] + \
+                list(random.sample(recommendation_words[2:], 20))
+            )
+
+            Recommendation(
+                profile=profile,
+                reviewer_name=fullname,
+                reviewer_email=email,
+                reviewer_position=position,
+                reviewer_institution=institution,
+                seen_at_conf=True,
+                comment=recommendation,
             ).save()
 
         management.call_command(

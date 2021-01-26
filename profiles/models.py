@@ -197,15 +197,15 @@ class Recommendation(models.Model):
     DIR = 'Group leader/ Director/ Head of Department'
 
     POSITION_CHOICES = (
-        (PHD, 'PhD student'),
-        (MDR, 'Medical Doctor'),
-        (PDR, 'Post-doctoral researcher'),
-        (SRE, 'Senior researcher/ scientist'),
-        (LEC, 'Lecturer'),
-        (ATP, 'Assistant Professor'),
-        (ACP, 'Associate Professor'),
-        (PRF, 'Professor'),
-        (DIR, 'Group leader/ Director/ Head of Department')
+        (PHD, PHD),
+        (MDR, MDR),
+        (PDR, PDR),
+        (SRE, SRE),
+        (LEC, LEC),
+        (ATP, ATP),
+        (ACP, ACP),
+        (PRF, PRF),
+        (DIR, DIR),
     )
 
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
