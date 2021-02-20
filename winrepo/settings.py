@@ -24,9 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', 'gfryns.pythonanywhere.com', 'www.winrepo.org']
+ALLOWED_HOSTS = \
+    ['*'] \
+    if DEBUG else \
+    ['localhost', 'gfryns.pythonanywhere.com', 'www.winrepo.org']
 
 
 # Application definition
@@ -92,6 +95,9 @@ DATABASES = {
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
+        'TEST': {
+            'NAME': config('DB_TEST_NAME'),
+        }
     }
 }
 
