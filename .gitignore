@@ -109,6 +109,7 @@ ENV/
 .coverage
 **/migrations/**
 !**/migrations
+!**/migrations/__init__.py
 .vscode/*
 pylintrc
 
