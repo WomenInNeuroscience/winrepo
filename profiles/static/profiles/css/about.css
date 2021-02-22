@@ -93,6 +93,11 @@ section .section-title {
     height: 18rem;
 }
 
+#volunteers .card {
+    width: 15rem;
+    height: 18rem;
+}
+
 .backside .card .card-text{
     font-size: 0.8rem;
     margin:0;
