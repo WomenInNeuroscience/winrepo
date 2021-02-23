@@ -88,12 +88,7 @@ section .section-title {
     height: 16rem;
 }
 
-#board .card {
-    width: 15rem;
-    height: 18rem;
-}
-
-#volunteers .card {
+#boardvol .card {
     width: 15rem;
     height: 18rem;
 }
