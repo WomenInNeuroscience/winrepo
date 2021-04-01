@@ -1,22 +1,21 @@
-import re
 import random
-
+import re
 from functools import reduce
 from operator import and_, or_
 
-from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Q, Count
-from django.urls import reverse
-from django.shortcuts import get_object_or_404
-from django.views.generic.edit import CreateView, UpdateView, FormView
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-
-from dal.autocomplete import Select2QuerySetView
 from rest_framework import viewsets
+from dal.autocomplete import Select2QuerySetView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
+from django.views.generic import TemplateView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, FormView, ModelFormMixin
+from django.views.generic.list import View, ListView
 
-from .models import Profile, Recommendation, Country
-from .forms import CreateProfileModelForm, RecommendModelForm
+from .forms import CreateUserForm, RecommendModelForm, UserProfileForm
+from .models import Country, Profile, Recommendation
 from .serializers import CountrySerializer, PositionsCountSerializer
 
 
@@ -26,10 +25,16 @@ class Home(ListView):
     model = Recommendation
 
     def get_queryset(self):
-        sample = random.sample(
-            list(Recommendation.objects.all()
-                 .order_by('-id')[:100]),
-            6)
+        top_reco = list(Recommendation.objects.all().order_by('-id')[:100])
+        nb_samples = 6
+
+        if len(top_reco) == 0:
+            sample = []
+        else:
+            sample = random.sample(
+                top_reco,
+                nb_samples if len(top_reco) > nb_samples else len(top_reco)
+            )
 
         return sample
 
@@ -46,7 +51,9 @@ class ListProfiles(ListView):
         is_senior = self.request.GET.get('senior') == 'on'
 
         # create filter on search terms
-        q_st = ~Q(pk=None)  # always true
+        # q_st = ~Q(pk=None)  # always true
+        q_st = Q(is_public=True)
+
         if s is not None:
             # split search terms and filter empty words (if successive spaces)
             search_terms = list(filter(None, s.split(' ')))
@@ -120,49 +127,74 @@ class ListProfiles(ListView):
 
 class ProfileDetail(DetailView):
     model = Profile
+    queryset = Profile.objects.filter(is_public=True)
 
 
-class UpdateProfile(SuccessMessageMixin, UpdateView):
-    model = Profile
-    fields = [
-        'name',
-        'email',
-        'webpage',
-        'institution',
-        'country',
-        'position',
-        'grad_month',
-        'grad_year',
-        'brain_structure',
-        'modalities',
-        'methods',
-        'domains',
-        'keywords',
-    ]
-    success_message = "The profile for %(name)s was updated successfully"
-
-    def get_success_url(self):
-        return reverse('profiles:detail', args=(self.object.id,))
+class UserProfileView(TemplateView):
+    template_name = "profiles/user_profile.html"
 
 
-class CreateProfile(SuccessMessageMixin, CreateView):
-    template_name = 'profiles/profile_form.html'
-    form_class = CreateProfileModelForm
-    success_message = "The profile for %(name)s was created successfully"
+class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
+    template_name = "profiles/user_profile_form.html"
+    form_class = UserProfileForm
+    success_message = 'Your profile has been stored successfully!'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.request.user.profile
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.request.user.profile
+        return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        # form.send_email()
-        form.save()
-        return super(CreateProfile, self).form_valid(form)
+        form.save(self.request.user)
+        return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('profiles:detail', kwargs={'pk': self.object.pk})
+        return reverse('profiles:user_profile')
 
+
+class CreateUser(CreateView):
+    form_class = CreateUserForm
+    template_name = 'profiles/signup_form.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('profiles:user_profile')
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.save()
+        return super(CreateUser, self).form_valid(form)
+
+    def get_success_url(self):
+        from django.core.mail import send_mail
+
+        send_mail(
+            'Subject here',
+            'Here is the message.',
+            None,
+            ['anibalsolon@gmail.com'],
+            fail_silently=False,
+        )
+        return reverse('profiles:signup_confirm')
+
+class CreateUserConfirm(TemplateView):
+    template_name = 'profiles/signup_confirm.html'
 
 class CreateRecommendation(SuccessMessageMixin, FormView):
     template_name = 'profiles/recommendation_form.html'
     form_class = RecommendModelForm
     success_message = 'Your recommendation has been submitted successfully!'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            profile = request.user.profile
+            profile_id = self.kwargs.get('pk')
+            if profile.id == profile_id:
+                return redirect('profiles:detail', pk=profile_id)
+        return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
         recommendation = form.save()
@@ -217,7 +249,7 @@ class CountriesAutocomplete(Select2QuerySetView):
 
 
 class RepresentedCountriesViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Country.objects.annotate(profiles_count=Count('profile')) \
+    queryset = Country.objects.annotate(profiles_count=Count('profiles')) \
                               .filter(profiles_count__gt=0)
     serializer_class = CountrySerializer
     authentication_classes = []

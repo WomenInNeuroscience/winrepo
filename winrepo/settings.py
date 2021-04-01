@@ -29,13 +29,13 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = \
     ['*'] \
     if DEBUG else \
-    ['localhost', 'gfryns.pythonanywhere.com', 'www.winrepo.org']
+    ['localhost', '127.0.0.1', 'www.winrepo.org']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'profiles.apps.ProfilesConfig',
+    'profiles',
     'multiselectfield',
     'crispy_forms',
     'captcha',
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -101,8 +102,9 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -153,6 +155,12 @@ RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 NOCAPTCHA = False
 RECAPTCHA_USE_SSL = False
 RECAPTCHA_DOMAIN = 'www.recaptcha.net'
+
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 
 # Sites settings
 SITE_ID = config('SITE_ID', cast=int)

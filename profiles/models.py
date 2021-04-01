@@ -1,8 +1,111 @@
+import random
+import string
+
+from django.contrib.auth.models import User as AbstractUser
 from django.db import models
-from django.utils import timezone
+
 from django.urls import reverse
 
 from multiselectfield import MultiSelectField
+
+PHD = 'PhD student'
+MDR = 'Medical Doctor'
+PDR = 'Post-doctoral researcher'
+JRE = 'Researcher/ scientist'
+SRE = 'Senior researcher/ scientist'
+LEC = 'Lecturer'
+ATP = 'Assistant Professor'
+ACP = 'Associate Professor'
+PRF = 'Professor'
+DIR = 'Group leader/ Director/ Head of Department'
+
+POSITION_CHOICES = (
+    (PHD, 'PhD student'),
+    (MDR, 'Medical Doctor'),
+    (PDR, 'Post-doctoral researcher'),
+    (JRE, 'Researcher/ scientist'),
+    (SRE, 'Senior researcher/ scientist'),
+    (LEC, 'Lecturer'),
+    (ATP, 'Assistant Professor'),
+    (ACP, 'Associate Professor'),
+    (PRF, 'Professor'),
+    (DIR, 'Group leader/ Director/ Head of Department')
+)
+
+MONTHS_CHOICES = (
+    ('01', 'January'),
+    ('02', 'February'),
+    ('03', 'March'),
+    ('04', 'April'),
+    ('05', 'May'),
+    ('06', 'June'),
+    ('07', 'July'),
+    ('08', 'August'),
+    ('09', 'September'),
+    ('10', 'October'),
+    ('11', 'November'),
+    ('12', 'December')
+)
+
+STRUCTURE_CHOICES = (
+    ('N', 'Neuron'),
+    ('L', 'Layer'),
+    ('C', 'Column'),
+    ('R', 'Region'),
+    ('W', 'Whole Brain')
+)
+
+MODALITIES_CHOICES = (
+    ('EP', 'Electrophysiology (EEG, MEG, ECoG)'),
+    ('OE', 'Other electrophysiology'),
+    ('MR', 'MRI'),
+    ('PE', 'PET'),
+    ('DT', 'DTI'),
+    ('BH', 'Behavioural'),
+    ('ET', 'Eye Tracking'),
+    ('BS', 'Brain Stimulation'),
+    ('GT', 'Genetics'),
+    ('FN', 'fNIRS'),
+    ('LE', 'Lesions and Inactivations'),
+)
+
+METHODS_CHOICES = (
+    ('UV', 'Univariate'),
+    ('MV', 'Multivariate'),
+    ('PM', 'Predictive Models'),
+    ('DC', 'DCM'),
+    ('CT', 'Connectivity'),
+    ('CM', 'Computational Modeling'),
+    ('AM', 'Animal Models')
+)
+
+DOMAINS_CHOICES = (
+    ('CG', 'Cognition (general)'),
+    ('MM', 'Memory'),
+    ('SS', 'Sensory systems'),
+    ('MO', 'Motor Systems'),
+    ('LG', 'Language'),
+    ('EM', 'Emotion'),
+    ('PN', 'Pain'),
+    ('LE', 'Learning'),
+    ('AT', 'Attention'),
+    ('DE', 'Decision Making'),
+    ('DV', 'Developmental'),
+    ('SL', 'Sleep'),
+    ('CN', 'Consciousness'),
+    ('CL', 'Clinical (general)'),
+    ('DM', 'Dementia'),
+    ('PK', 'Parkinson'),
+    ('DD', 'Other degenerative diseases'),
+    ('PS', 'Psychiatry'),
+    ('AD', 'Addiction'),
+    ('ON', 'Oncology'),
+    ('EV', 'Evolutionary'),
+    ('CM', 'Cellular and Molecular'),
+    ('BI', 'Bioinformatics'),
+    ('NC', 'Neuropharmacology'),
+    ('ET', 'Ethics')
+)
 
 
 class Country(models.Model):
@@ -18,131 +121,48 @@ class Country(models.Model):
         return self.name
 
 
+class User(AbstractUser):
+
+    email_confimation = models.CharField(max_length=10, null=True)
+
+    def set_email_confirmation(self):
+        k = self._meta.get_field('email_confirmation').max_length
+        self.email_confimation = ''.join(random.choices(string.ascii_uppercase + string.digits, k=k))
+
+
 class Profile(models.Model):
-    PHD = 'PhD student'
-    MDR = 'Medical Doctor'
-    PDR = 'Post-doctoral researcher'
-    JRE = 'Researcher/ scientist'
-    SRE = 'Senior researcher/ scientist'
-    LEC = 'Lecturer'
-    ATP = 'Assistant Professor'
-    ACP = 'Associate Professor'
-    PRF = 'Professor'
-    DIR = 'Group leader/ Director/ Head of Department'
-
-    POSITION_CHOICES = (
-        (PHD, 'PhD student'),
-        (MDR, 'Medical Doctor'),
-        (PDR, 'Post-doctoral researcher'),
-        (JRE, 'Researcher/ scientist'),
-        (SRE, 'Senior researcher/ scientist'),
-        (LEC, 'Lecturer'),
-        (ATP, 'Assistant Professor'),
-        (ACP, 'Associate Professor'),
-        (PRF, 'Professor'),
-        (DIR, 'Group leader/ Director/ Head of Department')
-    )
-
-    MONTHS_CHOICES = (
-        ('01', 'January'),
-        ('02', 'February'),
-        ('03', 'March'),
-        ('04', 'April'),
-        ('05', 'May'),
-        ('06', 'June'),
-        ('07', 'July'),
-        ('08', 'August'),
-        ('09', 'September'),
-        ('10', 'October'),
-        ('11', 'November'),
-        ('12', 'December')
-    )
-
-    STRUCTURE_CHOICES = (
-        ('N', 'Neuron'),
-        ('L', 'Layer'),
-        ('C', 'Column'),
-        ('R', 'Region'),
-        ('W', 'Whole Brain')
-    )
-
-    MODALITIES_CHOICES = (
-        ('EP', 'Electrophysiology (EEG, MEG, ECoG)'),
-        ('OE', 'Other electrophysiology'),
-        ('MR', 'MRI'),
-        ('PE', 'PET'),
-        ('DT', 'DTI'),
-        ('BH', 'Behavioural'),
-        ('ET', 'Eye Tracking'),
-        ('BS', 'Brain Stimulation'),
-        ('GT', 'Genetics'),
-        ('FN', 'fNIRS'),
-        ('LE', 'Lesions and Inactivations'),
-    )
-
-    METHODS_CHOICES = (
-        ('UV', 'Univariate'),
-        ('MV', 'Multivariate'),
-        ('PM', 'Predictive Models'),
-        ('DC', 'DCM'),
-        ('CT', 'Connectivity'),
-        ('CM', 'Computational Modeling'),
-        ('AM', 'Animal Models')
-    )
-
-    DOMAINS_CHOICES = (
-        ('CG', 'Cognition (general)'),
-        ('MM', 'Memory'),
-        ('SS', 'Sensory systems'),
-        ('MO', 'Motor Systems'),
-        ('LG', 'Language'),
-        ('EM', 'Emotion'),
-        ('PN', 'Pain'),
-        ('LE', 'Learning'),
-        ('AT', 'Attention'),
-        ('DE', 'Decision Making'),
-        ('DV', 'Developmental'),
-        ('SL', 'Sleep'),
-        ('CN', 'Consciousness'),
-        ('CL', 'Clinical (general)'),
-        ('DM', 'Dementia'),
-        ('PK', 'Parkinson'),
-        ('DD', 'Other degenerative diseases'),
-        ('PS', 'Psychiatry'),
-        ('AD', 'Addiction'),
-        ('ON', 'Oncology'),
-        ('EV', 'Evolutionary'),
-        ('CM', 'Cellular and Molecular'),
-        ('BI', 'Bioinformatics'),
-        ('NC', 'Neuropharmacology'),
-        ('ET', 'Ethics')
-    )
 
     @classmethod
     def get_position_choices(cls):
-        return cls.POSITION_CHOICES
+        return POSITION_CHOICES
 
     @classmethod
     def get_structure_choices(cls):
-        return cls.STRUCTURE_CHOICES
+        return STRUCTURE_CHOICES
 
     @classmethod
     def get_modalities_choices(cls):
-        return cls.MODALITIES_CHOICES
+        return MODALITIES_CHOICES
 
     @classmethod
     def get_methods_choices(cls):
-        return cls.METHODS_CHOICES
+        return METHODS_CHOICES
 
     @classmethod
     def get_domains_choices(cls):
-        return cls.DOMAINS_CHOICES
+        return DOMAINS_CHOICES
 
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    is_public = models.BooleanField(default=True)
+    
     name = models.CharField(max_length=100, blank=False)
-    email = models.EmailField(blank=True)
+    contact_email = models.EmailField(blank=True)
     webpage = models.URLField(blank=True)
     institution = models.CharField(max_length=100, blank=False)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country,
+                                on_delete=models.CASCADE,
+                                related_name='profiles',
+                                null=True)
     position = models.CharField(max_length=50, choices=POSITION_CHOICES,
                                 blank=True)
     grad_month = models.CharField(max_length=2, choices=MONTHS_CHOICES,
@@ -153,7 +173,7 @@ class Profile(models.Model):
     methods = MultiSelectField(choices=METHODS_CHOICES, blank=True)
     domains = MultiSelectField(choices=DOMAINS_CHOICES, blank=True)
     keywords = models.CharField(max_length=250, blank=True)
-    publish_date = models.DateTimeField(default=timezone.now)
+    publish_date = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -166,23 +186,23 @@ class Profile(models.Model):
         return reverse('profiles:detail', kwargs={'pk': self.id})
 
     def brain_structure_labels(self):
-        return [dict(self.STRUCTURE_CHOICES).get(item, item)
+        return [dict(STRUCTURE_CHOICES).get(item, item)
                 for item in self.brain_structure]
 
     def modalities_labels(self):
-        return [dict(self.MODALITIES_CHOICES).get(item, item)
+        return [dict(MODALITIES_CHOICES).get(item, item)
                 for item in self.modalities]
 
     def methods_labels(self):
-        return [dict(self.METHODS_CHOICES).get(item, item)
+        return [dict(METHODS_CHOICES).get(item, item)
                 for item in self.methods]
 
     def domains_labels(self):
-        return [dict(self.DOMAINS_CHOICES).get(item, item)
+        return [dict(DOMAINS_CHOICES).get(item, item)
                 for item in self.domains]
 
     def grad_month_labels(self):
-        return dict(self.MONTHS_CHOICES).get(self.grad_month)
+        return dict(MONTHS_CHOICES).get(self.grad_month)
 
 
 class Recommendation(models.Model):
@@ -208,14 +228,16 @@ class Recommendation(models.Model):
         (DIR, DIR),
     )
 
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile,
+                                on_delete=models.CASCADE,
+                                related_name='recommendations')
     reviewer_name = models.CharField(max_length=100, blank=False)
-    reviewer_email = models.EmailField(blank=False)
+    reviewer_email = models.EmailField(blank=True)
     reviewer_position = models.CharField(max_length=50,
                                          choices=POSITION_CHOICES,
                                          blank=True)
     reviewer_institution = models.CharField(max_length=100, blank=False)
-    seen_at_conf = models.BooleanField()
+    seen_at_conf = models.BooleanField(null=True)
     comment = models.TextField(blank=False)
     publish_date = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
