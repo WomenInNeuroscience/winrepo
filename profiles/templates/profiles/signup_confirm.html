@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+	{{ block.super }} - Sign Up
+{% endblock title %}
+
+{% block nav-signup-classes %}active{% endblock nav-signup-classes %}
+
+{% block content %}
+
+<h2>Your registration is complete</h2>
+
+<p>An e-mail has been sent to confirm the address {{ email }}. You will not be allowed to log-in until the confirmation.</p>
+
+{% endblock content %}

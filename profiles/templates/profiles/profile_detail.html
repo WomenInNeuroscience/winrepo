@@ -32,14 +32,16 @@
 		</div>
 		<div class="col-xs-6 col-sm-4 col-md-3">
 			<div class="d-flex flex-column">
-				<a class="btn pill-btn text-white btn-secondary m-1 email-btn{% if profile.email == "" %} disabled{% endif %}" href="mailto:{{ profile.email }}">
+				<a class="btn pill-btn text-white btn-secondary m-1 email-btn{% if profile.email == "" %} disabled{% endif %}" href="mailto:{{ profile.contact_email }}">
 					<i class="fas fa-envelope"></i> Send Email</a>
 
 				<a class="btn pill-btn text-white btn-secondary m-1 webpage-btn{% if profile.webpage == "" %} disabled{% endif %}" href="{{ profile.webpage }}" target="_blank" rel="noopener">
 					<i class="fas fa-address-card"></i> View Page</a>
 
-				<a class="btn pill-btn btn-outline-primary m-1 recommend-btn" href="{% url 'profiles:recommend_profile' profile.id %}">
-					<i class="fas fa-comment"></i> Recommend</a>
+				{% if not user.is_authenticated or profile.id != user.profile.id %}
+					<a class="btn pill-btn btn-outline-primary m-1 recommend-btn" href="{% url 'profiles:recommend_profile' profile.id %}">
+						<i class="fas fa-comment"></i> Recommend</a>
+				{% endif %}
 			</div>
 		</div>
 	</div>
@@ -106,10 +108,10 @@
 	<!--<div class="col-12 col-md-4 text-right pt-3 pr-4">
 		<a class="btn pill-btn text-white btn-primary" href="{% url 'profiles:recommend_profile' profile.id %}" target="_blank">Recommend</a>
 	</div>-->
-	{% if profile.recommendation_set.all %}
-	<span class="text-primary float-right" style="margin-top:-34px;"><i class="fas fa-comment num-rec"></i> {{ profile.recommendation_set.all|length }}</span>
+	{% if profile.recommendations.all %}
+	<span class="text-primary float-right" style="margin-top:-34px;"><i class="fas fa-comment num-rec"></i> {{ profile.recommendations.count }}</span>
 		<ul id="profile-quotes" class="list-unstyled">
-		{% for recommendation in profile.recommendation_set.all %}
+		{% for recommendation in profile.recommendations.all %}
 			<li class="quote grey-bg p-4 mt-3 rounded">
 				<h5 class="quote-reviewer text-secondary font-weight-bold">{{ recommendation.reviewer_name }}
 				<small>({{ recommendation.reviewer_position }} - {{ recommendation.reviewer_institution }})</small>
@@ -132,16 +134,22 @@
 	{% else %}
 		<div class="m-1 pt-4">
 		<p>No recommendations have been made for {{ profile.name }} yet.</p>
-		<p>Have you seen her at a conference? If so, please consider
-			<b><a href="{% url 'profiles:recommend_profile' profile.id %}" target="_blank">writing her one.</a></b>
-		</p>
+		{% if not user.is_authenticated or profile.id != user.profile.id %}
+			<p>Have you seen her at a conference? If so, please consider
+				<b><a href="{% url 'profiles:recommend_profile' profile.id %}" target="_blank">writing her one.</a></b>
+			</p>
+		{% endif %}
 		</div>
 	{% endif %}
 	<p class="m-1"></p>
 </div>
-<!-- Icons made by <a href="https://www.flaticon.com/authors/popcorns-arts" title="Icon Pond">Icon Pond</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a> -->
 <div class = "mt-5">
-<p class="m-1 text-muted small">Noticed something incorrect in your profile? <b><a href="mailto:admin@winrepo.org?subject=Winrepo%20-%20update%20profile%20{{ profile.id }}%20({{ profile.name|urlencode }})"> Send us an email</a></b> with instructions so we can update it!</p>
+	<p class="m-1 text-muted small">
+		Noticed something incorrect in your profile?
+		<b><a href="mailto:admin@winrepo.org?subject=Winrepo%20-%20update%20profile%20{{ profile.id }}%20({{ profile.name|urlencode }})">
+			Send us an email
+		</a></b> with instructions so we can update it!
+	</p>
 </div>
 
 <div id="results-nav" class="border-top pt-2 mt-4 w-100 text-muted">

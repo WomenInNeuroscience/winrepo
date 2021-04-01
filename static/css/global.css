@@ -1,6 +1,9 @@
 
 body {
 	font-family:'Open Sans', 'Lato', sans-serif;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -10,8 +13,9 @@ h1, h2, h3, h4, h5, h6 {
 .full_page {
 	padding: 65px 0px 0px 0px;
 }
-.page-container {
+#page-container {
 	padding: 20px 50px 70px 50px;
+	flex-grow: 1;
 }
 
 .intro p {
