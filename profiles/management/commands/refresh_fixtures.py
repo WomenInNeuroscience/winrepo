@@ -145,7 +145,6 @@ class Command(BaseCommand):
         # Accounts
 
         user = User.objects.create_user(
-            username='user',
             first_name='User',
             last_name='Resu',
             email='user-no-profile@winrepo.org',
