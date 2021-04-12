@@ -1,5 +1,6 @@
 {% load bootstrap4 %}
 {% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,6 +35,7 @@
 	{% block css %}
 		{% bootstrap_css %}
 		<link rel="stylesheet" type="text/css" href="{% static 'css/global.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'profiles/css/style.css' %}?v=4" />
 	{% endblock css %}
 
 	{% block header_scripts %}
@@ -129,10 +131,10 @@
 	{% block footer %}
 	<footer class="page-footer font-small bg-primary text-white p-4 mt-4">
 		<div class="d-flex flex-wrap justify-content-center">
-			<div class="col-12 col-md-6 text-md-left text-sm-center d-flex flex-column justify-content-center">
+			<div class="col-12 col-md-6 d-flex flex-column justify-content-center">
 				<span class="font-weight-bold mx-1 align-middle">Women in Neuroscience Repository</span>
 			</div>
-			<div class="col-12 col-md-6 text-md-right text-sm-center d-flex justify-content-center">
+			<div class="col-12 col-md-6 d-flex flex-row justify-content-center justify-content-md-end">
 				<a class="btn btn-lg mx-1 d-flex flex-column justify-content-center" href="https://www.facebook.com/WiNRepository/">
 					<span class="iconify" data-icon="brandico:facebook" data-inline="false"></span>
 				</a>
