@@ -3,19 +3,26 @@ import re
 from functools import reduce
 from operator import and_, or_
 
-from rest_framework import viewsets
 from dal.autocomplete import Select2QuerySetView
+from django.contrib import messages
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import ValidationError
+from django.core.mail import EmailMultiAlternatives
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
+from django.template import loader
 from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, FormView, ModelFormMixin
-from django.views.generic.list import View, ListView
+from django.views.generic.list import ListView, View
+from rest_framework import viewsets
 
 from .forms import CreateUserForm, RecommendModelForm, UserProfileForm
-from .models import Country, Profile, Recommendation
+from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
 
 
@@ -157,31 +164,75 @@ class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
 
 class CreateUser(CreateView):
     form_class = CreateUserForm
-    template_name = 'profiles/signup_form.html'
+    template_name = 'registration/signup_form.html'
+    subject_template_name = 'registration/signup_subject.txt'
+    email_template_name = 'registration/signup_email.txt'
+    html_email_template_name = 'registration/signup_email.html'
+
+    token_generator = default_token_generator
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('profiles:user_profile')
         return super().get(request, *args, **kwargs)
 
+    def send_mail(self, user):
+        context = {
+            "user": user,
+            "uid": urlsafe_base64_encode(force_bytes(user.email)),
+            "token": self.token_generator.make_token(user)
+        }
+        
+        subject = loader.render_to_string(self.subject_template_name, context)
+        subject = ''.join(subject.splitlines())
+        body = loader.render_to_string(self.email_template_name, context)
+
+        email_message = EmailMultiAlternatives(subject, body, None, [user.email])
+        html_email = loader.render_to_string(self.html_email_template_name, context)
+        email_message.attach_alternative(html_email, 'text/html')
+
+        email_message.send()
+
     def form_valid(self, form):
-        form.save()
+        self.object = form.save()
+        self.send_mail(self.object)
         return super(CreateUser, self).form_valid(form)
 
     def get_success_url(self):
-        from django.core.mail import send_mail
-
-        send_mail(
-            'Subject here',
-            'Here is the message.',
-            None,
-            ['anibalsolon@gmail.com'],
-            fail_silently=False,
-        )
         return reverse('profiles:signup_confirm')
 
+
 class CreateUserConfirm(TemplateView):
-    template_name = 'profiles/signup_confirm.html'
+    template_name = 'registration/signup_confirm.html'
+    success_message = 'Your account has been activated successfully! Please, log-in!'
+
+    token_generator = default_token_generator
+
+    def get(self, request, *args, **kwargs):
+        uid = request.GET.get('uid')
+        token = request.GET.get('token')
+
+        user = self.get_user(uid)
+        if token and user is not None:
+            if self.token_generator.check_token(user, token):
+                user.is_active = True
+                if Profile.objects.filter(contact_email=user.email).exists():
+                    user.profile = Profile.objects.get(contact_email=user.email)
+                user.save()
+
+            messages.success(self.request, self.success_message)
+            return redirect('profiles:login')
+
+        return super().get(request, *args, **kwargs)
+
+    def get_user(self, uidb64):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(email=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist, ValidationError) as e:
+            user = None
+        return user
+
 
 class CreateRecommendation(SuccessMessageMixin, FormView):
     template_name = 'profiles/recommendation_form.html'

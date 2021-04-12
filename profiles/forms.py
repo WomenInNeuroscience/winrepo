@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
-from .models import User, Profile, Recommendation
+from .models import Profile, Recommendation, User
 
 
 class CaptchaForm(forms.Form):
@@ -43,17 +43,18 @@ class CreateUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
     def save(self, commit=True):
+
         user = super().save(commit=False)
         user.is_active = False
-        print(dir(user))
-        user.set_email_confimation()
+
         if commit:
             user.save()
+
         return user
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email',)
+        fields = ('first_name', 'last_name', 'email',)
         labels = {
             'email': _('Email Address'),
         }
