@@ -241,10 +241,13 @@ class CreateRecommendation(SuccessMessageMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            profile = request.user.profile
-            profile_id = self.kwargs.get('pk')
-            if profile.id == profile_id:
-                return redirect('profiles:detail', pk=profile_id)
+            try:
+                profile = request.user.profile
+                profile_id = self.kwargs.get('pk')
+                if profile.id == profile_id:
+                    return redirect('profiles:detail', pk=profile_id)
+            except Profile.DoesNotExist:
+                pass
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
