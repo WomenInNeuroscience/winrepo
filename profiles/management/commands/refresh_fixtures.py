@@ -1,12 +1,9 @@
 import random
-from django.db import connection
 from django.core import management
-from django.core.management.color import no_style
 from django.core.management.base import BaseCommand, CommandError
-from django.contrib.auth.models import User
 
 import winrepo.settings as settings
-from profiles.models import Country, Profile, Recommendation
+from profiles.models import Country, User, Profile, Recommendation
 from profiles.models import (
     STRUCTURE_CHOICES,
     MODALITIES_CHOICES,
@@ -94,7 +91,7 @@ class Command(BaseCommand):
             profile = Profile(
                 name=fullname,
                 contact_email=email,
-                webpage=slug + '.me',
+                webpage='http://' + slug + '.me',
                 institution=institution,
                 country=random.choice(countries),
                 position=position,
