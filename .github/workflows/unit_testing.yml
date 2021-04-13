@@ -20,7 +20,13 @@ jobs:
         pip install -r requirements.txt
 
     - name: Set up environment
-      run: cp .env.default .env
+      run: |
+        cp .env.default .env
+
+    - name: Prepare project
+      run: |
+        python manage.py makemigrations
+        python manage.py migrate
 
     - name: Test
       run: |
