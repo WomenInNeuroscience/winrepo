@@ -1,6 +1,5 @@
 {% load bootstrap4 %}
 {% load static %}
-{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,10 +78,8 @@
 					<li class="nav-item dropdown mr-auto">
 						<a href="#" class="nav-link h6 dropdown-toggle" data-toggle="dropdown">{{ user.first_name }}</a>
 						<div class="dropdown-menu dropdown-menu-right">
-							{% if user.profile %}
-							<a href="{% url 'profiles:user_profile' %}" class="dropdown-item">My profile</a>
+							<a href="{% url 'profiles:user' %}" class="dropdown-item">My Account</a>
 							<div class="dropdown-divider"></div>
-							{% endif %}
 							<a href="{% url 'profiles:logout' %}" class="dropdown-item">Logout</a>
 						</div>
 					</li>

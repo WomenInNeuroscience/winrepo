@@ -46,6 +46,10 @@ urlpatterns = [
     path('countries-autocomplete/', views.CountriesAutocomplete.as_view(),
          name='countries_autocomplete'),
 
+    path('account/', views.UserView.as_view(),
+         name='user'),
+    path('account/delete/', views.UserDeleteView.as_view(),
+         name='user_delete'),
     path('profile/', views.UserProfileView.as_view(),
          name='user_profile'),
     path('profile/edit/', views.UserProfileEditView.as_view(),

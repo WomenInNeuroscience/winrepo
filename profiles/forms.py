@@ -11,6 +11,7 @@ from .models import Profile, Recommendation, User
 class CaptchaForm(forms.Form):
     captcha = ReCaptchaField(widget=ReCaptchaV3, label=False)
 
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -37,6 +38,13 @@ class UserProfileForm(forms.ModelForm):
         user_profile.save()
         return user_profile
 
+
+class UserDeleteForm(forms.Form):
+    confirm = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=True,
+        initial=True
+    )
 
 
 class CreateUserForm(CaptchaForm, UserCreationForm):

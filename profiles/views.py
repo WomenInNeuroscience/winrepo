@@ -5,10 +5,12 @@ from operator import and_, or_
 
 from dal.autocomplete import Select2QuerySetView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth import logout
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
 from django.template import loader
@@ -21,7 +23,8 @@ from django.views.generic.edit import CreateView, FormView, ModelFormMixin
 from django.views.generic.list import ListView, View
 from rest_framework import viewsets
 
-from .forms import CreateUserForm, RecommendModelForm, UserProfileForm
+
+from .forms import CreateUserForm, RecommendModelForm, UserProfileForm, UserDeleteForm
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
 
@@ -161,6 +164,52 @@ class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
     def get_success_url(self):
         return reverse('profiles:user_profile')
 
+
+class UserView(LoginRequiredMixin, TemplateView):
+    template_name = "users/user.html"
+
+
+class UserDeleteView(LoginRequiredMixin, FormView):
+    form_class = UserDeleteForm
+    template_name = 'users/user_delete.html'
+    success_message = 'Your account has been deleted successfully!'
+
+    token_generator = default_token_generator
+
+    def get(self, request, *args, **kwargs):
+        uid = request.GET.get('uid')
+        token = request.GET.get('token')
+
+        user = get_user(uid)
+        if token and user is not None:
+            if self.token_generator.check_token(user, token):
+                user.is_active = True
+                if Profile.objects.filter(contact_email=user.email).exists():
+                    user.profile = Profile.objects.get(contact_email=user.email)
+                user.save()
+
+            messages.success(self.request, self.success_message)
+            return redirect('profiles:login')
+
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        user = self.request.user
+
+        logout(self.request)
+
+        try:
+            profile = user.profile
+            profile.delete()
+        except Profile.DoesNotExist:
+            pass
+
+        user.delete()
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('profiles:login')
 
 
 class CreateUserView(CreateView):
