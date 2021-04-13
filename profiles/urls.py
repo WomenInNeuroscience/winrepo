@@ -51,9 +51,9 @@ urlpatterns = [
     path('profile/edit/', views.UserProfileEditView.as_view(),
          name='user_profile_edit'),
 
-    path('signup/', views.CreateUser.as_view(),
+    path('signup/', views.CreateUserView.as_view(),
          name='signup'),
-    path('signup/confirm/', views.CreateUserConfirm.as_view(),
+    path('signup/confirm/', views.CreateUserConfirmView.as_view(),
          name='signup_confirm'),
     path('login/', LoginView.as_view(),
          name='login'),
