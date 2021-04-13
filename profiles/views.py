@@ -29,6 +29,14 @@ from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
 
 
+def get_user(uidb64):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(email=uid)
+    except (TypeError, ValueError, OverflowError, ValidationError, AttributeError, User.DoesNotExist):
+        user = None
+    return user
+
 class Home(ListView):
     template_name = 'profiles/home.html'
     context_object_name = 'recommendations_sample'
@@ -141,11 +149,11 @@ class ProfileDetail(DetailView):
 
 
 class UserProfileView(TemplateView):
-    template_name = "profiles/user_profile.html"
+    template_name = "users/user_profile.html"
 
 
 class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
-    template_name = "profiles/user_profile_form.html"
+    template_name = "users/user_profile_form.html"
     form_class = UserProfileForm
     success_message = 'Your profile has been stored successfully!'
 
@@ -214,7 +222,7 @@ class UserDeleteView(LoginRequiredMixin, FormView):
 
 class CreateUserView(CreateView):
     form_class = CreateUserForm
-    template_name = 'registration/signup_form.html'
+    template_name = 'registration/signup.html'
     subject_template_name = 'registration/signup_subject.txt'
     email_template_name = 'registration/signup_email.txt'
     html_email_template_name = 'registration/signup_email.html'
@@ -246,7 +254,7 @@ class CreateUserView(CreateView):
     def form_valid(self, form):
         self.object = form.save()
         self.send_mail(self.object)
-        return super(CreateUser, self).form_valid(form)
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('profiles:signup_confirm')
@@ -262,7 +270,7 @@ class CreateUserConfirmView(TemplateView):
         uid = request.GET.get('uid')
         token = request.GET.get('token')
 
-        user = self.get_user(uid)
+        user = get_user(uid)
         if token and user is not None:
             if self.token_generator.check_token(user, token):
                 user.is_active = True
@@ -274,14 +282,6 @@ class CreateUserConfirmView(TemplateView):
             return redirect('profiles:login')
 
         return super().get(request, *args, **kwargs)
-
-    def get_user(self, uidb64):
-        try:
-            uid = urlsafe_base64_decode(uidb64).decode()
-            user = User.objects.get(email=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist, ValidationError) as e:
-            user = None
-        return user
 
 
 class CreateRecommendation(SuccessMessageMixin, FormView):
@@ -303,13 +303,13 @@ class CreateRecommendation(SuccessMessageMixin, FormView):
     def form_valid(self, form):
         recommendation = form.save()
         self.profile_id = recommendation.profile.id
-        return super(CreateRecommendation, self).form_valid(form)
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('profiles:detail', kwargs={'pk': self.profile_id})
 
     def get_initial(self):
-        initial = super(CreateRecommendation, self).get_initial()
+        initial = super().get_initial()
         profile_id = self.kwargs.get('pk')
         if profile_id is not None:
             profile = get_object_or_404(Profile, pk=profile_id)

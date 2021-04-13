@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% load crispy_forms_tags %}
 
 {% block title %}
@@ -12,21 +11,20 @@
 <h2>Create your account</h2>
 
 {% if form.errors %}
-    {% for error in form.non_field_errors %}
-        <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
-        </div>
-    {% endfor %}
+	{% for error in form.non_field_errors %}
+		<div class="alert alert-danger">
+			<strong>{{ error|escape }}</strong>
+		</div>
+	{% endfor %}
 {% endif %}
 
 <div class="col-lg-10 col-lg-offset-1">
 	<form method="post">
- 		{% csrf_token %}
+		{% csrf_token %}
 		{{ form|crispy }}
-	 <button type="submit" class="btn btn-primary pill-btn">
-		 Submit
-	 </button>
-
+		<button type="submit" class="btn btn-primary pill-btn">
+			Submit
+		</button>
 	</form>
 </div>
 {% endblock content %}
