@@ -6,10 +6,11 @@
 {% block content %}
 
 {% if form.errors %}
-	<p>Your e-mail and password didn't match. Please try again.</p>
+<div class="alert alert-warning" role="alert">
+	Your e-mail and password didn't match. Please try again.
+</div>
 {% endif %}
 
-{% csrf_token %}
 <form method="post" action="{% url 'profiles:login' %}">
 	{% csrf_token %}
 	<div class="container">
