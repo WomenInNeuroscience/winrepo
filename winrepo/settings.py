@@ -152,11 +152,9 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "static-collected")
 
 # reCaptcha settings
-RECAPTCHA_PUBLIC_KEY = '6Lc8d5YUAAAAAGeYG5ilVvTNiV8GgwGUxmDFpEhG'
+RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
-NOCAPTCHA = False
-RECAPTCHA_USE_SSL = False
-RECAPTCHA_DOMAIN = 'www.recaptcha.net'
+RECAPTCHA_DOMAIN = config('RECAPTCHA_DOMAIN')
 
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')
@@ -196,4 +194,5 @@ REST_FRAMEWORK = {
     ]
 }
 
-# SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+if DEBUG:
+    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']

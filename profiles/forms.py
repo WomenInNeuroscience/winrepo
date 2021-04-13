@@ -38,8 +38,8 @@ class UserProfileForm(forms.ModelForm):
         return user_profile
 
 
-# class CreateUserForm(CaptchaForm, UserCreationForm):
-class CreateUserForm(UserCreationForm):
+
+class CreateUserForm(CaptchaForm, UserCreationForm):
     email = forms.EmailField(required=True)
 
     def save(self, commit=True):
