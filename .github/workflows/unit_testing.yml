@@ -22,6 +22,6 @@ jobs:
     - name: Set up environment
       run: cp .env.default .env
 
-    - name: Test with pytest
+    - name: Test
       run: |
-        pytest
+        python ./manage.py test
