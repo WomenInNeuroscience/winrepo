@@ -149,11 +149,11 @@ class ProfileDetail(DetailView):
 
 
 class UserProfileView(TemplateView):
-    template_name = "users/user_profile.html"
+    template_name = "account/user_profile.html"
 
 
 class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
-    template_name = "users/user_profile_form.html"
+    template_name = "account/user_profile_form.html"
     form_class = UserProfileForm
     success_message = 'Your profile has been stored successfully!'
 
@@ -174,12 +174,12 @@ class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
 
 
 class UserView(LoginRequiredMixin, TemplateView):
-    template_name = "users/user.html"
+    template_name = "account/user.html"
 
 
 class UserDeleteView(LoginRequiredMixin, FormView):
     form_class = UserDeleteForm
-    template_name = 'users/user_delete.html'
+    template_name = 'account/user_delete.html'
     success_message = 'Your account has been deleted successfully!'
 
     token_generator = default_token_generator
