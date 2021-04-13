@@ -15,6 +15,7 @@ class SignupViewTests(TestCase):
             'email': 'test@test.com',
             'password1': 'myunittest1!',
             'password2': 'myunittest1!',
+            'captcha': 'abcdef',
         })
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('profiles:signup_confirm'))
