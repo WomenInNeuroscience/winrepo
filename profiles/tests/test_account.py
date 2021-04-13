@@ -33,6 +33,18 @@ class SignupViewTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertEqual(response.url, reverse('profiles:login'))
 
+    def test_account_page(self):
+
+        u = User(email='test@test.com')
+        u.is_active = True
+        u.save()
+
+        self.client.force_login(u)
+
+        response = self.client.get(reverse('profiles:user'))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, 'test@test.com')
+
     def test_delete(self):
 
         u = User(email='test@test.com')
