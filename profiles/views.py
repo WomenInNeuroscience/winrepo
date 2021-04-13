@@ -162,7 +162,8 @@ class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
         return reverse('profiles:user_profile')
 
 
-class CreateUser(CreateView):
+
+class CreateUserView(CreateView):
     form_class = CreateUserForm
     template_name = 'registration/signup_form.html'
     subject_template_name = 'registration/signup_subject.txt'
@@ -202,7 +203,7 @@ class CreateUser(CreateView):
         return reverse('profiles:signup_confirm')
 
 
-class CreateUserConfirm(TemplateView):
+class CreateUserConfirmView(TemplateView):
     template_name = 'registration/signup_confirm.html'
     success_message = 'Your account has been activated successfully! Please, log-in!'
 
