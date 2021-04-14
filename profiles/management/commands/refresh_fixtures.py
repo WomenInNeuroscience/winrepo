@@ -152,6 +152,43 @@ class Command(BaseCommand):
         )
         user.save()
 
+
+        user = User.objects.create_user(
+            first_name='User',
+            last_name='Resu',
+            email='user-profile@winrepo.org',
+            password='user'
+        )
+        user.save()
+
+        position = random.choice(POSITION_CHOICES)[0]
+        brain_structure = random.choice(STRUCTURE_CHOICES)[0]
+        modalities = random.choice(MODALITIES_CHOICES)[0]
+        methods = random.choice(METHODS_CHOICES)[0]
+        domains = random.choice(DOMAINS_CHOICES)[0]
+
+        grad_month = random.choice(MONTHS_CHOICES)[0]
+        grad_year = str(random.randint(1950, 2020))
+
+        profile = Profile(
+            user=user,
+            name='User Resu',
+            contact_email='user-profile@winrepo.org',
+            webpage='http://user-resu.me',
+            institution='User University',
+            country=random.choice(countries),
+            position=position,
+            grad_month=grad_month,
+            grad_year=grad_year,
+            brain_structure=brain_structure,
+            modalities=modalities,
+            methods=methods,
+            domains=domains,
+            keywords='',
+        )
+        profile.save()
+
+
         management.call_command(
             'dumpdata',
             'profiles',
