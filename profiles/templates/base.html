@@ -109,13 +109,13 @@
 		<div id="content" class="bg-white rounded-top p-4 offset-md-1 col-md-10 offset-lg-2 col-lg-8">
 			{% block messages %}
 				{% if messages %}
-					<ul class="messages">
+					<div class="messages">
 						{% for message in messages %}
 						<div class="alert{% if message.tags == 'success' %} alert-success{% else %} alert-info{% endif %}">
 							<strong>{{ message|escape }}</strong>
 						</div>
 						{% endfor %}
-					</ul>
+					</div>
 				{% endif %}
 			{% endblock messages %}
 
