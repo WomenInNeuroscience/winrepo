@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+	{{ block.super }} - Edit Account
+{% endblock title %}
+
+{% block nav-create-classes %}active{% endblock nav-create-classes %}
+
+{% block content %}
+{% if form.errors %}
+	{% for error in form.non_field_errors %}
+		<div class="alert alert-danger">
+			<strong>{{ error|escape }}</strong>
+		</div>
+	{% endfor %}
+{% endif %}
+
+<div class="col-lg-10 col-lg-offset-1">
+	<form method="post">
+		{% csrf_token %}
+		{{ form.first_name|as_crispy_field }}
+		{{ form.last_name|as_crispy_field }}
+		{{ form.email|as_crispy_field }}
+		<button type="submit" class="btn btn-primary pill-btn">
+			Submit
+		</button>
+	</form>
+</div>
+{% endblock content %}
