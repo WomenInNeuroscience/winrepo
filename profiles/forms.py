@@ -12,6 +12,16 @@ class CaptchaForm(forms.Form):
     captcha = ReCaptchaField(widget=ReCaptchaV3, label=False)
 
 
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = (
+            'first_name',
+            'last_name',
+            'email',
+        )
+
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = Profile

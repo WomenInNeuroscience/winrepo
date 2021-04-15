@@ -24,7 +24,7 @@ from django.views.generic.list import ListView, View
 from rest_framework import viewsets
 
 
-from .forms import CreateUserForm, RecommendModelForm, UserProfileForm, UserDeleteForm
+from .forms import CreateUserForm, RecommendModelForm, UserForm, UserProfileForm, UserDeleteForm
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
 
@@ -175,6 +175,27 @@ class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
 
 class UserView(LoginRequiredMixin, TemplateView):
     template_name = "account/user.html"
+
+
+class UserEditView(SuccessMessageMixin, ModelFormMixin, FormView):
+    template_name = "account/user_form.html"
+    form_class = UserForm
+    success_message = 'Your account has been updated successfully!'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.request.user
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.request.user
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.save(self.request.user)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('profiles:user')
 
 
 class UserDeleteView(LoginRequiredMixin, FormView):
