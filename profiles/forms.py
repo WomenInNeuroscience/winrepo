@@ -57,7 +57,7 @@ class UserDeleteForm(forms.Form):
     )
 
 
-class CreateUserForm(CaptchaForm, UserCreationForm):
+class UserCreateForm(CaptchaForm, UserCreationForm):
     email = forms.EmailField(required=True)
 
     def save(self, commit=True):

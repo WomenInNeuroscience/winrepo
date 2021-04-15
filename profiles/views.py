@@ -24,7 +24,7 @@ from django.views.generic.list import ListView, View
 from rest_framework import viewsets
 
 
-from .forms import CreateUserForm, RecommendModelForm, UserForm, UserProfileForm, UserDeleteForm
+from .forms import UserCreateForm, RecommendModelForm, UserForm, UserProfileForm, UserDeleteForm
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
 
@@ -241,8 +241,8 @@ class UserDeleteView(LoginRequiredMixin, FormView):
         return reverse('profiles:login')
 
 
-class CreateUserView(CreateView):
-    form_class = CreateUserForm
+class UserCreateView(CreateView):
+    form_class = UserCreateForm
     template_name = 'registration/signup.html'
     subject_template_name = 'registration/signup_subject.txt'
     email_template_name = 'registration/signup_email.txt'
@@ -281,7 +281,7 @@ class CreateUserView(CreateView):
         return reverse('profiles:signup_confirm')
 
 
-class CreateUserConfirmView(TemplateView):
+class UserCreateConfirmView(TemplateView):
     template_name = 'registration/signup_confirm.html'
     success_message = 'Your account has been activated successfully! Please, log-in!'
 
