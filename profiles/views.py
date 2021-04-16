@@ -5,15 +5,16 @@ from operator import and_, or_
 
 from dal.autocomplete import Select2QuerySetView
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ValidationError
-from django.contrib.auth import logout
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, FormView, ModelFormMixin
@@ -21,9 +22,14 @@ from django.views.generic.list import ListView
 from rest_framework import viewsets
 
 from .emails import user_create_confirm_email
-from .forms import UserCreateForm, RecommendModelForm, UserForm, UserProfileForm, UserDeleteForm
+from .forms import (RecommendModelForm, UserCreateForm, UserDeleteForm,
+                    UserForm, UserProfileForm)
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
+
+
+def _to_token(obj, field):
+    return urlsafe_base64_encode(force_bytes(getattr(obj, field)))
 
 
 def _from_token(model, field, data_b64):
@@ -245,13 +251,15 @@ class UserCreateView(CreateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('profiles:user_profile')
+            return redirect('profiles:user')
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
-        self.object = form.save()
-        user_create_confirm_email(self.object, self.token_generator).send()
-        return super().form_valid(form)
+        valid = super().form_valid(form)
+        uid =_to_token(self.object, 'email')
+        token = self.token_generator.make_token(self.object)
+        user_create_confirm_email(self.request, self.object, uid, token).send()
+        return valid
 
     def get_success_url(self):
         return reverse('profiles:signup_confirm')
@@ -260,6 +268,7 @@ class UserCreateView(CreateView):
 class UserCreateConfirmView(TemplateView):
     template_name = 'registration/signup_confirm.html'
     success_message = 'Your account has been activated successfully! Please, log-in!'
+    error_message = 'There was an error with your activation. Please, try again.'
 
     token_generator = default_token_generator
 
@@ -275,7 +284,9 @@ class UserCreateConfirmView(TemplateView):
                     user.profile = Profile.objects.get(contact_email=user.email)
                 user.save()
 
-            messages.success(self.request, self.success_message)
+                messages.success(self.request, self.success_message)
+            else:
+                messages.error(self.request, self.error_message)
             return redirect('profiles:login')
 
         return super().get(request, *args, **kwargs)
