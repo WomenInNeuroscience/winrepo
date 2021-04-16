@@ -1,11 +1,13 @@
 import random
 import re
+import time
 from functools import reduce
 from operator import and_, or_
 
 from dal.autocomplete import Select2QuerySetView
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
@@ -13,15 +15,18 @@ from django.core.exceptions import ValidationError
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.views.decorators.cache import never_cache
+from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, FormView, ModelFormMixin
 from django.views.generic.list import ListView
 from rest_framework import viewsets
 
-from .emails import user_create_confirm_email
+from .emails import user_create_confirm_email, user_reset_password_email
 from .forms import (RecommendModelForm, UserCreateForm, UserDeleteForm,
                     UserForm, UserProfileForm)
 from .models import Country, Profile, Recommendation, User
@@ -290,6 +295,76 @@ class UserCreateConfirmView(TemplateView):
             return redirect('profiles:login')
 
         return super().get(request, *args, **kwargs)
+
+class UserPasswordResetView(FormView):
+    form_class = PasswordResetForm
+    template_name = 'registration/reset_password.html'
+    token_generator = default_token_generator
+    success_message = 'If your e-mail address is in our registry, you will receive an e-mail soon on how to reset your password.'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('profiles:user')
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        try:
+            email = form.cleaned_data['email']
+            user = User.objects.get(email=email)
+            uid =_to_token(user, 'email')
+            token = self.token_generator.make_token(user)
+            user_reset_password_email(self.request, user, uid, token).send()
+        except User.DoesNotExist:
+            time.sleep(4)
+
+        messages.success(self.request, self.success_message)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('profiles:forgot')
+
+class UserPasswordResetConfirmView(FormView):
+    form_class = SetPasswordForm
+    template_name = 'registration/reset_password_confirm.html'
+    success_message = 'Your password has been resetted! Please, log-in!'
+    error_message = 'There was an error with your password reset. Please, try again.'
+
+    token_generator = default_token_generator
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.user
+        return kwargs
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        uid = request.GET.get('uid')
+        token = request.GET.get('token')
+        user = _from_token(User, 'email', uid)
+
+        self.user = None
+        if token and user is not None:
+            if self.token_generator.check_token(user, token):
+                self.user = user
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if self.user:
+            return super().get(request, *args, **kwargs)
+
+        messages.error(self.request, self.error_message)
+        return redirect('profiles:forgot')
+
+    def form_valid(self, form):
+        form.user.is_active = True
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, self.success_message)
+        return reverse('profiles:login')
 
 
 class CreateRecommendation(SuccessMessageMixin, FormView):
