@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 cd ${HOME}/winrepo
 git pull
 
