@@ -163,6 +163,9 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS') == 'True'
 EMAIL_USE_SSL = config('EMAIL_USE_SSL') == 'True'
 
+EMAIL_FROM = 'no-reply@winrepo.org'
+EMAIL_SUBJECT_PREFIX = 'WinRepo - '
+
 # Sites settings
 SITE_ID = config('SITE_ID', cast=int)
 ROBOTS_CACHE_TIMEOUT = 60 * 60 * 24
