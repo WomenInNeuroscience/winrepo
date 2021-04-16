@@ -9,33 +9,30 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ValidationError
-from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth import logout
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
-from django.template import loader
 from django.urls import reverse
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, FormView, ModelFormMixin
-from django.views.generic.list import ListView, View
+from django.views.generic.list import ListView
 from rest_framework import viewsets
 
-
+from .emails import user_create_confirm_email
 from .forms import UserCreateForm, RecommendModelForm, UserForm, UserProfileForm, UserDeleteForm
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
 
 
-def get_user(uidb64):
+def _from_token(model, field, data_b64):
     try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = User.objects.get(email=uid)
-    except (TypeError, ValueError, OverflowError, ValidationError, AttributeError, User.DoesNotExist):
-        user = None
-    return user
+        data = urlsafe_base64_decode(data_b64).decode()
+        obj = model.objects.get(**{ field: data })
+    except (TypeError, ValueError, OverflowError, ValidationError, AttributeError, model.DoesNotExist):
+        obj = None
+    return obj
 
 class Home(ListView):
     template_name = 'profiles/home.html'
@@ -209,7 +206,7 @@ class UserDeleteView(LoginRequiredMixin, FormView):
         uid = request.GET.get('uid')
         token = request.GET.get('token')
 
-        user = get_user(uid)
+        user = _from_token(User, 'email', uid)
         if token and user is not None:
             if self.token_generator.check_token(user, token):
                 user.is_active = True
@@ -244,10 +241,6 @@ class UserDeleteView(LoginRequiredMixin, FormView):
 class UserCreateView(CreateView):
     form_class = UserCreateForm
     template_name = 'registration/signup.html'
-    subject_template_name = 'registration/signup_subject.txt'
-    email_template_name = 'registration/signup_email.txt'
-    html_email_template_name = 'registration/signup_email.html'
-
     token_generator = default_token_generator
 
     def get(self, request, *args, **kwargs):
@@ -255,26 +248,9 @@ class UserCreateView(CreateView):
             return redirect('profiles:user_profile')
         return super().get(request, *args, **kwargs)
 
-    def send_mail(self, user):
-        context = {
-            "user": user,
-            "uid": urlsafe_base64_encode(force_bytes(user.email)),
-            "token": self.token_generator.make_token(user)
-        }
-        
-        subject = loader.render_to_string(self.subject_template_name, context)
-        subject = ''.join(subject.splitlines())
-        body = loader.render_to_string(self.email_template_name, context)
-
-        email_message = EmailMultiAlternatives(subject, body, None, [user.email])
-        html_email = loader.render_to_string(self.html_email_template_name, context)
-        email_message.attach_alternative(html_email, 'text/html')
-
-        email_message.send()
-
     def form_valid(self, form):
         self.object = form.save()
-        self.send_mail(self.object)
+        user_create_confirm_email(self.object, self.token_generator).send()
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -291,7 +267,7 @@ class UserCreateConfirmView(TemplateView):
         uid = request.GET.get('uid')
         token = request.GET.get('token')
 
-        user = get_user(uid)
+        user = _from_token(User, 'email', uid)
         if token and user is not None:
             if self.token_generator.check_token(user, token):
                 user.is_active = True

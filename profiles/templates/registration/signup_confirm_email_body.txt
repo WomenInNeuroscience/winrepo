@@ -1,0 +1,12 @@
+{% load abs_url %}
+
+Thank you for registering for the Women in Neuroscience repository!
+
+{% if profile %}
+We found a profile with the same e-mail address, and it will be linked to your account after your confirmation.
+
+After confirming your e-mail, you will be able to edit its information, if needed.
+{% endif %}
+
+Please, confirm your e-mail address following the link:
+{% abs_url 'profiles:signup_confirm' %}?token={{ token }}&uid={{ uid }}

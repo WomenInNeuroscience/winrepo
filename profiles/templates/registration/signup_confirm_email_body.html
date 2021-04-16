@@ -1,0 +1,22 @@
+{% extends "base_email.html" %}
+{% load abs_url %}
+
+{% block content %}
+
+<h1 style="text-align: center;">
+	Thank you for registering for the Women in Neuroscience repository!
+</h1>
+
+{% if profile %}
+<p style="font-size: 140%">We found a profile with the same e-mail address, and it will be linked to your account after your confirmation.</p>
+<p style="font-size: 140%">After confirming your e-mail, you will be able to edit its information, if needed.</p>
+{% endif %}
+
+<p style="text-align: center; font-size: 140%">Please, confirm your e-mail address following the link:</p>
+<p style="text-align: center; font-size: 140%">
+	<a href="{% abs_url 'profiles:signup_confirm' %}?token={{ token }}&uid={{ uid }}">
+		{% abs_url 'profiles:signup_confirm' %}?token={{ token }}&uid={{ uid }}
+	</a>
+</p>
+
+{% endblock content %}
