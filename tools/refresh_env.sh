@@ -3,7 +3,7 @@
 cd ${HOME}/winrepo
 git pull
 
-./tools/refresh_env.sh
+./tools/refresh_db.sh
 
 curl \
 -H 'Authorization: Token ${PYTHONANYWHERE_TOKEN}' \
