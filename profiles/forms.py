@@ -1,5 +1,5 @@
 from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV3
+from captcha.widgets import ReCaptchaV2Checkbox
 from dal.autocomplete import ModelSelect2
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -9,7 +9,7 @@ from .models import Profile, Recommendation, User
 
 
 class CaptchaForm(forms.Form):
-    captcha = ReCaptchaField(widget=ReCaptchaV3, label=False)
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox, label=False)
 
 
 class UserForm(forms.ModelForm):
@@ -61,7 +61,6 @@ class UserCreateForm(CaptchaForm, UserCreationForm):
     email = forms.EmailField(required=True)
 
     def save(self, commit=True):
-
         user = super().save(commit=False)
         user.is_active = False
 
