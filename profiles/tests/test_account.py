@@ -17,7 +17,7 @@ class SignupViewTests(TestCase):
             'email': 'test@test.com',
             'password1': 'myunittest1!',
             'password2': 'myunittest1!',
-            'captcha': 'abcdef',
+            'g-recaptcha-response': 'abcdef',
         })
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertEqual(response.url, reverse('profiles:signup_confirm'))
