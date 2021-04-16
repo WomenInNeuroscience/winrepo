@@ -1,7 +1,3 @@
-
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 
@@ -22,15 +18,16 @@ def build_email(subject_template_name, email_template_name, html_email_template_
 
 
 def user_create_confirm_email(
-    user, token_generator=default_token_generator,
+    request, user, uid, token,
     subject_template_name='registration/signup_confirm_email_subject.txt',
     email_template_name='registration/signup_confirm_email_body.txt',
     html_email_template_name='registration/signup_confirm_email_body.html'
 ):
     context = {
+        "request": request,
         "user": user,
-        "uid": urlsafe_base64_encode(force_bytes(user.email)),
-        "token": token_generator.make_token(user)
+        "uid": uid,
+        "token": token,
     }
 
     message = build_email(
