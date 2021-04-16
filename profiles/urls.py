@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic import TemplateView
-from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
+from django.contrib.auth.views import LoginView, LogoutView
 
 from rest_framework import routers
 
@@ -65,8 +65,10 @@ urlpatterns = [
          name='login'),
     path('logout/', LogoutView.as_view(),
          name='logout'),
-    path('login/forgot', PasswordResetView.as_view(),
-         name='login_forgot'),
+    path('login/forgot', views.UserPasswordResetView.as_view(),
+         name='forgot'),
+    path('login/forgot/confirm', views.UserPasswordResetConfirmView.as_view(),
+         name='forgot_confirm'),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
