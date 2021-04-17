@@ -31,3 +31,11 @@ jobs:
     - name: Test
       run: |
         python ./manage.py test
+
+    - name: Deploy
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      run: |
+        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+        ssh-add - <<< "${{ secrets.PYTHONANYWHERE_ACCESS }}"
+        ssh "${{ secrets.PYTHONANYWHERE_ADDRESS }}"
