@@ -38,4 +38,4 @@ jobs:
       run: |
         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
         ssh-add - <<< "${{ secrets.PYTHONANYWHERE_ACCESS }}"
-        ssh "${{ secrets.PYTHONANYWHERE_ADDRESS }}"
+        ssh -T -o StrictHostKeyChecking=no "${{ secrets.PYTHONANYWHERE_ADDRESS }}"
