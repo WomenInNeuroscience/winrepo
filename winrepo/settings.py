@@ -157,14 +157,14 @@ RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_DOMAIN = config('RECAPTCHA_DOMAIN')
 
 EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = int(config('EMAIL_PORT'))
+EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS') == 'True'
 EMAIL_USE_SSL = config('EMAIL_USE_SSL') == 'True'
 
 EMAIL_FROM = 'no-reply@winrepo.org'
-EMAIL_SUBJECT_PREFIX = 'WinRepo - '
+EMAIL_SUBJECT_PREFIX = 'WiNRepo - '
 
 # Sites settings
 SITE_ID = config('SITE_ID', cast=int)
