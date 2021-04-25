@@ -16,93 +16,106 @@
 				<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
 				Information
 				<div class="float-right">
-					<a class="btn btn-outline-primary pill-btn m-1" href="{% url 'profiles:user_edit' %}">Edit</a>
+					<a class="btn btn-outline-primary pill-btn" href="{% url 'profiles:user_edit' %}">Edit</a>
 				</div>
 			</h3>
 			<p class="m-1"><i class="fas fa-user"></i> {{ user.name }}</p>
 			<p class="m-1"><i class="fas fa-envelope"></i> {{ user.email }}</p>
 		</div>
 			
-		{% if user.profile %}
 		<div class="col-12 col-lg-7 pl-3 mt-5 mt-lg-0">
 			<h3 class="text-primary font-weight-bold mt-2">
 				<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
 				Public Profile
-				<div class="float-right">
-					<a class="btn btn-outline-primary pill-btn m-1" href="{% url 'profiles:user_profile_edit' %}">Edit</a>
-				</div>
+				{% if user.profile %}
+					<div class="float-right">
+						<a class="btn btn-outline-primary pill-btn" href="{% url 'profiles:user_profile_edit' %}">Edit</a>
+						<a class="btn btn-danger pill-btn" href="{% url 'profiles:user_profile_delete' %}">Delete</a>
+					</div>
+				{% endif %}
 			</h3>
 
-			<div class="p-3 mt-4 border rounded">
-				<div class="container-fluid">
-					<div class="row no-gutters">
-						<div class="col-xs-6 col-sm-8 col-md-9 text-muted details-grey">
-							<h2 class="text-primary font-weight-bold">{{ user.profile.name }}</h2>
-							<p class="m-1"><i class="fas fa-user"></i> {{ user.profile.position }}</p>
-							<p class="m-1"><i class="fas fa-university"></i> {{ user.profile.institution }}</p>
-							<p class="m-1"><i class="fas fa-map-marker-alt"></i> {{ user.profile.country }}</p>
-							{% if user.profile.grad_year %}<p class="m-1"><i class="fas fa-graduation-cap"></i> {{ user.profile.grad_month_labels }} {{ user.profile.grad_year }}</p>{% endif %}
+			{% if user.profile %}
+				<div class="p-3 mt-4 border rounded">
+					<div class="container-fluid">
+						<div class="row no-gutters">
+							<div class="col-xs-6 col-sm-8 col-md-9 text-muted details-grey">
+								<h2 class="text-primary font-weight-bold">{{ user.profile.name }}</h2>
+								<p class="m-1"><i class="fas fa-user"></i> {{ user.profile.position }}</p>
+								<p class="m-1"><i class="fas fa-university"></i> {{ user.profile.institution }}</p>
+								<p class="m-1"><i class="fas fa-map-marker-alt"></i> {{ user.profile.country }}</p>
+								{% if user.profile.grad_year %}<p class="m-1"><i class="fas fa-graduation-cap"></i> {{ user.profile.grad_month_labels }} {{ user.profile.grad_year }}</p>{% endif %}
+							</div>
 						</div>
 					</div>
-				</div>
-				
-				<div id="field-of-research">
-					<h5 class="text-primary font-weight-bold mt-5">
-						<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
-						Field of Research
-					</h5>
-					<div id="field-of-research-list" class="w-100 p-4 mt-3 d-flex flex-row grey-bg rounded">
-						<div class="w-25 p-2 text-center">
-							<h6 class="text-secondary font-weight-bold">Brain Area</h6>
-							<ul class="list-group list-group-flush">
-								{% for structure in user.profile.brain_structure_labels %}
-								<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ structure }} </li>
-								{% endfor %}
-							</ul>
-						</div>
-						<div class="w-25 p-2 text-center">
-							<h6 class="text-secondary font-weight-bold">Domain</h6>
-							<ul class="list-group list-group-flush">
-								{% for domain in user.profile.domains_labels %}
-								<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ domain }} </li>
-								{% endfor %}
-							</ul>
-						</div>
-						<div class="w-25 p-2 text-center">
-							<h6 class="text-secondary font-weight-bold">Modalities</h6>
-							<ul class="list-group list-group-flush">
-								{% for modality in user.profile.modalities_labels %}
-								<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ modality }} </li>
-								{% endfor %}
-							</ul>
-						</div>
-						<div class="w-25 p-2 text-center">
-							<h6 class="text-secondary font-weight-bold">Methods</h6>
-							<ul class="list-group list-group-flush">
-								{% for method in user.profile.methods_labels %}
-								<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ method }} </li>
-								{% endfor %}
-							</ul>
+					
+					<div id="field-of-research">
+						<h5 class="text-primary font-weight-bold mt-5">
+							<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
+							Field of Research
+						</h5>
+						<div id="field-of-research-list" class="w-100 p-4 mt-3 d-flex flex-row grey-bg rounded">
+							<div class="w-25 p-2 text-center">
+								<h6 class="text-secondary font-weight-bold">Brain Area</h6>
+								<ul class="list-group list-group-flush">
+									{% for structure in user.profile.brain_structure_labels %}
+									<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ structure }} </li>
+									{% endfor %}
+								</ul>
+							</div>
+							<div class="w-25 p-2 text-center">
+								<h6 class="text-secondary font-weight-bold">Domain</h6>
+								<ul class="list-group list-group-flush">
+									{% for domain in user.profile.domains_labels %}
+									<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ domain }} </li>
+									{% endfor %}
+								</ul>
+							</div>
+							<div class="w-25 p-2 text-center">
+								<h6 class="text-secondary font-weight-bold">Modalities</h6>
+								<ul class="list-group list-group-flush">
+									{% for modality in user.profile.modalities_labels %}
+									<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ modality }} </li>
+									{% endfor %}
+								</ul>
+							</div>
+							<div class="w-25 p-2 text-center">
+								<h6 class="text-secondary font-weight-bold">Methods</h6>
+								<ul class="list-group list-group-flush">
+									{% for method in user.profile.methods_labels %}
+									<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ method }} </li>
+									{% endfor %}
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
-				
-				{% if user.profile.keywords %}
-				<div id="keywords">
-					<h5 class="text-primary font-weight-bold mt-5">
-						<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
-						Other keywords
-					</h5>
-					<div class="grey-bg p-4 mt-3 rounded">
-						<p>{{ user.profile.keywords }}</p>
+					
+					{% if user.profile.keywords %}
+					<div id="keywords">
+						<h5 class="text-primary font-weight-bold mt-5">
+							<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
+							Other keywords
+						</h5>
+						<div class="grey-bg p-4 mt-3 rounded">
+							<p>{{ user.profile.keywords }}</p>
+						</div>
 					</div>
+					{% endif %}
 				</div>
-				{% endif %}
-			</div>
+			{% else %}
+
+				<p>Do you identify yourself as a woman in the field of neuroscience? If so, create your public profile!</p>
+
+				<a class="btn btn-primary ml-5 mr-5" style="white-space: normal;" href="{% url 'profiles:user_profile_edit' %}" role="button">
+					I identify myself as a woman and want to create a public profile
+				</a>
+			
+			{% endif %}
 
 		</div>
-		{% endif %}
 	</div>
+
+	<hr class="mt-5 mb-5" />
 
 	<div class="row mt-5">
 		<div class="col-12 text-right">
