@@ -12,8 +12,7 @@ class SignupViewTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
         response = self.client.post(reverse('profiles:signup'), data={
-            'first_name': 'Unit',
-            'last_name': 'Test',
+            'name': 'Unit Test',
             'email': 'test@test.com',
             'password1': 'myunittest1!',
             'password2': 'myunittest1!',

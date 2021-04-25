@@ -20,8 +20,7 @@
 <div class="col-lg-10 col-lg-offset-1">
 	<form method="post">
 		{% csrf_token %}
-		{{ form.first_name|as_crispy_field }}
-		{{ form.last_name|as_crispy_field }}
+		{{ form.name|as_crispy_field }}
 		{{ form.email|as_crispy_field }}
 		<button type="submit" class="btn btn-primary pill-btn">
 			Submit
