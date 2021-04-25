@@ -16,8 +16,7 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            'first_name',
-            'last_name',
+            'name',
             'email',
         )
 
@@ -71,7 +70,7 @@ class UserCreateForm(CaptchaForm, UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email',)
+        fields = ('name', 'email',)
         labels = {
             'email': _('Email Address'),
         }
