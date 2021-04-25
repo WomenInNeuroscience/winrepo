@@ -192,7 +192,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     is_public = models.BooleanField(default=True)
     
-    name = models.CharField(max_length=100, blank=False)
+    name = models.CharField(max_length=200, blank=False)
     contact_email = models.EmailField(blank=True)
     webpage = models.URLField(blank=True)
     institution = models.CharField(max_length=100, blank=False)

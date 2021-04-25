@@ -48,6 +48,14 @@ class UserProfileForm(forms.ModelForm):
         return user_profile
 
 
+class UserProfileDeleteForm(forms.Form):
+    confirm = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=True,
+        initial=True
+    )
+
+
 class UserDeleteForm(forms.Form):
     confirm = forms.BooleanField(
         widget=forms.HiddenInput(),

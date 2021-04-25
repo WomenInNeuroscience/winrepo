@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+	{{ block.super }} - Delete Public Profile
+{% endblock title %}
+
+{% block nav-repository-classes %}active{% endblock nav-repository-classes %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row no-gutters">
+		<div class="col-12">
+			<h2 class="text-primary font-weight-bold">Delete Public Profile</h2>
+
+			<h3 class="text-primary font-weight-bold mt-5">
+				<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
+				Are you absolutely sure?
+			</h3>
+			<p class="m-1">
+				This action cannot be undone.
+				This will permanently delete your public profile and recommendations.
+			</p>
+
+			<div class="pt-2 mt-4 w-100 text-muted">
+				<form method="post">
+					{% csrf_token %}
+					{{ form }}
+					<button type="submit" class="btn btn-primary pill-btn">
+						Delete
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock content %}

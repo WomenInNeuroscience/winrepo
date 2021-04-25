@@ -28,7 +28,7 @@ from rest_framework import viewsets
 
 from .emails import user_create_confirm_email, user_reset_password_email
 from .forms import (RecommendModelForm, UserCreateForm, UserDeleteForm,
-                    UserForm, UserProfileForm)
+                    UserProfileDeleteForm, UserForm, UserProfileForm)
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
 
@@ -163,14 +163,20 @@ class UserProfileView(TemplateView):
 class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
     template_name = "account/user_profile_form.html"
     form_class = UserProfileForm
-    success_message = 'Your profile has been stored successfully!'
+    success_message = 'Your profile has been saved successfully!'
 
     def get(self, request, *args, **kwargs):
-        self.object = self.request.user.profile
+        try:
+            self.object = self.request.user.profile
+        except Profile.DoesNotExist:
+            self.object = Profile()
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.object = self.request.user.profile
+        try:
+            self.object = self.request.user.profile
+        except Profile.DoesNotExist:
+            self.object = Profile()
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -179,6 +185,42 @@ class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
 
     def get_success_url(self):
         return reverse('profiles:user_profile')
+
+
+class UserProfileDeleteView(LoginRequiredMixin, FormView):
+
+    form_class = UserProfileDeleteForm
+    template_name = 'account/user_profile_delete.html'
+    success_message = 'Your profile has been deleted successfully!'
+
+    token_generator = default_token_generator
+
+    def get(self, request, *args, **kwargs):
+        uid = request.GET.get('uid')
+        token = request.GET.get('token')
+
+        user = _from_token(User, 'email', uid)
+        if token and user is not None:
+            if self.token_generator.check_token(user, token):
+                user.save()
+
+            messages.success(self.request, self.success_message)
+            return redirect('profiles:login')
+
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        user = self.request.user
+        try:
+            profile = user.profile
+            profile.delete()
+        except Profile.DoesNotExist:
+            pass
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('profiles:user')
 
 
 class UserView(LoginRequiredMixin, TemplateView):

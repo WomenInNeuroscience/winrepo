@@ -103,8 +103,8 @@ DATABASES = {
 }
 
 LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'profiles:user'
+LOGOUT_REDIRECT_URL = 'profiles:home'
 
 AUTH_USER_MODEL = 'profiles.User'
 
