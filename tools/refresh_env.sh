@@ -2,10 +2,11 @@
 
 set -eu
 
-cd ${HOME}/winrepo
+BASEDIR=$(realpath $(dirname "$0")/..)
+cd ${BASEDIR}
 git pull
 
-./tools/refresh_db.sh
+# ./tools/refresh_db.sh
 
 curl \
 -X POST \
