@@ -17,13 +17,7 @@ from decouple import config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = \
@@ -31,8 +25,6 @@ ALLOWED_HOSTS = \
     if DEBUG else \
     ['localhost', '127.0.0.1', 'www.winrepo.org']
 
-
-# Application definition
 
 INSTALLED_APPS = [
     'profiles',
@@ -86,9 +78,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'winrepo.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
@@ -134,11 +123,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -174,7 +160,6 @@ ROBOTS_CACHE_TIMEOUT = 60 * 60 * 24
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 BOOTSTRAP4 = {
-
     # The URL to the jQuery JavaScript file
     'jquery_url': 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js',
 
@@ -200,3 +185,5 @@ REST_FRAMEWORK = {
 
 if DEBUG:
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+else:
+    SECURE_SSL_REDIRECT = True
