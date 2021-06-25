@@ -50,6 +50,8 @@ urlpatterns = [
          name='user'),
     path('account/edit/', views.UserEditView.as_view(),
          name='user_edit'),
+    path('account/change_password/', views.UserChangePasswordView.as_view(),
+         name='user_change_password'),
     path('account/delete/', views.UserDeleteView.as_view(),
          name='user_delete'),
     path('profile/', views.UserProfileView.as_view(),

@@ -15,12 +15,14 @@
 			<h3 class="text-primary font-weight-bold mt-2">
 				<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
 				Information
-				<div class="float-right">
-					<a class="btn btn-outline-primary pill-btn" href="{% url 'profiles:user_edit' %}">Edit</a>
-				</div>
 			</h3>
 			<p class="m-1"><i class="fas fa-user"></i> {{ user.name }}</p>
 			<p class="m-1"><i class="fas fa-envelope"></i> {{ user.email }}</p>
+
+			<div class="text-center m-3">
+				<a class="btn btn-outline-primary pill-btn" href="{% url 'profiles:user_edit' %}">Edit</a>
+				<a class="btn btn-outline-primary pill-btn" href="{% url 'profiles:user_change_password' %}">Change password</a>
+			</div>
 		</div>
 			
 		<div class="col-12 col-lg-7 pl-3 mt-5 mt-lg-0">
