@@ -7,7 +7,7 @@ from operator import and_, or_
 from dal.autocomplete import Select2QuerySetView
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
@@ -231,6 +231,32 @@ class UserEditView(SuccessMessageMixin, ModelFormMixin, FormView):
     template_name = "account/user_form.html"
     form_class = UserForm
     success_message = 'Your account has been updated successfully!'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.request.user
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.request.user
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.save(self.request.user)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('profiles:user')
+
+
+class UserChangePasswordView(SuccessMessageMixin, ModelFormMixin, FormView):
+    template_name = "account/user_password.html"
+    form_class = PasswordChangeForm
+    success_message = 'Your password has been updated successfully!'
+
+    def get_form_kwargs(self):
+        kwargs = {}
+        kwargs['user'] = self.object
+        return kwargs
 
     def get(self, request, *args, **kwargs):
         self.object = self.request.user
