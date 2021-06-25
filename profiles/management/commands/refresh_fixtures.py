@@ -146,7 +146,7 @@ class Command(BaseCommand):
 
         user = User.objects.create_user(
             name='User Resu',
-            email='anibalsolon@gmail.com',
+            email='user@winrepo.org',
             password='user'
         )
         user.save()
