@@ -24,6 +24,7 @@
 			<div class="pt-2 mt-4 w-100 text-muted">
 				<form method="post">
 					{% csrf_token %}
+					{{ form.username|as_crispy_field }}
 					{{ form.name|as_crispy_field }}
 					{{ form.email|as_crispy_field }}
 					<div class="text-right">
