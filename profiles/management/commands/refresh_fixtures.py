@@ -145,6 +145,7 @@ class Command(BaseCommand):
         # Accounts
 
         user = User.objects.create_user(
+            username='user',
             name='User Resu',
             email='user@winrepo.org',
             password='user'
@@ -152,6 +153,7 @@ class Command(BaseCommand):
         user.save()
 
         user = User.objects.create_user(
+            username='user-profile',
             name='User Resu',
             email='user-profile@winrepo.org',
             password='user'

@@ -24,7 +24,12 @@
 			<div class="pt-2 mt-4 w-100 text-muted">
 				<form method="post">
 					{% csrf_token %}
-					{{ form|crispy }}
+					{{ form.username|as_crispy_field }}
+					{{ form.name|as_crispy_field }}
+					{{ form.email|as_crispy_field }}
+					{{ form.password1|as_crispy_field }}
+					{{ form.password2|as_crispy_field }}
+					{{ form.captcha }}
 					<div class="text-right">
 						<a class="btn btn-outline-danger pill-btn" href="{% url 'profiles:user' %}" role="button">
 							Cancel

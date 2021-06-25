@@ -150,12 +150,13 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
 
+    username = models.SlugField(max_length=50, unique=True)
     name = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
 
     objects = UserManager()
 
