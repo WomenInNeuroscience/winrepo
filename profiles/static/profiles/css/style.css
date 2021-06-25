@@ -69,38 +69,38 @@
 }
 
 #back-to-top {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    z-index: 9999;
-    background: #cacaca;
-    color: #fafafa;
-    cursor: pointer;
-    border: 0;
-    border-radius: 50%;
-    height: 50px;
-    width: 50px;
-    padding: 0px;
-    font-size: 42px;
-    line-height: 50px;
-    text-decoration: none;
-    transition: opacity 0.2s ease-out;
-    opacity: 0;
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 9999;
+  background: #cacaca;
+  color: #fafafa;
+  cursor: pointer;
+  border: 0;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  padding: 0px;
+  font-size: 42px;
+  line-height: 50px;
+  text-decoration: none;
+  transition: opacity 0.2s ease-out;
+  opacity: 0;
 }
 #back-to-top:hover {
-    background: #10898B;
+  background: #10898B;
 }
 
 #back-to-top.show {
-    opacity: 1;
+  opacity: 1;
 }
 
 #field-of-research-list>div {
-    border-right: 1px solid #ccc;
+  border-right: 1px solid #ccc;
 }
 
 #field-of-research-list>div:last-child {
-   border-right: none;
+  border-right: none;
 }
 
 li.quote .quote-date {
@@ -112,10 +112,14 @@ li.quote .quote-date {
   height: auto!important;
 } 
 
-.modelselect2>span {
+.modelselect2 > span {
   height: 100%!important;
 }
 
 .select2-selection {
   border: 1px solid #ced4da!important;
+}
+  
+.select2-container {
+  width: 100%!important;
 }
