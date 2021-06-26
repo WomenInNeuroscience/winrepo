@@ -23,7 +23,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = \
     ['*'] \
     if DEBUG else \
-    ['localhost', '127.0.0.1', 'www.winrepo.org']
+    ['localhost', '127.0.0.1', 'winrepo.org', 'winrepo.pythonanywhere.com']
 
 
 INSTALLED_APPS = [
