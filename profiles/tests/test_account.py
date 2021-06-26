@@ -18,9 +18,20 @@ class SignupViewTests(TestCase):
             'password2': 'myunittest1!',
             'g-recaptcha-response': 'abcdef',
         })
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn('username', response.context['form'].errors)
+
+        response = self.client.post(reverse('profiles:signup'), data={
+            'username': 'unittest',
+            'name': 'Unit Test',
+            'email': 'test@test.com',
+            'password1': 'myunittest1!',
+            'password2': 'myunittest1!',
+            'g-recaptcha-response': 'abcdef',
+        })
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertEqual(response.url, reverse('profiles:signup_confirm'))
-        
+
         u = User.objects.get(email='test@test.com')
         token = response.context['token']
         uid = response.context['uid']
