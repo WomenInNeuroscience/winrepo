@@ -88,3 +88,33 @@ class SignupViewTests(TestCase):
 
         with self.assertRaises(Recommendation.DoesNotExist):
             Recommendation.objects.get(id=r.id)
+
+    def test_account_changepassword(self):
+
+        u = User(email='test@test.com')
+        u.is_active = True
+        u.set_password('myunittest1!')
+        u.save()
+
+        self.client.force_login(u)
+
+        response = self.client.get(reverse('profiles:user_change_password'))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+        response = self.client.post(reverse('profiles:user_change_password'), data={
+            'old_password': 'myuqwdnittest1!!!',
+            'new_password1': 'myunittest1!passchange',
+            'new_password2': 'myunittest1!passchange',
+        })
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn('old_password', response.context['form'].errors)
+
+        response = self.client.post(reverse('profiles:user_change_password'), data={
+            'old_password': 'myunittest1!',
+            'new_password1': 'myunittest1!passchange',
+            'new_password2': 'myunittest1!passchange',
+        })
+
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(response.url, reverse('profiles:user'))

@@ -6,7 +6,7 @@ from operator import and_, or_
 
 from dal.autocomplete import Select2QuerySetView
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
@@ -227,7 +227,7 @@ class UserView(LoginRequiredMixin, TemplateView):
     template_name = "account/user.html"
 
 
-class UserEditView(SuccessMessageMixin, ModelFormMixin, FormView):
+class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, FormView):
     template_name = "account/user_form.html"
     form_class = UserForm
     success_message = 'Your account has been updated successfully!'
@@ -248,26 +248,20 @@ class UserEditView(SuccessMessageMixin, ModelFormMixin, FormView):
         return reverse('profiles:user')
 
 
-class UserChangePasswordView(SuccessMessageMixin, ModelFormMixin, FormView):
-    template_name = "account/user_password.html"
+class UserChangePasswordView(LoginRequiredMixin, SuccessMessageMixin, FormView):
     form_class = PasswordChangeForm
+    template_name = "account/user_change_password.html"
     success_message = 'Your password has been updated successfully!'
 
+
     def get_form_kwargs(self):
-        kwargs = {}
-        kwargs['user'] = self.object
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
         return kwargs
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.request.user
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.request.user
-        return super().post(request, *args, **kwargs)
-
     def form_valid(self, form):
-        form.save(self.request.user)
+        form.save()
+        update_session_auth_hash(self.request, form.user)
         return super().form_valid(form)
 
     def get_success_url(self):
