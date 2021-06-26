@@ -19,6 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
+ENV = config('ENV', default='Local')
 
 ALLOWED_HOSTS = \
     ['*'] \
@@ -186,5 +187,6 @@ REST_FRAMEWORK = {
 
 if DEBUG:
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
-else:
+
+if ENV != 'Local':
     SECURE_SSL_REDIRECT = True
