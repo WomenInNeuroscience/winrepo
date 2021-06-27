@@ -80,8 +80,9 @@ class UserCreateForm(CaptchaForm, UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('name', 'email',)
+        fields = ('username', 'name', 'email',)
         labels = {
+            'username': _('User Name'),
             'email': _('Email Address'),
         }
         help_texts = {
