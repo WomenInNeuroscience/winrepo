@@ -25,11 +25,11 @@ class SignupViewTests(TestCase):
             'username': 'unittest',
             'name': 'Unit Test',
             'email': 'test@test.com',
-            'password1': 'myunittest1!',
-            'password2': 'myunittest1!',
+            'password1': 'myunitarytest1!',
+            'password2': 'myunitarytest1!',
             'g-recaptcha-response': 'abcdef',
         })
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND, 'form' in response.context and response.context['form'].errors.as_text())
         self.assertEqual(response.url, reverse('profiles:signup_confirm'))
 
         u = User.objects.get(email='test@test.com')
