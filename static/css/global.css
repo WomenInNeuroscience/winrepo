@@ -19,6 +19,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* navbar */
+.navbar {
+    height: 5%;
+}
+
 .navbar-custom  {
 	background-color: white;
 }
@@ -29,14 +33,74 @@ h1, h2, h3, h4, h5, h6 {
 .navbar-custom .navbar-nav .nav-link {
     color: #555;
 }
+
+/* Settings for active links */
 .navbar-custom .nav-item.active .nav-link {
 	color: #10898B; /*red #CC063E*/
 	text-decoration: underline;
 	font-weight: bold;
 }
+
+/* Settings when cursor is on the top */
 .navbar-custom .nav-item:hover .nav-link {
-    color: #10898B;
+  color: #10898B;
 }
+
+/* The dropdown container */
+.dropdown {
+  display: inline-block
+  overflow: hidden;
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: #555;
+  padding: 6px 16px;
+  background-color: inherit;
+  font-family: inherit; /* Important for vertical align on mobile phones */
+  margin: 0; /* Important for vertical align on mobile phones */
+}
+
+/* Settings when cursor is on top of dropdown menu */
+.navbar a:hover, .dropdown:hover .dropbtn {
+    background-color: none;
+    color: #10898B;
+    text-decoration: underline;
+	  font-weight: bold;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  float: none;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+/* Dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
 
 /* head */
 .headtitle {
