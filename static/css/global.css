@@ -29,11 +29,15 @@ h1, h2, h3, h4, h5, h6 {
 .navbar-custom .navbar-nav .nav-link {
     color: #555;
 }
+
+/* Settings for active links in the navigation bar */
 .navbar-custom .nav-item.active .nav-link {
 	color: #10898B; /*red #CC063E*/
 	text-decoration: underline;
 	font-weight: bold;
 }
+
+/* Settings when cursor is on the top of item in navigation bar*/
 .navbar-custom .nav-item:hover .nav-link {
     color: #10898B;
 }
@@ -44,18 +48,20 @@ h1, h2, h3, h4, h5, h6 {
     overflow: hidden;
 }
 
-/* Dropdown button */
+/* Default settings of top button of dropdown menu*/
 .dropdown .dropbtn {
     font-size: 16px;
     border: none;
     outline: none;
     color: #555;
-    padding: 5px 10px;
+    padding: 8px 10px;
     background-color: inherit;
     font-family: inherit;
     margin: 0;
+    cursor: pointer;
 }
 
+/* Settings when cursor is on top of dropdown menu */
 .navbar a:hover, .dropdown:hover .dropbtn {
     background-color: none;
     color: #10898B;
@@ -73,6 +79,7 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 1;
 }
 
+/* Default settings of items in the dropdown menu */
 .dropdown-content a {
     float: none;
     color: black;
@@ -83,17 +90,23 @@ h1, h2, h3, h4, h5, h6 {
     color: #555;
 }
 
+/* Show grey-bar selection when cursor is on the top of dropdown-menu item */
 .dropdown-content a:hover {
     background-color: #ddd;
-    text-decoration: underline;
-    font-weight: bold;
 }
 
+/* Show grey-bar selection when cursor is on the top of dropdown-menu item */
+.dropdown-content:active {
+    background-color: #ddd;
+}
+
+/* Show dropdown menu */
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-.active {
+/* class to display default settings of dropdown-menu items */
+.noactive {
     background-color: none;
 }
 
