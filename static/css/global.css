@@ -105,11 +105,6 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
 }
 
-/* class to display default settings of dropdown-menu items */
-.noactive {
-    background-color: none;
-}
-
 /* head */
 .headtitle {
 	font-family: 'Nunito', sans-serif;
