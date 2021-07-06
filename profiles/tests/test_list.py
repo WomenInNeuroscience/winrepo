@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Profile, Country, Recommendation
+from ..models import Profile, Country, Recommendation
 
 
 default_user = {
@@ -18,7 +18,6 @@ default_user = {
 }
 
 
-# Create your tests here.
 class ProfileIndexViewTests(TestCase):
     def test_no_profile(self):
         """
@@ -77,7 +76,7 @@ class ProfileDetailViewTests(TestCase):
         url = reverse('profiles:detail', args=(self.profile.id,))
         response = self.client.get(url)
         self.assertEqual(response.context['profile']
-                                 .recommendation_set
+                                 .recommendations
                                  .count(),
                          self.recommendations_count)
 

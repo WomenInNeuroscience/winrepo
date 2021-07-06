@@ -17,25 +17,18 @@ from decouple import config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
+ENV = config('ENV', default='Local')
 
 ALLOWED_HOSTS = \
     ['*'] \
     if DEBUG else \
-    ['localhost', 'gfryns.pythonanywhere.com', 'www.winrepo.org']
+    ['localhost', '127.0.0.1', 'winrepo.org', 'winrepo.pythonanywhere.com']
 
-
-# Application definition
 
 INSTALLED_APPS = [
-    'profiles.apps.ProfilesConfig',
+    'profiles',
     'multiselectfield',
     'crispy_forms',
     'captcha',
@@ -52,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -85,9 +79,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'winrepo.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
@@ -101,8 +92,11 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = 'profiles:user'
+LOGOUT_REDIRECT_URL = 'profiles:home'
+
+AUTH_USER_MODEL = 'profiles.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -123,6 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = ['profiles.backends.EmailOrUsernameModelBackend']
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -130,11 +125,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -148,11 +140,19 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "static-collected")
 
 # reCaptcha settings
-RECAPTCHA_PUBLIC_KEY = '6Lc8d5YUAAAAAGeYG5ilVvTNiV8GgwGUxmDFpEhG'
+RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
-NOCAPTCHA = False
-RECAPTCHA_USE_SSL = False
-RECAPTCHA_DOMAIN = 'www.recaptcha.net'
+RECAPTCHA_DOMAIN = config('RECAPTCHA_DOMAIN')
+
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS') == 'True'
+EMAIL_USE_SSL = config('EMAIL_USE_SSL') == 'True'
+
+EMAIL_FROM = 'no-reply@winrepo.org'
+EMAIL_SUBJECT_PREFIX = 'WiNRepo - '
 
 # Sites settings
 SITE_ID = config('SITE_ID', cast=int)
@@ -162,7 +162,6 @@ ROBOTS_CACHE_TIMEOUT = 60 * 60 * 24
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 BOOTSTRAP4 = {
-
     # The URL to the jQuery JavaScript file
     'jquery_url': 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js',
 
@@ -186,4 +185,8 @@ REST_FRAMEWORK = {
     ]
 }
 
-# SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+if DEBUG:
+    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+
+if ENV != 'Local':
+    SECURE_SSL_REDIRECT = True
