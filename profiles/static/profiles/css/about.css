@@ -84,13 +84,13 @@ section .section-title {
 }
 
 #cont .card {
-    width: 12rem;
-    height: 16rem;
+    width: 14rem;
+    height: 20rem;
 }
 
 #boardvol .card {
-    width: 15rem;
-    height: 18rem;
+    width: 16rem;
+    height: 22rem;
 }
 
 .backside .card .card-text{
