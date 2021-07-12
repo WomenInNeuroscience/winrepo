@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block css %} 
+    {{ block.super }}
+    <style media="screen">
+        #accordion .btn {
+            font-size: 1.2rem
+        }
+    </style>
+{% endblock css %}
+
+{% block title %} {{ block.super }} - Resources {% endblock title %}
+
+{% block nav-resources-classes %}active{% endblock nav-resources-classes %}
+
+{% block content %}
+    <h2 class="text-primary font-weight-bold mb-4"> 
+    Tips for conference organizers and other directory users</h2>
+
+    <p style="text-align:justified; padding: 1em 0 0 0">
+    Resources from <a href="../faq">www.winrepo.org (FAQ)</a> and 
+    <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/ejn.14397#ejn14397-bib-0023">Schrouff et al., 2019</a> 
+    (plus cited work).</p>
+
+    <p>Authors: Jessica Schrouff (WiNRepo, 
+    <a href="https://wimlworkshop.org/">WiML</a>), with contributions from 
+    Sarah Tan (<a href="https://wimlworkshop.org/">WiML</a>), 
+    <a href="https://biaswatchneuro.com/">BiasWatchNeuro (BWN)</a>, 
+    Aina Frau Pascual (WiNRepo) and Ana Luísa Pinho (WiNRepo).</p>
+
+    <p style="text-align:justified; padding: 0 0 3.5em 0">
+    Here are tips that may help you increase the diversity at your events. 
+    While this list mostly refers to diversity in terms of gender, we would 
+    like to emphasize that diversity across different axes is desired, 
+    including (but not limited to) geographical location, race, disability, 
+    seniority or academia <i>vs.</i> 
+    industry<sup><a href="#footnote">1</a></sup>. Please note that none of 
+    the suggestions in this document are a panacea, hence the impact of 
+    diversity measures should be constantly re-evaluated. 
+    </p>
+
+    <h3 class="text-primary font-weight-bold mb-4"> 
+    Diversity is worth the extra effort</h3>
+
+    <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
+    It might seem like extra effort to ensure that an event is diverse and 
+    balanced, and achieving this result might be challenging. It has however 
+    been shown that diverse teams outperform homogeneous groups in 
+    innovation, flexibility, problem‐solving, and decision‐making 
+    (<a href="#King2015">King, 2005</a>). So, it is definitely worth the 
+    extra mile and if you’re here, you’re one step closer.</p>
+
+    <h3 class="text-primary font-weight-bold mb-4"> 
+    An early start can help</h3>
+
+    <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
+    Organizing an event is definitely a complex task. However, organizing 
+    travels while being a parent of a young child, having other 
+    responsibilities (which women tend to volunteer for more often than men) 
+    or having to perform a long administrative procedure to get a visa also 
+    requires time. For these reasons, we’d suggest sending invitations for 
+    speaking/participation as early as possible, with regular reminders.</p>
+
+    <h3 class="text-primary font-weight-bold mb-4"> 
+    Diversity across organizers and participants</h3>
+
+    <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
+    Diversity should be considered at all steps of the event, starting by 
+    the organizing committee. A diverse conference organizing committee can 
+    indeed encourage more women to contribute and participate 
+    (<a href="#Klein2017">Klein et al., 2017</a>). Diversity should also be 
+    considered across invited  speakers, in the reviewer pool and across 
+    attendees, as well as when awarding prizes. It might be helpful to 
+    consider tandem nominations for all those roles, i.e. for each man 
+    suggested, suggest a woman. Similarly, defining clear criteria for 
+    nomination, based on a person’s expertise, recent work or seniority can 
+    lead to a less biased selection.</p>
+
+    <h3 class="text-primary font-weight-bold mb-4"> 
+    Avoiding the over solicited circles</h3>
+
+    <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
+    As female scientists are less visible, it is likely that the same 
+    people are repeatedly solicited and thus will decline some of the 
+    invitations (<a href="#Moghaddam2016">Moghaddam & Gur, 2016</a>). 
+    Nonetheless, women do not decline more talk invitations than men, on 
+    average (<a href="#Nittrouer2018">Nittrouer et al., 2018</a>). 
+    Strive to invite women (and men) that are outside the small circle of 
+    repeatedly solicited scientists to avoid this potential situation (e.g., 
+    using this repository). 
+    <a href="#Moghaddam2016">Moghaddam & Gur, 2016</a> address the concern of 
+    inviting a researcher that the organizers have not heard speak at a 
+    conference before: “How many of you have heard famous men scientists give 
+    dull talks? Are you taking a greater risk by inviting women to give talks 
+    even though you have never heard them give a talk before? Chances are 
+    that a thoughtful scientist can give a good talk.”</p>
+
+    <h3 class="text-primary font-weight-bold mb-4"> 
+    Careful correspondence</h3>
+
+    <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
+    Women can be put off when the invitation clearly stems from a diversity 
+    search (<a href="#Moghaddam2016">Moghaddam & Gur, 2016</a>) as this 
+    emphasizes their gender, and not their  work. Make sure to focus on the 
+    professional reasons and give examples of published works that have 
+    triggered the invitation. Any policies that have been designed to ease 
+    the contribution/attendance could also be highlighted in this 
+    communication (e.g. childcare, invitation letter for visa, mother-nursing 
+    rooms), in addition to what the invitation covers (travel stipend, 
+    hotel booked, etc.). As we all face unique challenges, asking what other 
+    measures not mentioned could ease participation might be a great learning 
+    opportunity. </p>
+
+    <h3 class="text-primary font-weight-bold mb-4"> 
+    Implementing double-blind reviews of submitted work (if relevant)</h3>
+
+    <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
+    Double-blind reviews have shown to increase the rate of acceptance of 
+    work by female authors (<a href="#Budden2008">Budden et al., 2008</a>, 
+    <a href="#Roberts2016">Roberts & Verhoef, 2016</a>, 
+    <a href="#Bernard2018">Bernard, 2018</a>). We note that this process can 
+    be beneficial even in small fields, as reviewers fail to identify authors 
+    in 74% to 90% of cases (<a href="#LeGoues2018">Le Goues et al., 2018</a>). 
+    While the effect on gender does not apply to all venues (e.g. 
+    <a href="#Cox2019">Cox & Montgomerie, 2019</a>), double-blind review can 
+    reduce nepotism (<a href="#Sandstrom2008">Sandström and Hällsten, 2008</a>), 
+    institutional (<a href="#Ross2006">Ross et al., 2006</a>, 
+    <a href="#Okike2016">Okike et al., 2016</a>, 
+    <a href="#Tomkins2017">Tomkins et al., 2017</a>), and geographic biases 
+    (<a href="#Link1998">Link, 1998</a>, 
+    <a href="#Primack2009">Primack et al., 2009</a>). In addition, 
+    double-blind review is a low-cost measure to implement. It is however 
+    important to note that double-blind review has been shown to produce 
+    harsher reviews 
+    (<a href="#McGillivray2018">McGillivray & De Ranieri, 2018</a>). One 
+    potential solution is to avoid the combination of double-blind reviews with 
+    “elitist” selection criteria that tend to benefit the “richer” 
+    (<a href="https://lemire.me/blog/2020/11/19/double-blind-peer-review-is-a-bad-idea/">see 
+    this opinion</a>), as well as include a rebuttal period. Hybrid 
+    reviewing modes (e.g. displaying the reviewers’ names upon acceptance) 
+    have been developed recently and we encourage the reader to investigate 
+    the available options.</p>
+
+    <h3 class="text-primary font-weight-bold mb-4"> 
+    Diversity as a core value</h3>
+
+    <p style="text-align:justified; margin-top:-1em">
+    Diversity should be considered as a core value of each event, and not 
+    simply as a box to check. Events and policies should be thought carefully 
+    in terms of diversity to ensure the success of later actions. 
+    Below are some examples of policies that can be considered in the 
+    planning. Please note that this list is by no means exhaustive.</p>
+
+    <ul>
+        <li style="padding: 0 0 0.75em 0">
+        Do deadlines or event dates coincide with major events for a 
+        specific group (e.g. major religious celebrations, beginning of 
+        school year, etc.)? If so, consider moving the deadlines.</li>
+
+        <li style="padding: 0 0 0.75em 0">
+        Does the notification timeline allow enough time for visa 
+        applications? It might also be worth contacting the immigration 
+        services in the host country to ensure a smooth process.</li>
+
+        <li style="padding: 0 0 0.75em 0">
+        Is the event during a weekend? This might make it more difficult 
+        for parents to attend and might disproportionately affect women 
+        (<a href="#Calisi2018">Calisi et al., 2018</a>).</li>
+
+        <li style="padding: 0 0 0.75em 0">
+        Is the event providing childcare or childcare fellowships? 
+        Childcare is a great way to help parents attend/contribute to an 
+        event. <a href="#Calisi2018">Calisi et al., 2018</a> have great 
+        suggestions on how to help parents at conferences and 
+        (<a href="#Grens2017">Grens, 2017</a>) reports a successful example 
+        in that regard. With respect to fellowships, it is important to 
+        ensure that their amount is a significant help in the cost of 
+        childcare and that they are accessible (e.g. requiring receipts or 
+        invoices might limit their practical impact).</li>
+
+        <li style="padding: 0 0 0.75em 0">
+        For speakers, can travel arrangements be made and paid for by the 
+        event to avoid out-of-pocket expenses?</li>
+
+        <li style="padding: 0 0 0.75em 0">
+        Has a code of conduct been adopted, with a “hotline” to report 
+        incidents?</li>
+
+        <li style="padding: 0 0 0.75em 0">
+        For online events, are multiple time zones accommodated? Is a 
+        free phone number provided for countries outside the US and 
+        Canada?</li>
+
+        <li style="padding: 0 0 0.75em 0">
+        Is the venue accessible? This question is valid in the context of 
+        physical (e.g. wheelchair) but also virtual events (e.g. deaf or 
+        blind).</li>
+
+        <li style="padding: 0 0 0.75em 0">
+        Has the event considered all-gender participants (e.g. 
+        gender-neutral bathrooms, pronouns on badges)? </li>
+
+        <li style="padding: 0 0 0.75em 0">
+        Are diversity-specific events (talks, panels, meetings) organized 
+        and given the importance they deserve (e.g. scheduled in priority 
+        times)? It is often the case that only minorities and women attend 
+        these events, when diversity should concern all of us.</li>
+
+        <li style="padding: 0 0 2em 0">
+        Is the catering providing options for all, as well as clearly 
+        labelled?</li>
+    
+    </ul>
+
+    <h3 class="text-primary font-weight-bold mb-4"> References</h3>
+
+    <ul style="text-align:justified; margin-top:-1em">
+        <li><a id="King2015" href="https://doi.org/10.1126/science.1112550">
+        King, J. (2005). Benefits of women in science. <i>Science</i>, 
+        <b>308</b>(5722):601.</a></li>
+
+        <li><a id="Klein2017" href="https://doi.org/10.1038/ni.3707">
+        Klein, R., Voskuhl, R., Segal, B. et al. (2017) Speaking out about 
+        gender imbalance in invited speakers improves diversity. 
+        <i>Nat Immunol</i>, <b>18</b>:475–478.</a></li>
+
+        <li><a id="Moghaddam2016" href="https://doi.org/10.1038/npp.2015.320">
+        Moghaddam, B., & Gur, R. E. (2016). Women at the podium: ACNP strives 
+        to reach speaker gender equality at the annual meeting. 
+        <i>Neuropsychopharmacology</i>, <b>41</b>:929–931. </a></li>
+
+        <li><a id="Nittrouer2018" href="https://doi.org/10.1073/pnas.1708414115"> 
+        Nittrouer, C. L., Hebl, M. R., Ashburn-Nardo, L., 
+        Trump-Steele, R. C. E., Lane, D. M., & Valian, V. (2018). Gender 
+        disparities in colloquium speakers at top universities. 
+        <i>Proc Natl Acad Sci USA</i>, <b>115</b>:104–108.</a></li>
+
+        <li><a id="Budden2008" 
+        href="https://doi.org/10.1016/j.tree.2007.07.008">Budden, A. E., 
+        Tregenza, T., Aarssen, L. W., Koricheva, J., Leimu, R., & 
+        Lortie, C. J. (2008). Double-blind review favours increased 
+        representation of female authors. <i>Trends Ecol Evol</i>, 
+        <b>23</b>:4–6.</a></li>
+
+        <li><a id="Roberts2016" href="https://doi.org/10.1093/jole/lzw009">
+        Roberts, S. G., & Verhoef, T. (2016). Double-blind reviewing at 
+        EvoLang 11 reveals gender bias, <i>J Lang Evol</i>, 
+        <b>1</b>(2):163–167.</a></li>
+
+        <li><a id="Bernard2018" href="https://doi.org/10.1523/ENEURO.0225-18.2018">
+        Bernard, C. (2018). Editorial: Gender bias in publishing: 
+        Double-blind reviewing as a solution? <i>Eneuro</i>, <b>5</b>.</a></li>
+
+        <li><a id="LeGoues2018" href="https://doi.org/10.1145/3208157">
+        Le Goues, C., Brun, Y., Apel, S., Berger, E., Khurshid, S., & 
+        Smaragdakis, Y. (2018) <i>Commun ACM</i>, <b>61</b>(6):30-33.</a></li>
+
+        <li><a id="Cox2019" href="https://doi.org/10.7717/peerj.6702">
+        Cox, A. R., & Montgomerie, R. (2019). <i>PeerJ</i>, 
+        <b>7</b>:e6702.</a></li>
+
+        <li><a id="Sandstrom2008" href="https://doi.org/10.1007/s11192-008-0211-3">
+        Sandström, U., & Hällsten, M. (2008) Persistent nepotism in 
+        peer-review. <i>Scientometrics</i>, <b>74</b>:175–189. </a></li>
+
+        <li><a id="Ross2006" href="https://doi.org/10.1001/jama.295.14.1675">
+        Ross, J. S., Gross, C. P., Desai, M. M., et al. (2006). Effect of 
+        Blinded Peer Review on Abstract Acceptance. <i>JAMA</i>, 
+        <b>295</b>(14):1675–1680.</a></li>
+
+        <li><a id="Okike2016" href="https://doi.org/10.1001/jama.2016.11014">
+        Okike, K., Hug, K. T., Kocher, M. S., & Leopold, S. S. (2016). 
+        Single-blind vs Double-blind Peer Review in the Setting of Author 
+        Prestige. <i>JAMA</i>, <b>316</b>(12):1315–1316.</a></li>
+
+        <li><a id="Tomkins2017" href="https://arxiv.org/abs/1702.00502">
+        Tomkins, A., Zhang, M., Heavlin, W. D. (2017). Single versus Double 
+        Blind Reviewing at WSDM 2017. <i>arXiv</i>:1702.00502</a></li>
+
+        <li><a id="Link1998" href="https://doi.org/10.1001/jama.280.3.246">
+        Link, A. M. (1998). US and Non-US Submissions: An Analysis of 
+        Reviewer Bias. <i>JAMA</i>, <b>280</b>(3):246–247.</a></li>
+
+        <li><a id="Primack2009" href="https://doi.org/10.1016/j.biocon.2009.06.021">
+        Primack, R. B., Ellwood, E., Miller-Rushing, A. J., Marrs, R., & 
+        Mulligan, M. (2009). Do gender, nationality, or academic age affect 
+        review decisions? An analysis of submissions to the journal 
+        <i>Biological Conservation</i>. <i>Biol Conserv</i>, 
+        <b>142</b>(11):2415-2418.</a></li>
+
+        <li><a id="McGillivray2018" href="https://doi.org/10.1186/s41073-018-0049-z">
+        McGillivray, B., & De Ranieri, E. (2018) Uptake and outcome of 
+        manuscripts in Nature journals by review model and author 
+        characteristics. <i>Res Integr Peer Rev</i>, <b>3</b>:5.</a></li>
+
+        <li><a id="Calisi2018" href="https://doi.org/10.1073/pnas.1803153115">
+        Calisi, R. M., Working Group of Mothers in Science. (2018). 
+        Opinion: How to tackle the childcare–conference conundrum. 
+        <i>Proc Natl Acad Sci USA</i>, <b>115</b>:2845–2849.</a></li>
+
+        <li style="padding: 0 0 2em 0">Grens, K. (2017). Baby on board. 
+        Retrieved from <a id="Grens2017", 
+        href="https://www.thescientist.com/careers/baby-on-board-30991">https://www.thescientist.com/careers/baby-on-board-30991</a></li>
+
+    </ul>
+
+    <hr>
+    <p id="footnote" style="font-size: 14px"><sup>1</sup>We acknowledge that 
+    our repository does not cover all these factors (e.g. race or disability). 
+    We thus would like to encourage you to visit other, similar initiatives, 
+    such as BlackInAI 
+    (<a href="https://blackinai2020.vercel.app">https://blackinai2020.vercel.app</a>), 
+    LatinXAI (<a href="http://www.latinxinai.org">http://www.latinxinai.org)</a>, 
+    Queer in AI (<a href="https://sites.google.com/view/queer-in-ai">https://sites.google.com/view/queer-in-ai</a>), 
+    BlackInNeuro (<a href="https://www.blackinneuro.com/profiles">https://www.blackinneuro.com/profiles)</a>, 
+    QueerInNeuro (<a href="https://twitter.com/queerinneuro">https://twitter.com/queerinneuro</a>, 
+    with information given upon request confidentially and with the 
+    scientist’s explicit permission) that can provide further speaker 
+    suggestions.</p>
+    
+{% endblock content %}
