@@ -15,6 +15,27 @@
         a:hover { 
             color: #C71585;
         }
+
+        #toc_container {
+            background: #f9f9f9 none repeat scroll 0 0;
+            border: 1px solid #aaa;
+            display: table;
+            font-size: 95%;
+            margin-bottom: 1em;
+            padding: 20px
+            padding-right: 55px;
+            padding-top: 35px;
+            width: auto;
+        }
+
+        .toc_title {
+            font-weight: 700;
+            text-align: center;
+        }
+
+        #toc_container li, #toc_container ul, #toc_container ul li {
+            list-style: outside none none !important;
+        }
     </style>
 {% endblock css %}
 
@@ -41,7 +62,7 @@
     (<a href="#Schrouff2019">Schrouff et al., 2019</a>) and in collaboration 
     with members of different organizations.</p>
 
-    <p style="text-align:justified; padding: 0 0 3em 0">
+    <p style="text-align:justified; padding: 0 0 1em 0">
     Here are some tips that may help you increase the diversity at your 
     events. While this list mostly refers to diversity in terms of gender, 
     we would like to emphasize that diversity across different axes is 
@@ -52,7 +73,30 @@
     diversity measures should be constantly re-evaluated. 
     </p>
 
-    <h3 class="text-primary font-weight-bold mb-4"> 
+    <div id="toc_container">
+        <p class="toc_title">Contents</p>
+            <ul class="toc_list">
+                <li style="padding: 0.5em 0 0.25em 0"><a href="#First_Point_Header">
+                1 Diversity is worth the extra effort</a></li>
+                <li style="padding: 0 0 0.25em 0"><a href="#Second_Point_Header">
+                2 An early start can help</a></li>
+                <li style="padding: 0 0 0.25em 0"><a href="#Third_Point_Header">
+                3 Diversity across organizers and participants</a></li>
+                <li style="padding: 0 0 0.25em 0"><a href="#Fourth_Point_Header">
+                4 Avoiding the over solicited circles</a></li>
+                <li style="padding: 0 0 0.25em 0"><a href="#Fifth_Point_Header">
+                5 Careful correspondence</a></li>
+                <li style="padding: 0 0 0.25em 0"><a href="#Sixth_Point_Header">
+                6 Implementing double-blind reviews of submitted work 
+                (if relevant)</a></li>
+                <li style="padding: 0 0 0.25em 0"><a href="#Seventh_Point_Header">
+                7 Diversity as a core value</a></li>
+                <li><a href="#Eighth_Point_Header">8 References</a></li>
+            </ul>
+    </div>
+
+    <h3 class="text-primary font-weight-bold mb-4 anchor" 
+    style="padding: 2.2em 0 0 0" id="First_Point_Header"> 
     Diversity is worth the extra effort</h3>
 
     <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
@@ -63,8 +107,8 @@
     (<a href="#King2015">King, 2005</a>). So, it is definitely worth the 
     extra mile and if you’re here, you’re one step closer.</p>
 
-    <h3 class="text-primary font-weight-bold mb-4"> 
-    An early start can help</h3>
+    <h3 class="text-primary font-weight-bold mb-4 anchor" 
+    id="Second_Point_Header">An early start can help</h3>
 
     <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
     Organizing an event is definitely a complex task. However, organizing 
@@ -75,8 +119,8 @@
     reasons, we’d suggest sending invitations for speaking/participation as 
     early as possible, with regular reminders.</p>
 
-    <h3 class="text-primary font-weight-bold mb-4"> 
-    Diversity across organizers and participants</h3>
+    <h3 class="text-primary font-weight-bold mb-4 anchor" 
+    id="Third_Point_Header">Diversity across organizers and participants</h3>
 
     <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
     Diversity should be considered at all steps of the event, starting by 
@@ -90,8 +134,8 @@
     nomination, based on a person’s expertise, recent work or seniority can 
     lead to a less biased selection.</p>
 
-    <h3 class="text-primary font-weight-bold mb-4"> 
-    Avoiding the over solicited circles</h3>
+    <h3 class="text-primary font-weight-bold mb-4 anchor" 
+    id="Fourth_Point_Header">Avoiding the over solicited circles</h3>
 
     <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
     As female scientists are less visible, it is likely that the same 
@@ -109,8 +153,8 @@
     even though you have never heard them give a talk before? Chances are 
     that a thoughtful scientist can give a good talk.”</p>
 
-    <h3 class="text-primary font-weight-bold mb-4"> 
-    Careful correspondence</h3>
+    <h3 class="text-primary font-weight-bold mb-4 anchor" 
+    id="Fifth_Point_Header">Careful correspondence</h3>
 
     <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
     Women can be put off when the invitation clearly stems from a diversity 
@@ -125,7 +169,8 @@
     measures not mentioned could ease participation might be a great learning 
     opportunity. </p>
 
-    <h3 class="text-primary font-weight-bold mb-4"> 
+    <h3 class="text-primary font-weight-bold mb-4 anchor" 
+    id="Sixth_Point_Header">
     Implementing double-blind reviews of submitted work (if relevant)</h3>
 
     <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
@@ -155,8 +200,8 @@
     have been developed recently and we encourage the reader to investigate 
     the available options.</p>
 
-    <h3 class="text-primary font-weight-bold mb-4"> 
-    Diversity as a core value</h3>
+    <h3 class="text-primary font-weight-bold mb-4 anchor" 
+    id="Seventh_Point_Header">Diversity as a core value</h3>
 
     <p style="text-align:justified; margin-top:-1em">
     Diversity should be considered as a core value of each event, and not 
@@ -226,7 +271,8 @@
     
     </ul>
 
-    <h3 class="text-primary font-weight-bold mb-4"> References</h3>
+    <h3 class="text-primary font-weight-bold mb-4 anchor" 
+    id="Eighth_Point_Header">References</h3>
 
     <p style="margin-bottom: 0.5em" class="anchor" id="Babcock2018">
     Babcock, L., Recalde, M. P., & Vesterlund, L. (2018). 
