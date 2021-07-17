@@ -3,17 +3,17 @@
 {% block css %} 
     {{ block.super }}
     <style media="screen">
-        #accordion .btn {
-            font-size: 1.2rem
-        }
-
         .anchor::before{
             display: block; 
             content: " ";
-            margin-top: -120px; 
-            height: 120px; 
+            margin-top: -60px; 
+            height: 60px; 
             visibility: hidden; 
             pointer-events: none;
+        }
+
+        a:hover { 
+            color: #C71585;
         }
     </style>
 {% endblock css %}
@@ -69,10 +69,11 @@
     <p style="text-align:justified; margin-top:-1em; padding: 0 0 2em 0">
     Organizing an event is definitely a complex task. However, organizing 
     travels while being a parent of a young child, having other 
-    responsibilities (which women tend to volunteer for more often than men) 
-    or having to perform a long administrative procedure to get a visa also 
-    requires time. For these reasons, we’d suggest sending invitations for 
-    speaking/participation as early as possible, with regular reminders.</p>
+    responsibilities---which women tend to volunteer for more often than men 
+    (<a href="#Babcock2018">Babcock, 2018</a>)---or having to perform a long 
+    administrative procedure to get a visa also requires time. For these 
+    reasons, we’d suggest sending invitations for speaking/participation as 
+    early as possible, with regular reminders.</p>
 
     <h3 class="text-primary font-weight-bold mb-4"> 
     Diversity across organizers and participants</h3>
@@ -185,7 +186,7 @@
         Childcare is a way to help parents attend/contribute to an event. 
         <a href="#Calisi2018">Calisi et al., 2018</a> have suggestions on 
         how to help parents at conferences and 
-        (<a href="#Cox2019">Grens, 2017</a>) reports a successful example 
+        (<a href="#Grens2017">Grens, 2017</a>) reports a successful example 
         in that regard. With respect to fellowships, it is important to 
         ensure that their amount is a significant help in the cost of 
         childcare and that they are accessible (e.g. requiring receipts or 
@@ -227,6 +228,13 @@
 
     <h3 class="text-primary font-weight-bold mb-4"> References</h3>
 
+    <p style="margin-bottom: 0.5em" class="anchor" id="Babcock2018">
+    Babcock, L., Recalde, M. P., & Vesterlund, L. (2018). 
+    Why Women Volunteer for Tasks That Don’t Lead to Promotions. 
+    Retrieved from 
+    <a href="https://hbr.org/2018/07/why-women-volunteer-for-tasks-that-dont-lead-to-promotions">
+    https://hbr.org/2018/07/why-women-volunteer-for-tasks-that-dont-lead-to-promotions</a></p>
+
     <p style="margin-bottom: 0.5em">
     <a class="anchor" id="Bernard2018" href="https://doi.org/10.1523/ENEURO.0225-18.2018">
         Bernard, C. (2018). Editorial: Gender bias in publishing: 
@@ -251,8 +259,8 @@
         Cox, A. R., & Montgomerie, R. (2019). <i>PeerJ</i>, 
         <b>7</b>:e6702.</a></p>
 
-    <p style="margin-bottom: 0.5em">Grens, K. (2017). Baby on board. 
-    Retrieved from 
+    <p style="margin-bottom: 0.5em" class="anchor" id="Grens2017">
+    Grens, K. (2017). Baby on board. Retrieved from 
     <a href="https://www.thescientist.com/careers/baby-on-board-30991">https://www.thescientist.com/careers/baby-on-board-30991</a></p>
 
     <p style="margin-bottom: 0.5em">
