@@ -40,6 +40,8 @@ urlpatterns = [
          name='recommend'),
     path('faq/', TemplateView.as_view(template_name='profiles/FAQs.html'),
          name='faq'),
+    path('tips/', TemplateView.as_view(template_name='profiles/tips.html'),
+         name='tips'),
     path('about/', TemplateView.as_view(template_name='profiles/about.html'),
          name='about'),
     path('profiles-autocomplete', views.ProfilesAutocomplete.as_view(),
