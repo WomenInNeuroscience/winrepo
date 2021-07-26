@@ -89,8 +89,8 @@ section .section-title {
 }
 
 #boardvol .card {
-    width: 16rem;
-    height: 22rem;
+    width: 14rem;
+    height: 24rem;
 }
 
 .backside .card .card-text{
