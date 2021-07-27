@@ -142,4 +142,13 @@
         </div>
     </div>
     </div>
+
+    <script>
+        if (Date.parse(new Date(document.lastModified)) != 0)
+            document.write(
+                '<p style="padding: 3em 0 0 0"><small><i>Last modified: '
+                + new Date(document.lastModified)
+                + '</i></small>');
+    </script>
+
 {% endblock content %}

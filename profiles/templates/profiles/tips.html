@@ -3,7 +3,7 @@
 {% block css %} 
     {{ block.super }}
     <style media="screen">
-        .anchor::before{
+        .anchor::before {
             display: block; 
             content: " ";
             margin-top: -60px; 
@@ -432,5 +432,13 @@
     <a href="https://www.blackinneuro.com/">BlackInNeuro</a> and 
     <a href="https://twitter.com/queerinneuro">QueerInNeuro</a>, that can 
     provide further speaker suggestions.</p>
+
+    <script>
+        if (Date.parse(new Date(document.lastModified)) != 0)
+            document.write(
+                '<p style="padding: 3em 0 0 0"><small><i>Last modified: '
+                + new Date(document.lastModified)
+                + '</i></small>');
+    </script>
     
 {% endblock content %}

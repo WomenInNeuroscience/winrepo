@@ -527,4 +527,12 @@
         <li><a href="http://people.duke.edu/~jmgroh/">Jennifer Groh</a></li>
         <li><a href="http://churchlandlab.labsites.cshl.edu//">Anne Churchland</a></li>
     </ul>
+
+    <script>
+        if (Date.parse(new Date(document.lastModified)) != 0)
+            document.write(
+                '<p style="padding: 3em 0 0 0"><small><i>Last modified: '
+                + new Date(document.lastModified)
+                + '</i></small>');
+    </script>
     {% endblock content %}
