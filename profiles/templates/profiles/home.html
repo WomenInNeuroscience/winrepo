@@ -14,7 +14,7 @@
   			float: left;
 		}
 		/* Clear floats after the columns */
-		.row:after {
+		.row:before {
   			content: "";
   			display: table;
   			clear: both;
@@ -23,6 +23,7 @@
 			max-height:810px; 
 			max-width:450px;
 			padding-top: 60px;
+			padding-bottom: 20px;
 			background:#fff; 
 			border-radius:3px; 
 			box-shadow:2px 2px 3px rgba(0,0,0,.1);
@@ -46,17 +47,17 @@
 
 <div class="container-fluid p-0">
 	<div class="row">
-		<div class="column" style="width: 75%;">
+		<div class="col-sm-8 col-md-8 col-lg-8" style="max-width:90rem;">
 			<picture id="hero-image">
 				<source srcset="{% static 'profiles/images/banner2-1600.webp' %}" type="image/webp">
 				<source srcset="{% static 'profiles/images/banner2.jpg' %}" type="image/jpeg"> 
 				<img src="{% static 'profiles/images/banner2.jpg' %}" alt="Header Image">
 			</picture>
         </div>
-  		<div class="column" style="width: 25%">
+  		<div class="col-sm-4 col-md-4 col-lg-4" style="max-width:28rem;">
 			<div id="twitter-widget-holder">
 				<section class="scrollable">
-    				<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="5">
+    				<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="5" data-chrome="nofooter noborders">
 					Tweets by WINRePo1</a>
 					<script>
 						!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
