@@ -5,6 +5,34 @@
 {% block css %}
 	{{ block.super }}
 	<link rel="stylesheet" type="text/css" href="{% static 'profiles/css/home.css' %}?v=3" />
+	<style>
+		* {
+  			box-sizing: border-box;
+		}
+		/* Create two equal columns that floats next to each other */
+		.column {
+  			float: left;
+		}
+		/* Clear floats after the columns */
+		.row:after {
+  			content: "";
+  			display: table;
+  			clear: both;
+		}
+		#twitter-widget-holder{ 
+			max-height:810px; 
+			max-width:450px;
+			padding-top: 60px;
+			background:#fff; 
+			border-radius:3px; 
+			box-shadow:2px 2px 3px rgba(0,0,0,.1); 
+		}
+		.scrollable {
+    		overflow-y: auto !important;
+    		overflow-x: hidden !important;
+    		height: 745px; <!--size of the scroll-->
+		}
+	</style>
 {% endblock css%}
 
 {% block nav-home-classes %}active{% endblock nav-home-classes %}
@@ -13,12 +41,26 @@
 {% endblock page_container %}
 
 {% block full_page_content %}
+
 <div class="container-fluid p-0">
-	<picture id="hero-image">
-		<source srcset="{% static 'profiles/images/banner2-1600.webp' %}" type="image/webp">
-		<source srcset="{% static 'profiles/images/banner2.jpg' %}" type="image/jpeg"> 
-		<img src="{% static 'profiles/images/banner2.jpg' %}" alt="Header Image">
-	</picture>
+	<div class="row">
+		<div class="column" style="width: 75%;">
+			<picture id="hero-image">
+				<source srcset="{% static 'profiles/images/banner2-1600.webp' %}" type="image/webp">
+				<source srcset="{% static 'profiles/images/banner2.jpg' %}" type="image/jpeg"> 
+				<img src="{% static 'profiles/images/banner2.jpg' %}" alt="Header Image">
+			</picture>
+        </div>
+  		<div class="column" style="width: 25%">
+			<div id="twitter-widget-holder">
+				<section class="scrollable">
+    				<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="20">
+					Tweets by WINRePo1</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8">
+					</script> 
+				</section>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="container-fluid" id="home-search">
 	<form action="list" method="get" class="input-group bg-white rounded p-1 mx-auto">
