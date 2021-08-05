@@ -20,10 +20,9 @@
   			clear: both;
 		}
 		#twitter-widget-holder{ 
-			max-height: 810px;
+			max-height: 1400px;
 			max-width: 700px;
-			padding-top: 60px;
-			padding-bottom: 10px;
+			padding-top: 20px;
 			background:#fff; 
 			border-radius:3px; 
 			box-shadow:2px 2px 3px rgba(0,0,0,.1);
@@ -32,7 +31,7 @@
 		.scrollable {
     		overflow-y: auto !important;
     		overflow-x: hidden !important;
-    		height: 250px; <!--size of the scroll-->
+    		height: 1400px; <!--size of the scroll-->
 		}
 	</style>
 {% endblock css%}
@@ -45,30 +44,20 @@
 {% block full_page_content %}
 
 <div class="container-fluid p-0">
-	<div class="row">
-		<div class="col-sm-6 col-md-6 col-lg-6" style="max-width:5rem;">
-			<picture id="hero-image">
-				<source srcset="{% static 'profiles/images/banner2-1600.webp' %}" type="image/webp">
-				<source srcset="{% static 'profiles/images/banner2.jpg' %}" type="image/jpeg"> 
-				<img src="{% static 'profiles/images/banner2.jpg' %}" alt="Header Image">
-			</picture>
-        </div>
-  		<div class="col-sm-4 col-md-4 col-lg-4" style="max-width:28rem;">
-			<div id="twitter-widget-holder">
-				<section class="scrollable">
-					<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="10">Tweets by WINRePo1</a>
-					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
-				</section>
-			</div>
-		</div>
-	</div>
+	<picture id="hero-image">
+		<source srcset="{% static 'profiles/images/banner2-1600.webp' %}" type="image/webp">
+		<source srcset="{% static 'profiles/images/banner2.jpg' %}" type="image/jpeg"> 
+		<img src="{% static 'profiles/images/banner2.jpg' %}" alt="Header Image">
+	</picture>
 </div>
+
 <div class="container-fluid" id="home-search">
 	<form action="list" method="get" class="input-group bg-white rounded p-1 mx-auto">
 		<input type="text" id="search-input" class="form-control" placeholder="Enter search keywords here..." aria-label="Search" name="s" autofocus>
 		<button type="submit" id="search-btn" class="btn btn-secondary pl-4 pr-4">Search</button>
 	</form>
 </div>
+
 <div class="container-fluid bg-primary text-white pt-5 pb-5" id="intro-container">
 	<div class="row no-gutters p-4">
 		<div class="col-md-4 offset-md-4 text-center">
@@ -125,78 +114,86 @@
 </div>
 
 <div class="container-fluid" id="stats">
-	<div class="text-center m-4" id="entries-container">
-		<p class="h1 text-secondary font-weight-bold mb-0" id="entries-number"> </p>
-		<p class="h5 text-primary" id="entries-text">entries in repository. </p>
-	</div>
-
-	<div class="d-flex flex-wrap justify-content-center align-items-start m-4" id="chart-stats">
-		<div class="p-2 text-center donutTab">
-			<table>
-				<tr>
-					<td class="donutCell">
-						<div id="chartPhD" class="donutDiv"></div>
-						<div id="student-percent" class="donutValue">%</div>
-					</td>
-				</tr>
-			</table>
-			<span class="position-title text-secondary" id="PhDtext">PhD</span>
-			<p id="student-count" class="position-text"> profiles</p>
+	<div class="row">
+		<div class="col-sm-5 col-md-5 col-lg-5" style="max-width:32rem;">
+			<div id="twitter-widget-holder">
+				<section class="scrollable">
+					<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="10">Tweets by WINRePo1</a>
+					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+				</section>
+			</div>
 		</div>
-		<div class="p-2 text-center donutTab">
-			<table>
-				<tr>
-					<td class="donutCell">
-						<div id="chartPostDoc" class="donutDiv"></div>
-						<div id="postdoc-percent" class="donutValue">%</div>
-					</td>
-				</tr>
-			</table>
-			<span class="position-title text-tertiary" id="PostDoctext">Post-doc</span>
-			<p id="postdoc-count" class="position-text"> profiles</p>
-		</div>
-		<div class="p-2 text-center donutTab">
-			<table>
-				<tr>
-					<td class="donutCell">
-						<div id="chartSenior" class="donutDiv"></div>
-						<div id="senior-percent" class="donutValue">%</div>
-					</td>
-				</tr>
-			</table>
-			<span class="position-title text-quaternary" id="Seniortext">Senior</span>
-			<p id="senior-count" class="position-text"> profiles</p>
-		</div>
-		<div class="p-2 text-center donutTab">
-			<table>
-				<tr>
-					<td class="donutCell">
-						<div id="chartOther" class="donutDiv"></div>
-						<div id="other-percent" class="donutValue">%</div>
-					</td>
-				</tr>
-			</table>
-			<span class="position-title text-senary" id="Othertext">Other</span>
-			<p id="other-count" class="position-text"> profiles</p>
-		</div>
-	</div>
-
-	<div class="row no-gutters m-4" id="country-stats">
-		{% comment %} <div class="col-12 col-md-8 offset-md-2" id="map-container"> {% endcomment %}
-		<div class="col-12 col-md-8 offset-md-2 m-auto" id="map-container">
-			<div id="regions_div"></div>
-		</div>
-	</div>
-</div>
-
-<div class="container-fluid">
-	<div class="row no-gutters m-4 pt-4">
-		<div class="col-12 col-md-8 offset-md-2 text-center">
-			<h2 class="text-secondary">Going to a conference soon?</h2>
-			<p class="text-dark text-justify">Download our slide and insert it at the end of your presentation!
-				It will raise awareness on the issue of gender equity in neuroscience and show that there are resources to
-				help conference organizers. In addition, it will encourage researchers to submit recommendations of their peers.</p>
-			<a href="{% static 'images/slide_feb2021.pdf' %}" id="download-slide" class="btn pill-btn slide-btn text-white btn-secondary" download="WiNRepo_Slide">Download slide</a>
+		<div class="col-sm-7 col-md-7 col-lg-7">
+			<div class="text-center m-4" id="entries-container">
+				<p class="h1 text-secondary font-weight-bold mb-0" id="entries-number"> </p>
+				<p class="h5 text-primary" id="entries-text">entries in repository. </p>
+			</div>
+			<div class="d-flex flex-wrap justify-content-center align-items-start m-4" id="chart-stats" style="height:23rem;">
+				<div class="p-2 text-center donutTab">
+					<table>
+						<tr>
+							<td class="donutCell">
+								<div id="chartPhD" class="donutDiv"></div>
+								<div id="student-percent" class="donutValue">%</div>
+							</td>
+						</tr>
+					</table>
+					<span class="position-title text-secondary" id="PhDtext">PhD</span>
+					<p id="student-count" class="position-text"> profiles</p>
+				</div>
+				<div class="p-2 text-center donutTab">
+					<table>
+						<tr>
+							<td class="donutCell">
+								<div id="chartPostDoc" class="donutDiv"></div>
+								<div id="postdoc-percent" class="donutValue">%</div>
+							</td>
+						</tr>
+					</table>
+					<span class="position-title text-tertiary" id="PostDoctext">Post-doc</span>
+					<p id="postdoc-count" class="position-text"> profiles</p>
+				</div>
+				<div class="p-2 text-center donutTab">
+					<table>
+						<tr>
+							<td class="donutCell">
+								<div id="chartSenior" class="donutDiv"></div>
+								<div id="senior-percent" class="donutValue">%</div>
+							</td>
+						</tr>
+					</table>
+					<span class="position-title text-quaternary" id="Seniortext">Senior</span>
+					<p id="senior-count" class="position-text"> profiles</p>
+				</div>
+				<div class="p-2 text-center donutTab">
+					<table>
+						<tr>
+							<td class="donutCell">
+								<div id="chartOther" class="donutDiv"></div>
+								<div id="other-percent" class="donutValue">%</div>
+							</td>
+						</tr>
+					</table>
+					<span class="position-title text-senary" id="Othertext">Other</span>
+					<p id="other-count" class="position-text"> profiles</p>
+				</div>
+			</div>
+			<div class="row no-gutters m-4" id="country-stats">
+				<div class="col-sm-12 col-md-8 col-lg-12 offset-md-2 m-auto" id="map-container" style="height:36rem;">
+					<div id="regions_div"></div>
+				</div>
+			</div>
+			<div class="container-fluid">
+				<div class="row no-gutters m-4 pt-4">
+					<div class="col-12 col-md-12 offset-md-12 text-center">
+						<h2 class="text-secondary">Going to a conference soon?</h2>
+						<p class="text-dark text-justify">Download our slide and insert it at the end of your presentation!
+							It will raise awareness on the issue of gender equity in neuroscience and show that there are resources to
+							help conference organizers. In addition, it will encourage researchers to submit recommendations of their peers.</p>
+						<a href="{% static 'images/slide_feb2021.pdf' %}" id="download-slide" class="btn pill-btn slide-btn text-white btn-secondary" download="WiNRepo_Slide">Download slide</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
