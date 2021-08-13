@@ -5,6 +5,37 @@
 {% block css %}
 	{{ block.super }}
 	<link rel="stylesheet" type="text/css" href="{% static 'profiles/css/home.css' %}?v=3" />
+	<style>
+		* {
+  			box-sizing: border-box;
+		}
+		/* Create two equal columns that floats next to each other */
+		.column {
+  			float: left;
+		}
+		/* Clear floats after the columns */
+		.row:before {
+  			content: "";
+  			display: table;
+  			clear: both;
+		}
+		#twitter-widget-holder{ 
+			height: 300px;
+			max-width: 600px;
+			padding-top: 10px;
+			padding-left: 10px;
+			padding-bottom: 10px;
+			background:#fff; 
+			border-radius:3px; 
+			box-shadow:2px 2px 3px rgba(0,0,0,.1);
+			overflow: hidden; 
+		}
+		.scrollable {
+    		overflow-y: auto !important;
+    		overflow-x: hidden !important;
+    		height: 280px; <!--size of the scroll-->
+		}
+	</style>
 {% endblock css%}
 
 {% block nav-home-classes %}active{% endblock nav-home-classes %}
@@ -146,14 +177,26 @@
 	</div>
 </div>
 
-<div class="container-fluid">
-	<div class="row no-gutters m-4 pt-4">
-		<div class="col-12 col-md-8 offset-md-2 text-center">
-			<h2 class="text-secondary">Going to a conference soon?</h2>
-			<p class="text-dark text-justify">Download our slide and insert it at the end of your presentation!
-				It will raise awareness on the issue of gender equity in neuroscience and show that there are resources to
-				help conference organizers. In addition, it will encourage researchers to submit recommendations of their peers.</p>
-			<a href="{% static 'images/slide_feb2021.pdf' %}" id="download-slide" class="btn pill-btn slide-btn text-white btn-secondary" download="WiNRepo_Slide">Download slide</a>
+<div class=row>
+	<div class="col-sm-7 col-md-7 col-lg-7">
+		<div class="container-fluid">
+			<div class="row no-gutters m-4 pt-4">
+				<div class="col-12 col-md-8 offset-md-2 text-center">
+					<h2 class="text-secondary">Going to a conference soon?</h2>
+					<p class="text-dark text-justify">Download our slide and insert it at the end of your presentation!
+						It will raise awareness on the issue of gender equity in neuroscience and show that there are resources to
+						help conference organizers. In addition, it will encourage researchers to submit recommendations of their peers.</p>
+					<a href="{% static 'images/slide_feb2021.pdf' %}" id="download-slide" class="btn pill-btn slide-btn text-white btn-secondary" download="WiNRepo_Slide">Download slide</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-5 col-md-5 col-lg-5">
+		<div id="twitter-widget-holder">
+			<section class="scrollable">
+				<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="5">Tweets by WINRePo1</a>
+				<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+			</section>
 		</div>
 	</div>
 </div>
