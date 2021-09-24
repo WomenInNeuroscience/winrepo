@@ -56,4 +56,4 @@ class ProfilesSitemap(sitemaps.Sitemap):
         return Profile.objects.all()
 
     def lastmod(self, obj):
-        return obj.last_updated
+        return obj.updated_at

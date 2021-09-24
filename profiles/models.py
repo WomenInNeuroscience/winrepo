@@ -4,6 +4,7 @@ import string
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils import timezone
 
 from django.urls import reverse
@@ -168,7 +169,38 @@ class User(AbstractBaseUser):
         return self.name.split(' ', 1)[0]
 
 
+class ProfileManager(models.Manager):
+    def __init__(self, *args, **kwargs):
+        self.alive_only = kwargs.pop('alive_only', True)
+        super().__init__(*args, **kwargs)
+
+    def get_queryset(self):
+        if self.alive_only:
+            return ProfileQuerySet(self.model).filter(deleted_at=None)
+        return ProfileQuerySet(self.model)
+
+    def hard_delete(self):
+        return self.get_queryset().hard_delete()
+
+
+class ProfileQuerySet(QuerySet):
+    def delete(self):
+        return super().update(deleted_at=timezone.now())
+
+    def hard_delete(self):
+        return super().delete()
+
+    def alive(self):
+        return self.filter(deleted_at=None)
+
+    def dead(self):
+        return self.exclude(deleted_at=None)
+
+
 class Profile(models.Model):
+
+    objects = ProfileManager()
+    all_objects = ProfileManager(alive_only=False)
 
     @classmethod
     def get_position_choices(cls):
@@ -211,11 +243,20 @@ class Profile(models.Model):
     methods = MultiSelectField(choices=METHODS_CHOICES, blank=True)
     domains = MultiSelectField(choices=DOMAINS_CHOICES, blank=True)
     keywords = models.CharField(max_length=250, blank=True)
-    publish_date = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
+
+    published_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True)
 
     class Meta:
-        ordering = ['name', 'institution', 'last_updated']
+        ordering = ['name', 'institution', 'updated_at']
+
+    def delete(self):
+        self.deleted_at = timezone.now()
+        self.save()
+
+    def hard_delete(self):
+        super().delete()
 
     def __str__(self):
         return f'{self.name}, {self.institution}'
@@ -277,11 +318,11 @@ class Recommendation(models.Model):
     reviewer_institution = models.CharField(max_length=100, blank=False)
     seen_at_conf = models.BooleanField(null=True)
     comment = models.TextField(blank=False)
-    publish_date = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
+    published_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-last_updated']
+        ordering = ['-updated_at']
 
     def __str__(self):
         return self.comment[:50]

@@ -146,7 +146,7 @@ class ListProfiles(ListView):
         # apply filters
         profiles_list = Profile.objects \
                                .filter(q_st, q_ur, q_senior) \
-                               .order_by('-publish_date')
+                               .order_by('-published_at')
 
         return profiles_list
 
@@ -213,7 +213,10 @@ class UserProfileDeleteView(LoginRequiredMixin, FormView):
         user = self.request.user
         try:
             profile = user.profile
-            profile.delete()
+            if profile.recommendations.count() > 0:
+                profile.delete()
+            else:
+                profile.hard_delete()
         except Profile.DoesNotExist:
             pass
 
@@ -221,7 +224,6 @@ class UserProfileDeleteView(LoginRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse('profiles:user')
-
 
 class UserView(LoginRequiredMixin, TemplateView):
     template_name = "account/user.html"
