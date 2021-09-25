@@ -160,7 +160,7 @@ class UserProfileView(TemplateView):
     template_name = "account/user_profile.html"
 
 
-class UserProfileEditView(SuccessMessageMixin, ModelFormMixin, FormView):
+class UserProfileEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, FormView):
     template_name = "account/user_profile_form.html"
     form_class = UserProfileForm
     success_message = 'Your profile has been saved successfully!'
