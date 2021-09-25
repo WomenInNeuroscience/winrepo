@@ -35,6 +35,8 @@ urlpatterns = [
          name='recommend_profile'),
     path('list/recommend/', views.CreateRecommendation.as_view(),
          name='recommend'),
+    path('list/<int:pk>/claim/', views.ProfileClaim.as_view(),
+         name='claim_profile'),
 
     path('faq/', TemplateView.as_view(template_name='profiles/faq.html'),
          name='faq'),

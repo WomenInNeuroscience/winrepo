@@ -35,6 +35,11 @@
 				<a class="btn pill-btn btn-outline-primary m-1 recommend-btn" href="{% url 'profiles:recommend_profile' profile.id %}">
 					<i class="fas fa-comment"></i> Recommend</a>
 			{% endif %}
+			
+			{% if user.is_authenticated and not user.profile and not user.any_claimed_profile and not profile.user %}
+				<a class="btn pill-btn btn-outline-primary m-1 recommend-btn" href="{% url 'profiles:claim_profile' profile.id %}">
+					<i class="fas fa-star"></i> Claim</a>
+			{% endif %}
 		</div>
 	</div>
 </div>
