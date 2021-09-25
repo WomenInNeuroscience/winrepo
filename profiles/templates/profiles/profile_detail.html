@@ -1,16 +1,10 @@
 {% extends "base.html" %}
 
-{% load bootstrap4 %}
 {% load static %}
 
 {% block title %}
 	{{ block.super }} - Profile Details
 {% endblock title %}
-
- {% block css %}
-	{{ block.super }}
-	<link rel="stylesheet" type="text/css" href="{% static 'profiles/css/style.css' %}?v=3" />
-{% endblock css %}
 
 {% block nav-repository-classes %}active{% endblock nav-repository-classes %}
 

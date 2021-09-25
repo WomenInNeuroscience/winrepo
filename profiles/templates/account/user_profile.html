@@ -7,12 +7,7 @@
 	{{ block.super }} - Account Details
 {% endblock title %}
 
- {% block css %}
-	{{ block.super }}
-	<link rel="stylesheet" type="text/css" href="{% static 'profiles/css/style.css' %}?v=3" />
-{% endblock css %}
-
-{% block nav-repository-classes %}active{% endblock nav-repository-classes %}
+{% block nav-user-classes %}active{% endblock nav-user-classes %}
 
 {% block full_page_content %}
 	<div id="list-search" class="w-100 bg-primary" style="height:250px; margin-bottom:-150px;"></div>
