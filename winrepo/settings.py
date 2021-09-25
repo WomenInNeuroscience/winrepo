@@ -188,5 +188,27 @@ REST_FRAMEWORK = {
 if DEBUG:
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
+    LOGGING = {
+        'version': 1,
+        'filters': {
+            'require_debug_true': {
+                '()': 'django.utils.log.RequireDebugTrue',
+            }
+        },
+        'handlers': {
+            'console': {
+                'level': 'DEBUG',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+            }
+        },
+        'loggers': {
+            'django.db.backends': {
+                'level': 'DEBUG',
+                'handlers': ['console'],
+            }
+        }
+    }
+
 if ENV != 'Local':
     SECURE_SSL_REDIRECT = True
