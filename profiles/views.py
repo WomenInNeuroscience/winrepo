@@ -7,14 +7,17 @@ from operator import and_, or_
 from dal.autocomplete import Select2QuerySetView
 from django.contrib import messages
 from django.contrib.auth import logout, update_session_auth_hash
-from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
+from django.contrib.auth.forms import (PasswordChangeForm, PasswordResetForm,
+                                       SetPasswordForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Q
+from django.http.response import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -27,8 +30,9 @@ from django.views.generic.list import ListView
 from rest_framework import viewsets
 
 from .emails import user_create_confirm_email, user_reset_password_email
-from .forms import (RecommendModelForm, UserCreateForm, UserDeleteForm,
-                    UserProfileDeleteForm, UserForm, UserProfileForm)
+from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
+                    UserDeleteForm, UserForm, UserProfileDeleteForm,
+                    UserProfileForm)
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
 
@@ -213,10 +217,11 @@ class UserProfileDeleteView(LoginRequiredMixin, FormView):
         user = self.request.user
         try:
             profile = user.profile
-            if profile.recommendations.count() > 0:
-                profile.delete()
-            else:
-                profile.hard_delete()
+            profile.user = None
+            profile.delete()
+
+            user.profile = None
+            user.save()
         except Profile.DoesNotExist:
             pass
 
@@ -254,7 +259,6 @@ class UserChangePasswordView(LoginRequiredMixin, SuccessMessageMixin, FormView):
     form_class = PasswordChangeForm
     template_name = "account/user_change_password.html"
     success_message = 'Your password has been updated successfully!'
-
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -462,6 +466,51 @@ class CreateRecommendation(SuccessMessageMixin, FormView):
             profile = get_object_or_404(Profile, pk=profile_id)
             initial.update({'profile': profile})
         return initial
+
+
+class ProfileClaim(SuccessMessageMixin, FormView, LoginRequiredMixin):
+    template_name = 'profiles/claim_form.html'
+    form_class = ProfileClaimForm
+    success_message = 'Your claim has been submitted successfully!'
+
+    profile = None
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        profile_id = self.kwargs.get('pk')
+        if profile_id is None:
+            raise Http404('No Profile matches the given query.')
+
+        user = self.request.user
+        try:
+            user.profile
+            return redirect('profiles:user_profile')
+        except Profile.DoesNotExist:
+            pass
+
+        if user.any_claimed_profile:
+            return redirect('profiles:detail', pk=profile_id)
+            
+        self.profile = get_object_or_404(Profile, pk=profile_id)
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        user = self.request.user
+        self.profile.user = user
+        self.profile.claimed_at = timezone.now()
+        self.profile.claimed_by = user
+        self.profile.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('profiles:user_profile')
+
+    def get_context_data(self, **kwargs):
+        context = {"profile": self.profile}
+        context.update(kwargs)
+        return super().get_context_data(**context)
 
 
 class ProfilesAutocomplete(Select2QuerySetView):

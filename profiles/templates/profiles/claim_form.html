@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+	{{ block.super }} - Claim Profile
+{% endblock title %}
+
+{% block nav-repository-classes %}active{% endblock nav-repository-classes %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row no-gutters">
+		<div class="col-12">
+			<h2 class="text-primary font-weight-bold">Claim Profile</h2>
+
+			<h3 class="text-primary font-weight-bold mt-5">
+				<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
+				Are you absolutely sure?
+			</h3>
+
+			<div class="pt-2 mt-4 w-100 text-muted">
+				<form method="post">
+					{% csrf_token %}
+					{{ form }}
+					<div class="text-right">
+						<a class="btn btn-outline-danger pill-btn" href="{% url 'profiles:detail' profile.id %}" role="button">
+							Cancel
+						</a>
+						<button type="submit" class="btn btn-primary pill-btn">
+							Claim
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

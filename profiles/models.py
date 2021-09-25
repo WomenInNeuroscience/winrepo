@@ -1,7 +1,7 @@
 import random
 import string
 
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.db.models.query import QuerySet
@@ -149,12 +149,14 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.SlugField(max_length=50, unique=True)
     name = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = 'username'
@@ -168,8 +170,20 @@ class User(AbstractBaseUser):
     def first_name(self):
         return self.name.split(' ', 1)[0]
 
+    @property
+    def any_claimed_profile(self):
+        try:
+            Profile.all_objects.values('id').get(
+                claimed_by=self,
+                claimed_at__isnull=False
+            )
+            return True
+        except Profile.DoesNotExist:
+            return False
+
 
 class ProfileManager(models.Manager):
+
     def __init__(self, *args, **kwargs):
         self.alive_only = kwargs.pop('alive_only', True)
         super().__init__(*args, **kwargs)
@@ -222,7 +236,10 @@ class Profile(models.Model):
     def get_domains_choices(cls):
         return DOMAINS_CHOICES
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE,
+        null=True, blank=True, related_name='profile'
+    )
     is_public = models.BooleanField(default=True)
     
     name = models.CharField(max_length=200, blank=False)
@@ -248,8 +265,16 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True)
 
+    claimed_at = models.DateTimeField(null=True)
+    claimed_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL,
+        related_name='profile_claims',
+        null=True
+    )
+
     class Meta:
         ordering = ['name', 'institution', 'updated_at']
+        base_manager_name = 'objects'
 
     def delete(self):
         self.deleted_at = timezone.now()
@@ -260,9 +285,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.name}, {self.institution}'
-
-    def get_absolute_url(self):
-        return reverse('profiles:detail', kwargs={'pk': self.id})
 
     def brain_structure_labels(self):
         return [dict(STRUCTURE_CHOICES).get(item, item)

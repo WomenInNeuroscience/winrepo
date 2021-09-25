@@ -65,6 +65,14 @@ class UserDeleteForm(forms.Form):
     )
 
 
+class ProfileClaimForm(forms.Form):
+    confirm = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=True,
+        initial=True
+    )
+
+
 class UserCreateForm(CaptchaForm, UserCreationForm):
     username = forms.SlugField(required=True)
     email = forms.EmailField(required=True)
