@@ -55,16 +55,16 @@ class Home(ListView):
     model = Recommendation
 
     def get_queryset(self):
-        top_reco = list(Recommendation.objects.all().order_by('-id')[:100])
+        top_reco = Recommendation.objects.filter(profile__deleted_at__isnull=True).order_by('-id')[:100]
         nb_samples = 6
 
         if len(top_reco) == 0:
             sample = []
         else:
-            sample = random.sample(
-                top_reco,
-                nb_samples if len(top_reco) > nb_samples else len(top_reco)
-            )
+            sample = [
+                top_reco[i]
+                for i in random.sample(range(len(top_reco)), nb_samples)
+            ]
 
         return sample
 
