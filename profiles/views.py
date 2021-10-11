@@ -92,29 +92,30 @@ class ListProfiles(ListView):
                 st_regex = re.compile(f'.*{st}.*', re.IGNORECASE)
 
                 # matching_positions = list(
-                #   x[0]
-                #   for x in Profile.get_position_choices()
-                #   if st_regex.match(x[1]))
+                #   code
+                #   for code, name in Profile.get_position_choices()
+                #   if st_regex.match(name)
+                # )
                 matching_structures = list(
-                    Q(brain_structure__contains=x[0])
-                    for x
-                    in Profile.get_structure_choices()
-                    if st_regex.match(x[1]))
+                    Q(brain_structure__contains=code)
+                    for code, name in Profile.get_structure_choices()
+                    if st_regex.match(name)
+                )
                 matching_modalities = list(
-                    Q(modalities__contains=x[0])
-                    for x
-                    in Profile.get_modalities_choices()
-                    if st_regex.match(x[1]))
+                    Q(modalities__contains=code)
+                    for code, name in Profile.get_modalities_choices()
+                    if st_regex.match(name)
+                )
                 matching_methods = list(
-                    Q(methods__contains=x[0])
-                    for x
-                    in Profile.get_methods_choices()
-                    if st_regex.match(x[1]))
+                    Q(methods__contains=code)
+                    for code, name in Profile.get_methods_choices()
+                    if st_regex.match(name)
+                )
                 matching_domains = list(
-                    Q(domains__contains=x[0])
-                    for x
-                    in Profile.get_domains_choices()
-                    if st_regex.match(x[1]))
+                    Q(domains__contains=code)
+                    for code, name in Profile.get_domains_choices()
+                    if st_regex.match(name)
+                )
 
                 st_conditions = [
                     Q(name__icontains=st),
