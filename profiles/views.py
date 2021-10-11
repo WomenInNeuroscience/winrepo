@@ -150,8 +150,8 @@ class ListProfiles(ListView):
 
         # apply filters
         profiles_list = Profile.objects \
-                               .filter(q_st, q_ur, q_senior) \
-                               .order_by('-published_at')
+            .filter(q_st, q_ur, q_senior) \
+            .order_by('-published_at')
 
         return profiles_list
 
