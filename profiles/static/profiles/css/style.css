@@ -95,11 +95,11 @@
   opacity: 1;
 }
 
-#field-of-research-list>div {
+.field-of-research-list > div {
   border-right: 1px solid #ccc;
 }
 
-#field-of-research-list>div:last-child {
+.field-of-research-list > div:last-child {
   border-right: none;
 }
 

@@ -28,17 +28,14 @@
             });
         }
 
-        // infinite scroll
-        // from https://simpleisbetterthancomplex.com/tutorial/2017/03/13/how-to-create-infinite-scroll-with-django.html
         var infinite = new Waypoint.Infinite({
             element: $('.infinite-container')[0],
-            onBeforePageLoad: function () {
-            $('.loading').show();
+            onBeforePageLoad: function() {
+              $('.loading').show();
             },
-            onAfterPageLoad: function ($items) {
-            $('.loading').hide();
+            onAfterPageLoad: function($items) {
+              $('.loading').hide();
             },
-            offset: 150
         });
     });
 })();
