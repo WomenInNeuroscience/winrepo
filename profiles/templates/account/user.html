@@ -39,70 +39,7 @@
 
 			{% if user.profile %}
 				<div class="p-3 mt-4 border rounded">
-					<div class="container-fluid">
-						<div class="row no-gutters">
-							<div class="col-xs-6 col-sm-8 col-md-9 text-muted details-grey">
-								<h2 class="text-primary font-weight-bold">{{ user.profile.name }}</h2>
-								<p class="m-1"><i class="fas fa-user"></i> {{ user.profile.position }}</p>
-								<p class="m-1"><i class="fas fa-university"></i> {{ user.profile.institution }}</p>
-								<p class="m-1"><i class="fas fa-map-marker-alt"></i> {{ user.profile.country }}</p>
-								{% if user.profile.grad_year %}<p class="m-1"><i class="fas fa-graduation-cap"></i> {{ user.profile.grad_month_labels }} {{ user.profile.grad_year }}</p>{% endif %}
-							</div>
-						</div>
-					</div>
-					
-					<div id="field-of-research">
-						<h5 class="text-primary font-weight-bold mt-5">
-							<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
-							Field of Research
-						</h5>
-						<div id="field-of-research-list" class="w-100 p-1 pt-3 pb-3 mt-3 d-flex flex-row grey-bg rounded">
-							<div class="w-25 p-0 text-center">
-								<h6 class="text-secondary font-weight-bold">Brain Area</h6>
-								<ul class="list-group list-group-flush">
-									{% for structure in user.profile.brain_structure_labels %}
-									<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ structure }} </li>
-									{% endfor %}
-								</ul>
-							</div>
-							<div class="w-25 p-0 text-center">
-								<h6 class="text-secondary font-weight-bold">Domain</h6>
-								<ul class="list-group list-group-flush">
-									{% for domain in user.profile.domains_labels %}
-									<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ domain }} </li>
-									{% endfor %}
-								</ul>
-							</div>
-							<div class="w-25 p-0 text-center">
-								<h6 class="text-secondary font-weight-bold">Modalities</h6>
-								<ul class="list-group list-group-flush">
-									{% for modality in user.profile.modalities_labels %}
-									<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ modality }} </li>
-									{% endfor %}
-								</ul>
-							</div>
-							<div class="w-25 p-0 text-center">
-								<h6 class="text-secondary font-weight-bold">Methods</h6>
-								<ul class="list-group list-group-flush">
-									{% for method in user.profile.methods_labels %}
-									<li class="list-group-item grey-bg" style="border: none; padding: 0;">{{ method }} </li>
-									{% endfor %}
-								</ul>
-							</div>
-						</div>
-					</div>
-					
-					{% if user.profile.keywords %}
-					<div id="keywords">
-						<h5 class="text-primary font-weight-bold mt-5">
-							<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
-							Other keywords
-						</h5>
-						<div class="grey-bg p-4 mt-3 rounded">
-							<p>{{ user.profile.keywords }}</p>
-						</div>
-					</div>
-					{% endif %}
+					{% include "fragments/profile.html" with profile=user.profile %}
 				</div>
 			{% else %}
 
