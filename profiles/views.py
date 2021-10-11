@@ -82,7 +82,7 @@ class ListProfiles(ListView):
 
         # create filter on search terms
         # q_st = ~Q(pk=None)  # always true
-        q_st = Q(is_public=True)
+        q_st = Q(is_public=True, deleted_at__isnull=True)
 
         if s is not None:
             # split search terms and filter empty words (if successive spaces)
