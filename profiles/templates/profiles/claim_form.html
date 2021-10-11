@@ -22,6 +22,8 @@
 				Are you absolutely sure?
 			</h3>
 
+			{% include "fragments/profile.html" with profile=profile %}
+
 			<div class="pt-2 mt-4 w-100 text-muted">
 				<form method="post">
 					{% csrf_token %}
