@@ -28,8 +28,19 @@
 					{{ form.institution|as_crispy_field }}
 					{{ form.country|as_crispy_field }}
 					{{ form.position|as_crispy_field }}
-					{{ form.contact_email|as_crispy_field }}
-					{{ form.webpage|as_crispy_field }}
+
+					<fieldset>
+						<legend>Contact and Social</legend>
+						{{ form.contact_email|as_crispy_field }}
+						{{ form.webpage|as_crispy_field }}
+						{{ form.orcid|as_crispy_field }}
+						{{ form.twitter|as_crispy_field }}
+						{{ form.linkedin|as_crispy_field }}
+						{{ form.github|as_crispy_field }}
+						{{ form.google_scholar|as_crispy_field }}
+						{{ form.researchgate|as_crispy_field }}
+					</fieldset>
+
 					<div class="form-row">
 						<div class="form-group col-md-6 mb-0">
 							{{ form.grad_month|as_crispy_field }}
