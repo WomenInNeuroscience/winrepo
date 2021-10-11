@@ -73,3 +73,16 @@ h1, h2, h3, h4, h5, h6 {
 #winrepo-logo > img {
 	height: 38px;
 }
+
+form fieldset {
+	border: 1px solid #CCC;
+	padding: 1rem;
+}
+
+form fieldset legend {
+	font-size: 1rem;
+	padding: 1rem;
+	display: inline-block;
+	width: auto;
+	background: #FFF;
+}
