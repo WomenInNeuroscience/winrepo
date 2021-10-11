@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load my_tags %}
+{% load param_replace %}
 
 {% block title %}
 	{{ block.super }} - Repository
@@ -94,7 +94,6 @@
 		<p>No matching entries.</p>
 	{% endif %}
 
-	<!-- from http://jsfiddle.net/gilbitron/Lt2wH/ -->
 	<a href="#" id="back-to-top" title="Back to top" class="btn"><i class="fas fa-chevron-circle-up"></i></a>
 {% endblock content %}
 
