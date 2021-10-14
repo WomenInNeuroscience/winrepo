@@ -132,8 +132,8 @@ RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_DOMAIN = config('RECAPTCHA_DOMAIN')
 
-EMAIL_BACKEND = config('EMAIL_BACKEND')
-SENDGRID_API_KEY = config('SENDGRID_API_KEY')
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 EMAIL_HOST = config('EMAIL_HOST', default='')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
