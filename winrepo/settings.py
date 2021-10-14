@@ -138,6 +138,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS').lower() == 'true'
 EMAIL_USE_SSL = config('EMAIL_USE_SSL').lower() == 'true'
+EMAIL_TIMEOUT = config('EMAIL_TIMEOUT', default=60, cast=int)
 
 print('HERE', EMAIL_HOST)
 
