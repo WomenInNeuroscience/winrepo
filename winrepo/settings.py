@@ -132,17 +132,18 @@ RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_DOMAIN = config('RECAPTCHA_DOMAIN')
 
-EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+SENDGRID_API_KEY = config('SENDGRID_API_KEY')
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+EMAIL_HOST = config('EMAIL_HOST', default='')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS').lower() == 'true'
-EMAIL_USE_SSL = config('EMAIL_USE_SSL').lower() == 'true'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default='').lower() == 'true'
+EMAIL_USE_SSL = config('EMAIL_USE_SSL', default='').lower() == 'true'
 EMAIL_TIMEOUT = config('EMAIL_TIMEOUT', default=60, cast=int)
 
-print('HERE', EMAIL_HOST)
-
-EMAIL_FROM = 'no-reply@winrepo.org'
+EMAIL_FROM = config('DEFAULT_FROM_EMAIL')
 EMAIL_SUBJECT_PREFIX = 'WiNRepo - '
 
 # Sites settings
