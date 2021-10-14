@@ -35,13 +35,13 @@ class Command(BaseCommand):
 
         countries_data = []
         with open('profiles/fixtures/countries.txt') as f:
-            countries_data = [c.split('\t') for c in f.read().splitlines()]
+            countries_data = [c.split('\t') for c in f.read().splitlines() if c]
 
         Country.objects.all().delete()
 
         countries = []
-        for name, code in countries_data:
-            is_under_represented = random.random() > 0.5
+        for code, name, under in countries_data:
+            is_under_represented = under == '1'
 
             country =  Country(
                 code=code,

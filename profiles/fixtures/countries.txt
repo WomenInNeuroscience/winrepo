@@ -1,249 +1,249 @@
-Afghanistan	AFG
-Albania	ALB
-Algeria	DZA
-American Samoa	ASM
-Andorra	AND
-Angola	AGO
-Anguilla	AIA
-Antarctica	ATA
-Antigua and Barbuda	ATG
-Argentina	ARG
-Armenia	ARM
-Aruba	ABW
-Australia	AUS
-Austria	AUT
-Azerbaijan	AZE
-Bahamas (the)	BHS
-Bahrain	BHR
-Bangladesh	BGD
-Barbados	BRB
-Belarus	BLR
-Belgium	BEL
-Belize	BLZ
-Benin	BEN
-Bermuda	BMU
-Bhutan	BTN
-Bolivia (Plurinational State of)	BOL
-Bonaire, Sint Eustatius and Saba	BES
-Bosnia and Herzegovina	BIH
-Botswana	BWA
-Bouvet Island	BVT
-Brazil	BRA
-British Indian Ocean Territory (the)	IOT
-Brunei Darussalam	BRN
-Bulgaria	BGR
-Burkina Faso	BFA
-Burundi	BDI
-Cabo Verde	CPV
-Cambodia	KHM
-Cameroon	CMR
-Canada	CAN
-Cayman Islands (the)	CYM
-Central African Republic (the)	CAF
-Chad	TCD
-Chile	CHL
-China	CHN
-Christmas Island	CXR
-Cocos (Keeling) Islands (the)	CCK
-Colombia	COL
-Comoros (the)	COM
-Congo (the Democratic Republic of the)	COD
-Congo (the)	COG
-Cook Islands (the)	COK
-Costa Rica	CRI
-Croatia	HRV
-Cuba	CUB
-Curaçao	CUW
-Cyprus	CYP
-Czechia	CZE
-Côte d'Ivoire	CIV
-Denmark	DNK
-Djibouti	DJI
-Dominica	DMA
-Dominican Republic (the)	DOM
-Ecuador	ECU
-Egypt	EGY
-El Salvador	SLV
-Equatorial Guinea	GNQ
-Eritrea	ERI
-Estonia	EST
-Eswatini	SWZ
-Ethiopia	ETH
-Falkland Islands (the) [Malvinas]	FLK
-Faroe Islands (the)	FRO
-Fiji	FJI
-Finland	FIN
-France	FRA
-French Guiana	GUF
-French Polynesia	PYF
-French Southern Territories (the)	ATF
-Gabon	GAB
-Gambia (the)	GMB
-Georgia	GEO
-Germany	DEU
-Ghana	GHA
-Gibraltar	GIB
-Greece	GRC
-Greenland	GRL
-Grenada	GRD
-Guadeloupe	GLP
-Guam	GUM
-Guatemala	GTM
-Guernsey	GGY
-Guinea	GIN
-Guinea-Bissau	GNB
-Guyana	GUY
-Haiti	HTI
-Heard Island and McDonald Islands	HMD
-Holy See (the)	VAT
-Honduras	HND
-Hong Kong	HKG
-Hungary	HUN
-Iceland	ISL
-India	IND
-Indonesia	IDN
-Iran (Islamic Republic of)	IRN
-Iraq	IRQ
-Ireland	IRL
-Isle of Man	IMN
-Israel	ISR
-Italy	ITA
-Jamaica	JAM
-Japan	JPN
-Jersey	JEY
-Jordan	JOR
-Kazakhstan	KAZ
-Kenya	KEN
-Kiribati	KIR
-Korea (the Democratic People's Republic of)	PRK
-Korea (the Republic of)	KOR
-Kuwait	KWT
-Kyrgyzstan	KGZ
-Lao People's Democratic Republic (the)	LAO
-Latvia	LVA
-Lebanon	LBN
-Lesotho	LSO
-Liberia	LBR
-Libya	LBY
-Liechtenstein	LIE
-Lithuania	LTU
-Luxembourg	LUX
-Macao	MAC
-Madagascar	MDG
-Malawi	MWI
-Malaysia	MYS
-Maldives	MDV
-Mali	MLI
-Malta	MLT
-Marshall Islands (the)	MHL
-Martinique	MTQ
-Mauritania	MRT
-Mauritius	MUS
-Mayotte	MYT
-Mexico	MEX
-Micronesia (Federated States of)	FSM
-Moldova (the Republic of)	MDA
-Monaco	MCO
-Mongolia	MNG
-Montenegro	MNE
-Montserrat	MSR
-Morocco	MAR
-Mozambique	MOZ
-Myanmar	MMR
-Namibia	NAM
-Nauru	NRU
-Nepal	NPL
-Netherlands (the)	NLD
-New Caledonia	NCL
-New Zealand	NZL
-Nicaragua	NIC
-Niger (the)	NER
-Nigeria	NGA
-Niue	NIU
-Norfolk Island	NFK
-Northern Mariana Islands (the)	MNP
-Norway	NOR
-Oman	OMN
-Pakistan	PAK
-Palau	PLW
-Palestine, State of	PSE
-Panama	PAN
-Papua New Guinea	PNG
-Paraguay	PRY
-Peru	PER
-Philippines (the)	PHL
-Pitcairn	PCN
-Poland	POL
-Portugal	PRT
-Puerto Rico	PRI
-Qatar	QAT
-Republic of North Macedonia	MKD
-Romania	ROU
-Russian Federation (the)	RUS
-Rwanda	RWA
-Réunion	REU
-Saint Barthélemy	BLM
-Saint Helena, Ascension and Tristan da Cunha	SHN
-Saint Kitts and Nevis	KNA
-Saint Lucia	LCA
-Saint Martin (French part)	MAF
-Saint Pierre and Miquelon	SPM
-Saint Vincent and the Grenadines	VCT
-Samoa	WSM
-San Marino	SMR
-Sao Tome and Principe	STP
-Saudi Arabia	SAU
-Senegal	SEN
-Serbia	SRB
-Seychelles	SYC
-Sierra Leone	SLE
-Singapore	SGP
-Sint Maarten (Dutch part)	SXM
-Slovakia	SVK
-Slovenia	SVN
-Solomon Islands	SLB
-Somalia	SOM
-South Africa	ZAF
-South Georgia and the South Sandwich Islands	SGS
-South Sudan	SSD
-Spain	ESP
-Sri Lanka	LKA
-Sudan (the)	SDN
-Suriname	SUR
-Svalbard and Jan Mayen	SJM
-Sweden	SWE
-Switzerland	CHE
-Syrian Arab Republic	SYR
-Taiwan (Province of China)	TWN
-Tajikistan	TJK
-Tanzania, United Republic of	TZA
-Thailand	THA
-Timor-Leste	TLS
-Togo	TGO
-Tokelau	TKL
-Tonga	TON
-Trinidad and Tobago	TTO
-Tunisia	TUN
-Turkey	TUR
-Turkmenistan	TKM
-Turks and Caicos Islands (the)	TCA
-Tuvalu	TUV
-Uganda	UGA
-Ukraine	UKR
-United Arab Emirates (the)	ARE
-United Kingdom of Great Britain and Northern Ireland (the)	GBR
-United States Minor Outlying Islands (the)	UMI
-United States of America (the)	USA
-Uruguay	URY
-Uzbekistan	UZB
-Vanuatu	VUT
-Venezuela (Bolivarian Republic of)	VEN
-Viet Nam	VNM
-Virgin Islands (British)	VGB
-Virgin Islands (U.S.)	VIR
-Wallis and Futuna	WLF
-Western Sahara	ESH
-Yemen	YEM
-Zambia	ZMB
-Zimbabwe	ZWE
-Åland Islands	ALA
+ABW	Aruba	0
+AFG	Afghanistan	1
+AGO	Angola	1
+AIA	Anguilla	0
+ALA	Åland Islands	0
+ALB	Albania	1
+AND	Andorra	0
+ARE	United Arab Emirates (the)	0
+ARG	Argentina	1
+ARM	Armenia	1
+ASM	American Samoa	1
+ATA	Antarctica	0
+ATF	French Southern Territories (the)	0
+ATG	Antigua and Barbuda	0
+AUS	Australia	0
+AUT	Austria	0
+AZE	Azerbaijan	1
+BDI	Burundi	1
+BEL	Belgium	0
+BEN	Benin	1
+BES	Bonaire, Sint Eustatius and Saba	0
+BFA	Burkina Faso	1
+BGD	Bangladesh	1
+BGR	Bulgaria	1
+BHR	Bahrain	0
+BHS	Bahamas (the)	0
+BIH	Bosnia and Herzegovina	1
+BLM	Saint Barthélemy	0
+BLR	Belarus	1
+BLZ	Belize	1
+BMU	Bermuda	0
+BOL	Bolivia (Plurinational State of)	1
+BRA	Brazil	1
+BRB	Barbados	0
+BRN	Brunei Darussalam	0
+BTN	Bhutan	1
+BVT	Bouvet Island	0
+BWA	Botswana	1
+CAF	Central African Republic (the)	1
+CAN	Canada	0
+CCK	Cocos (Keeling) Islands (the)	0
+CHE	Switzerland	0
+CHL	Chile	0
+CHN	China	1
+CIV	Côte d'Ivoire	1
+CMR	Cameroon	1
+COD	Congo (the Democratic Republic of the)	1
+COG	Congo (the)	1
+COK	Cook Islands (the)	0
+COL	Colombia	1
+COM	Comoros (the)	1
+CPV	Cabo Verde	1
+CRI	Costa Rica	1
+CUB	Cuba	1
+CUW	Curaçao	0
+CXR	Christmas Island	0
+CYM	Cayman Islands (the)	0
+CYP	Cyprus	0
+CZE	Czechia	0
+DEU	Germany	0
+DJI	Djibouti	1
+DMA	Dominica	1
+DNK	Denmark	0
+DOM	Dominican Republic (the)	1
+DZA	Algeria	1
+ECU	Ecuador	1
+EGY	Egypt	1
+ERI	Eritrea	1
+ESH	Western Sahara	0
+ESP	Spain	0
+EST	Estonia	0
+ETH	Ethiopia	1
+FIN	Finland	0
+FJI	Fiji	1
+FLK	Falkland Islands (the) [Malvinas]	0
+FRA	France	0
+FRO	Faroe Islands (the)	0
+FSM	Micronesia (Federated States of)	1
+GAB	Gabon	1
+GBR	United Kingdom of Great Britain and Northern Ireland (the)	0
+GEO	Georgia	1
+GGY	Guernsey	0
+GHA	Ghana	1
+GIB	Gibraltar	0
+GIN	Guinea	1
+GLP	Guadeloupe	0
+GMB	Gambia (the)	1
+GNB	Guinea-Bissau	1
+GNQ	Equatorial Guinea	1
+GRC	Greece	0
+GRD	Grenada	1
+GRL	Greenland	0
+GTM	Guatemala	1
+GUF	French Guiana	0
+GUM	Guam	0
+GUY	Guyana	1
+HKG	Hong Kong	0
+HMD	Heard Island and McDonald Islands	0
+HND	Honduras	1
+HRV	Croatia	1
+HTI	Haiti	1
+HUN	Hungary	0
+IDN	Indonesia	1
+IMN	Isle of Man	0
+IND	India	1
+IOT	British Indian Ocean Territory (the)	0
+IRL	Ireland	0
+IRN	Iran (Islamic Republic of)	1
+IRQ	Iraq	1
+ISL	Iceland	0
+ISR	Israel	0
+ITA	Italy	0
+JAM	Jamaica	1
+JEY	Jersey	0
+JOR	Jordan	1
+JPN	Japan	0
+KAZ	Kazakhstan	1
+KEN	Kenya	1
+KGZ	Kyrgyzstan	1
+KHM	Cambodia	1
+KIR	Kiribati	1
+KNA	Saint Kitts and Nevis	0
+KOR	Korea (the Republic of)	0
+KWT	Kuwait	0
+LAO	Lao People's Democratic Republic (the)	1
+LBN	Lebanon	1
+LBR	Liberia	1
+LBY	Libya	1
+LCA	Saint Lucia	1
+LIE	Liechtenstein	0
+LKA	Sri Lanka	1
+LSO	Lesotho	1
+LTU	Lithuania	0
+LUX	Luxembourg	0
+LVA	Latvia	0
+MAC	Macao	0
+MAF	Saint Martin (French part)	0
+MAR	Morocco	1
+MCO	Monaco	0
+MDA	Moldova (the Republic of)	1
+MDG	Madagascar	1
+MDV	Maldives	1
+MEX	Mexico	1
+MHL	Marshall Islands (the)	1
+MKD	Republic of North Macedonia	1
+MLI	Mali	1
+MLT	Malta	0
+MMR	Myanmar	1
+MNE	Montenegro	1
+MNG	Mongolia	1
+MNP	Northern Mariana Islands (the)	0
+MOZ	Mozambique	1
+MRT	Mauritania	1
+MSR	Montserrat	0
+MTQ	Martinique	0
+MUS	Mauritius	1
+MWI	Malawi	1
+MYS	Malaysia	1
+MYT	Mayotte	0
+NAM	Namibia	1
+NCL	New Caledonia	0
+NER	Niger (the)	1
+NFK	Norfolk Island	0
+NGA	Nigeria	1
+NIC	Nicaragua	1
+NIU	Niue	0
+NLD	Netherlands (the)	0
+NOR	Norway	0
+NPL	Nepal	1
+NRU	Nauru	1
+NZL	New Zealand	0
+OMN	Oman	0
+PAK	Pakistan	1
+PAN	Panama	1
+PCN	Pitcairn	0
+PER	Peru	1
+PHL	Philippines (the)	1
+PLW	Palau	0
+PNG	Papua New Guinea	1
+POL	Poland	0
+PRI	Puerto Rico	0
+PRK	Korea (the Democratic People's Republic of)	1
+PRT	Portugal	0
+PRY	Paraguay	1
+PSE	Palestine, State of	1
+PYF	French Polynesia	0
+QAT	Qatar	0
+REU	Réunion	0
+ROU	Romania	1
+RUS	Russian Federation (the)	1
+RWA	Rwanda	1
+SAU	Saudi Arabia	0
+SDN	Sudan (the)	1
+SEN	Senegal	1
+SGP	Singapore	0
+SGS	South Georgia and the South Sandwich Islands	0
+SHN	Saint Helena, Ascension and Tristan da Cunha	0
+SJM	Svalbard and Jan Mayen	0
+SLB	Solomon Islands	1
+SLE	Sierra Leone	1
+SLV	El Salvador	1
+SMR	San Marino	0
+SOM	Somalia	1
+SPM	Saint Pierre and Miquelon	0
+SRB	Serbia	1
+SSD	South Sudan	1
+STP	Sao Tome and Principe	1
+SUR	Suriname	1
+SVK	Slovakia	0
+SVN	Slovenia	0
+SWE	Sweden	0
+SWZ	Eswatini	1
+SXM	Sint Maarten (Dutch part)	0
+SYC	Seychelles	0
+SYR	Syrian Arab Republic	1
+TCA	Turks and Caicos Islands (the)	0
+TCD	Chad	1
+TGO	Togo	1
+THA	Thailand	1
+TJK	Tajikistan	1
+TKL	Tokelau	0
+TKM	Turkmenistan	1
+TLS	Timor-Leste	1
+TON	Tonga	1
+TTO	Trinidad and Tobago	0
+TUN	Tunisia	1
+TUR	Turkey	1
+TUV	Tuvalu	1
+TWN	Taiwan (Province of China)	0
+TZA	Tanzania, United Republic of	1
+UGA	Uganda	1
+UKR	Ukraine	1
+UMI	United States Minor Outlying Islands (the)	0
+URY	Uruguay	0
+USA	United States of America (the)	0
+UZB	Uzbekistan	1
+VAT	Holy See (the)	0
+VCT	Saint Vincent and the Grenadines	1
+VEN	Venezuela (Bolivarian Republic of)	1
+VGB	Virgin Islands (British)	0
+VIR	Virgin Islands (U.S.)	0
+VNM	Viet Nam	1
+VUT	Vanuatu	1
+WLF	Wallis and Futuna	0
+WSM	Samoa	1
+YEM	Yemen	1
+ZAF	South Africa	1
+ZMB	Zambia	1
+ZWE	Zimbabwe	1
