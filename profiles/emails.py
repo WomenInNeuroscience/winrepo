@@ -62,3 +62,20 @@ def user_reset_password_email(
     message.to = [user.email]
     return message
 
+
+def test_email(
+    to,
+    subject_template_name='test_email_subject.txt',
+    email_template_name='test_email_body.txt',
+    html_email_template_name='test_email_body.html'
+):
+    context = {}
+
+    message = build_email(
+        subject_template_name,
+        email_template_name,
+        html_email_template_name,
+        context
+    )
+    message.to = [to]
+    return message
