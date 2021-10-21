@@ -8,6 +8,7 @@ django-extensions==3.1.1
 django-multiselectfield==0.1.12
 django-recaptcha==2.0.6
 django-robots==4.0
+django-allauth==0.45.0
 djangorestframework==3.12.4
 flake8==3.9.0
 pyflakes==2.3.1

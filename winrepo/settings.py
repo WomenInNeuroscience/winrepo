@@ -34,6 +34,13 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'django_extensions',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.linkedin',
+    'allauth.socialaccount.providers.twitter',
 ]
 
 MIDDLEWARE = [
@@ -105,10 +112,50 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = ['profiles.backends.EmailOrUsernameModelBackend']
+AUTHENTICATION_BACKENDS = [
+    'profiles.backends.EmailOrUsernameModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.0/topics/i18n/
+ACCOUNT_ADAPTER = 'profiles.adapter.AccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'profiles.adapter.SocialAccountAdapter'
+
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'APP': {
+            'client_id': config('GOOGLE_CLIENT_ID'),
+            'secret': config('GOOGLE_CLIENT_SECRET'),
+        }
+    },
+    'twitter': {
+        'APP': {
+            'client_id': config('TWITTER_CLIENT_ID'),
+            'secret': config('TWITTER_CLIENT_SECRET'),
+        }
+    },
+    'linkedin': {
+        'SCOPE': [
+            'r_basicprofile',
+            'r_emailaddress'
+        ],
+        'PROFILE_FIELDS': [
+            'id',
+            'first-name',
+            'last-name',
+            'email-address',
+        ],
+        'APP': {
+            'client_id': config('LINKEDIN_CLIENT_ID'),
+            'secret': config('LINKEDIN_CLIENT_SECRET'),
+        }
+    }
+}
 
 LANGUAGE_CODE = 'en-us'
 
@@ -118,8 +165,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
@@ -127,7 +172,6 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static-collected")
 
-# reCaptcha settings
 RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_DOMAIN = config('RECAPTCHA_DOMAIN')
@@ -146,26 +190,14 @@ EMAIL_TIMEOUT = config('EMAIL_TIMEOUT', default=60, cast=int)
 EMAIL_FROM = config('DEFAULT_FROM_EMAIL')
 EMAIL_SUBJECT_PREFIX = 'WiNRepo - '
 
-# Sites settings
 SITE_ID = config('SITE_ID', cast=int)
 ROBOTS_CACHE_TIMEOUT = 60 * 60 * 24
 
-# Apps settings
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 BOOTSTRAP4 = {
-    # The URL to the jQuery JavaScript file
     'jquery_url': 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js',
-
-    # The Bootstrap base URL
     'base_url': 'https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/',
-
-    # The complete URL to the Bootstrap CSS file
-    # (None means derive it from base_url)
     'css_url':  STATIC_URL + 'css/bootstrap-winrepo.min.css',
-
-    # The complete URL to the Bootstrap JavaScript file
-    # (None means derive it from base_url)
     'javascript_url': 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'
 }
 

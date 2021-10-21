@@ -159,6 +159,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
 
+    password = models.CharField(max_length=128, null=True)
+
     USERNAME_FIELD = 'username'
 
     objects = UserManager()

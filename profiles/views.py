@@ -6,9 +6,8 @@ from operator import and_, or_
 
 from dal.autocomplete import Select2QuerySetView
 from django.contrib import messages
-from django.contrib.auth import logout, update_session_auth_hash
-from django.contrib.auth.forms import (PasswordChangeForm, PasswordResetForm,
-                                       SetPasswordForm)
+from django.contrib.auth import logout, update_session_auth_hash, views as auth_views
+from django.contrib.auth.forms import (PasswordResetForm, SetPasswordForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
@@ -23,16 +22,14 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import TemplateView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, FormView, ModelFormMixin
-from django.views.generic.list import ListView
+from django.views.generic import TemplateView, DetailView,  CreateView, FormView, ListView
+from django.views.generic.edit import ModelFormMixin
 from rest_framework import viewsets
 
 from .emails import user_create_confirm_email, user_reset_password_email
 from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
                     UserDeleteForm, UserForm, UserProfileDeleteForm,
-                    UserProfileForm)
+                    UserProfileForm, UserPasswordChangeForm, AuthenticationForm)
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
 
@@ -48,6 +45,11 @@ def _from_token(model, field, data_b64):
     except (TypeError, ValueError, OverflowError, ValidationError, AttributeError, model.DoesNotExist):
         obj = None
     return obj
+
+
+class LoginView(auth_views.LoginView):
+    form_class = AuthenticationForm
+
 
 class Home(ListView):
     template_name = 'profiles/home.html'
@@ -257,7 +259,7 @@ class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, Form
 
 
 class UserChangePasswordView(LoginRequiredMixin, SuccessMessageMixin, FormView):
-    form_class = PasswordChangeForm
+    form_class = UserPasswordChangeForm
     template_name = "account/user_change_password.html"
     success_message = 'Your password has been updated successfully!'
 
