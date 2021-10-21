@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.linkedin',
+    'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.twitter',
 ]
 
@@ -139,20 +139,13 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': config('TWITTER_CLIENT_SECRET'),
         }
     },
-    'linkedin': {
+    'github': {
         'SCOPE': [
-            'r_basicprofile',
-            'r_emailaddress'
-        ],
-        'PROFILE_FIELDS': [
-            'id',
-            'first-name',
-            'last-name',
-            'email-address',
+            'user',
         ],
         'APP': {
-            'client_id': config('LINKEDIN_CLIENT_ID'),
-            'secret': config('LINKEDIN_CLIENT_SECRET'),
+            'client_id': config('GITHUB_CLIENT_ID'),
+            'secret': config('GITHUB_CLIENT_SECRET'),
         }
     }
 }
