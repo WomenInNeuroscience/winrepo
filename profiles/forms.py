@@ -2,7 +2,12 @@ from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from dal.autocomplete import ModelSelect2
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import (
+    AuthenticationForm as _AuthenticationForm,
+    PasswordChangeForm,
+    UserCreationForm,
+    UsernameField
+)
 from django.utils.translation import gettext_lazy as _
 
 from .models import Profile, Recommendation, User
@@ -10,6 +15,12 @@ from .models import Profile, Recommendation, User
 
 class CaptchaForm(forms.Form):
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox, label=False)
+
+
+class AuthenticationForm(_AuthenticationForm):
+    username = UsernameField(
+        widget=forms.TextInput(attrs={'autofocus': True, 'placeholder': 'Username or e-mail'}),
+    )
 
 
 class UserForm(forms.ModelForm):
@@ -20,6 +31,20 @@ class UserForm(forms.ModelForm):
             'name',
             'email',
         )
+
+
+class UserPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="Old password",
+        strip=False,
+        required=False,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'autofocus': True}),
+    )
+
+    def clean_old_password(self):
+        if self.user.password is None:
+            return None
+        return super().clean_old_password()
 
 
 class UserProfileForm(forms.ModelForm):
