@@ -170,7 +170,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def first_name(self):
-        return self.name.split(' ', 1)[0]
+        try:
+            return self.name.partition(' ')[0]
+        except:
+            return self.name
 
     @property
     def any_claimed_profile(self):
@@ -239,7 +242,7 @@ class Profile(models.Model):
         return DOMAINS_CHOICES
 
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE,
+        User, on_delete=models.SET_NULL,
         null=True, blank=True, related_name='profile'
     )
     is_public = models.BooleanField(default=True)
@@ -313,6 +316,23 @@ class Profile(models.Model):
 
     def grad_month_labels(self):
         return dict(MONTHS_CHOICES).get(self.grad_month)
+
+
+
+class RecommendationQuerySet(QuerySet):
+    pass
+
+
+class RecommendationManager(models.Manager):
+
+    def __init__(self, *args, **kwargs):
+        self.alive_only = kwargs.pop('alive_only', True)
+        super().__init__(*args, **kwargs)
+
+    def get_queryset(self):
+        if self.alive_only:
+            return RecommendationQuerySet(self.model).filter(profile__deleted_at=None)
+        return RecommendationQuerySet(self.model)
 
 
 class Recommendation(models.Model):
