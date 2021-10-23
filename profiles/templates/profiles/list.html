@@ -52,7 +52,11 @@
 						<div class="profile_id d-none">{{ profile.id }}</div>
 						<div class="col-xs-12 col-sm-4 col-lg-3">
 							<h5 class="text-primary font-weight-bold">
-								<a href="{% url 'profiles:detail' profile.id %}">{{ profile.name }}</a>
+								{% if profile.user %}
+									<a href="{% url 'profiles:detail_username' profile.user.username %}">{{ profile.name }}</a>
+								{% else %}
+									<a href="{% url 'profiles:detail' profile.id %}">{{ profile.name }}</a>
+								{% endif %}
 							</h5>
 						</div>
 						<div class="col-xs-12 col-sm-4 col-lg-3 details-grey text-muted">
