@@ -26,11 +26,14 @@ app_name = 'profiles'
 
 urlpatterns = [
     path('', views.Home.as_view(), name='home'),
-    path('list/', views.ListProfiles.as_view(), name='index'),
-    path('list/<int:pk>/', views.ProfileDetail.as_view(), name='detail'),
-    path('list/<int:pk>/recommend/', views.CreateRecommendation.as_view(), name='recommend_profile'),
-    path('list/recommend/', views.CreateRecommendation.as_view(), name='recommend'),
-    path('list/<int:pk>/claim/', views.ProfileClaim.as_view(), name='claim_profile'),
+    path('repo/', views.ListProfiles.as_view(), name='index'),
+    path('repo/recommend/', views.CreateRecommendation.as_view(), name='recommend'),
+    path('repo/<int:pk>/', views.ProfileDetail.as_view(), name='detail'),
+    path('repo/<int:pk>/recommend/', views.CreateRecommendation.as_view(), name='recommend_profile'),
+    path('repo/<int:pk>/claim/', views.ProfileClaim.as_view(), name='claim_profile'),
+    path('repo/<str:user__username>/', views.ProfileDetail.as_view(), name='detail_username'),
+    path('repo/<str:user__username>/recommend/', views.CreateRecommendation.as_view(), name='recommend_profile_username'),
+    path('repo/<str:user__username>/claim/', views.ProfileClaim.as_view(), name='claim_profile_username'),
 
     path('faq/', TemplateView.as_view(template_name='profiles/faq.html'), name='faq'),
     path('tips/', TemplateView.as_view(template_name='profiles/tips.html'), name='tips'),

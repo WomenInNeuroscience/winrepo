@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load abs_url %}
 
 {% block title %}
 	{{ block.super }} - My Account
@@ -38,6 +39,14 @@
 			</h3>
 
 			{% if user.profile %}
+				
+				<div class="p-3 mt-4 text-center">
+					The link for your profile is:
+					<a class="btn btn-primary ml-5 mr-5" style="white-space: normal;" href="{% url 'profiles:detail_username' user.username %}" role="button">
+						{% abs_url 'profiles:detail_username' user.username %}
+					</a>
+				</div>
+				
 				<div class="p-3 mt-4 border rounded">
 					{% include "fragments/profile.html" with profile=user.profile %}
 				</div>

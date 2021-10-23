@@ -97,7 +97,13 @@
 	<span class="text-secondary quote-icon float-left m-2"><i class="fas fa-quote-left"></i></span>
 	<blockquote class="blockquote text-center m-2">
 		<p class="mb-0">{{ reco.comment|truncatechars:255 }}</p>
-		<footer class="blockquote-footer">{{ reco.reviewer_name }}, about <a class="text-primary" href="{% url 'profiles:detail' reco.profile.id %}">{{ reco.profile.name }}</a></footer>
+		<footer class="blockquote-footer">{{ reco.reviewer_name }}, about 
+			{% if reco.profile.user %}
+				<a class="text-primary" href="{% url 'profiles:detail_username' reco.profile.user.username %}">{{ reco.profile.name }}</a>
+			{% else %}
+				<a class="text-primary" href="{% url 'profiles:detail' reco.profile.id %}">{{ reco.profile.name }}</a>
+			{% endif %}
+		</footer>
 	</blockquote>
     </div>
   {% endfor %}
