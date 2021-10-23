@@ -27,7 +27,7 @@ from django.views.generic.edit import ModelFormMixin
 from rest_framework import viewsets
 from dal.autocomplete import Select2QuerySetView
 
-from .emails import user_create_confirm_email, user_reset_password_email
+from .emails import profile_update_email, user_create_confirm_email, user_reset_password_email, user_update_email
 from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
                     UserDeleteForm, UserForm, UserProfileDeleteForm,
                     UserProfileForm, UserPasswordChangeForm, AuthenticationForm)
@@ -191,6 +191,9 @@ class UserProfileEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixi
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
+        if self.object._state.adding is False and \
+            any(f in form.changed_data for f in form.base_fields):
+            profile_update_email(self.request, self.request.user, self.object).send()
         form.save(self.request.user)
         return super().form_valid(form)
 
@@ -255,6 +258,8 @@ class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, Form
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
+        if any(f in form.changed_data for f in form.base_fields):
+            user_update_email(self.request, self.object).send()
         form.save(self.request.user)
         return super().form_valid(form)
 
@@ -383,6 +388,7 @@ class UserCreateConfirmView(TemplateView):
 
         return super().get(request, *args, **kwargs)
 
+
 class UserPasswordResetView(FormView):
     form_class = PasswordResetForm
     template_name = 'registration/reset_password.html'
@@ -409,6 +415,7 @@ class UserPasswordResetView(FormView):
 
     def get_success_url(self):
         return reverse('profiles:forgot')
+
 
 class UserPasswordResetConfirmView(FormView):
     form_class = SetPasswordForm

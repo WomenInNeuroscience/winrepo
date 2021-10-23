@@ -1,0 +1,3 @@
+{% load abs_url %}
+
+Someone changed information from your WiNRepo profile. If it was not you, please reply to this e-mail.
