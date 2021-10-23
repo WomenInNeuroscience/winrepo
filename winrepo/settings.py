@@ -189,6 +189,7 @@ EMAIL_USE_SSL = config('EMAIL_USE_SSL', default='').lower() == 'true'
 EMAIL_TIMEOUT = config('EMAIL_TIMEOUT', default=60, cast=int)
 
 EMAIL_FROM = config('DEFAULT_FROM_EMAIL')
+EMAIL_REPLY_TO = config('DEFAULT_REPLY_TO_EMAIL')
 EMAIL_SUBJECT_PREFIX = 'WiNRepo - '
 
 SITE_ID = config('SITE_ID', cast=int)

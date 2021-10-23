@@ -4,17 +4,66 @@ from django.template import loader
 import winrepo.settings as settings
 
 
-def build_email(subject_template_name, email_template_name, html_email_template_name, context=None):
+def build_email(subject_template_name, email_template_name, html_email_template_name, context=None, reply=False):
 
     subject = loader.render_to_string(subject_template_name, context)
     subject = settings.EMAIL_SUBJECT_PREFIX + ''.join(subject.splitlines())
     body = loader.render_to_string(email_template_name, context)
 
-    email_message = EmailMultiAlternatives(subject, body, settings.EMAIL_FROM, None)
+    headers = {}
+    if reply:
+        headers['Reply-To'] = settings.EMAIL_REPLY_TO
+    
+    email_message = EmailMultiAlternatives(subject, body, settings.EMAIL_FROM, None, headers=headers)
     html_email = loader.render_to_string(html_email_template_name, context)
     email_message.attach_alternative(html_email, 'text/html')
 
     return email_message
+
+
+def user_update_email(
+    request, user,
+    subject_template_name='account/user_update_email_subject.txt',
+    email_template_name='account/user_update_email_body.txt',
+    html_email_template_name='account/user_update_email_body.html'
+):
+    context = {
+        "request": request,
+        "user": user,
+    }
+
+    message = build_email(
+        subject_template_name,
+        email_template_name,
+        html_email_template_name,
+        context,
+        True,
+    )
+    message.to = [user.email]
+    return message
+
+
+def profile_update_email(
+    request, user, profile,
+    subject_template_name='profiles/profile_update_email_subject.txt',
+    email_template_name='profiles/profile_update_email_body.txt',
+    html_email_template_name='profiles/profile_update_email_body.html'
+):
+    context = {
+        "request": request,
+        "user": user,
+        "profile": profile,
+    }
+
+    message = build_email(
+        subject_template_name,
+        email_template_name,
+        html_email_template_name,
+        context,
+        True,
+    )
+    message.to = [user.email]
+    return message
 
 
 def user_create_confirm_email(
