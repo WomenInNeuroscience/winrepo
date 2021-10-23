@@ -96,7 +96,7 @@ class UserDeleteForm(forms.Form):
     )
 
 
-class ProfileClaimForm(forms.Form):
+class ProfileClaimForm(CaptchaForm, forms.Form):
     confirm = forms.BooleanField(
         widget=forms.HiddenInput(),
         required=True,
