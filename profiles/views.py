@@ -353,7 +353,7 @@ class UserCreateView(CreateView):
 
 class UserCreateConfirmView(TemplateView):
     template_name = 'registration/signup_confirm.html'
-    success_message = 'Your account has been activated successfully! Please, log-in!'
+    success_message = 'Your account has been activated successfully! Please, sign-in!'
     error_message = 'There was an error with your activation. Please, try again.'
 
     token_generator = default_token_generator
@@ -420,7 +420,7 @@ class UserPasswordResetView(FormView):
 class UserPasswordResetConfirmView(FormView):
     form_class = SetPasswordForm
     template_name = 'registration/reset_password_confirm.html'
-    success_message = 'Your password has been resetted! Please, log-in!'
+    success_message = 'Your password has been resetted! Please, sign-in!'
     error_message = 'There was an error with your password reset. Please, try again.'
 
     token_generator = default_token_generator
