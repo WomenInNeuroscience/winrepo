@@ -7,7 +7,19 @@
 
 {% if form.errors %}
 <div class="alert alert-warning" role="alert">
-	Your e-mail and password didn't match. Please try again.
+	{% if form.non_field_errors %}
+		{% for error in form.non_field_errors.data %}
+			{% if error.code == 'inactive' %}
+				Your account is inactive. Please check your email for the activation link.
+			{% elif error.code == 'invalid_login' %}
+				Please enter a correct username/e-mail and password. Note that both fields are case-sensitive.
+			{% else %}
+				{% for suberror in error %}
+					{{ suberror }}
+				{% endfor %}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
 </div>
 {% endif %}
 

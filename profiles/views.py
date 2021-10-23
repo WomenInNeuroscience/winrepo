@@ -47,10 +47,6 @@ def _from_token(model, field, data_b64):
     return obj
 
 
-class LoginView(auth_views.LoginView):
-    form_class = AuthenticationForm
-
-
 class Home(ListView):
     template_name = 'profiles/home.html'
     context_object_name = 'recommendations_sample'
@@ -161,6 +157,10 @@ class ListProfiles(ListView):
 class ProfileDetail(DetailView):
     model = Profile
     queryset = Profile.objects.filter(is_public=True)
+
+
+class LoginView(auth_views.LoginView):
+    form_class = AuthenticationForm
 
 
 class UserProfileView(TemplateView):

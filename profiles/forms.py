@@ -19,7 +19,7 @@ class CaptchaForm(forms.Form):
 
 class AuthenticationForm(_AuthenticationForm):
     username = UsernameField(
-        widget=forms.TextInput(attrs={'autofocus': True, 'placeholder': 'Username or e-mail'}),
+        widget=forms.TextInput(attrs={'autofocus': True, 'placeholder': 'Username or E-mail'}),
     )
 
 
