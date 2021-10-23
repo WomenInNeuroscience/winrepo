@@ -513,6 +513,10 @@ class ProfileClaim(SuccessMessageMixin, FormView, LoginRequiredMixin):
             return redirect('profiles:detail', pk=profile_id)
             
         self.profile = get_object_or_404(Profile, pk=profile_id)
+
+        if self.profile.user:
+            return redirect('profiles:detail', pk=profile_id)
+
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
