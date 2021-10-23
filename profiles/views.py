@@ -158,6 +158,9 @@ class ListProfiles(ListView):
 class ProfileDetail(DetailView):
     model = Profile
     queryset = Profile.objects.filter(is_public=True)
+    slug_url_kwarg = 'user__username'
+    slug_field = 'user__username'
+    query_pk_and_slug = True
 
 
 class LoginView(auth_views.LoginView):
