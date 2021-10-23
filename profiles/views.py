@@ -4,9 +4,9 @@ import time
 from functools import reduce
 from operator import and_, or_
 
-from dal.autocomplete import Select2QuerySetView
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import logout, update_session_auth_hash, views as auth_views
+from django.contrib.auth import login, logout, update_session_auth_hash, views as auth_views
 from django.contrib.auth.forms import (PasswordResetForm, SetPasswordForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
@@ -25,6 +25,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import TemplateView, DetailView,  CreateView, FormView, ListView
 from django.views.generic.edit import ModelFormMixin
 from rest_framework import viewsets
+from dal.autocomplete import Select2QuerySetView
 
 from .emails import user_create_confirm_email, user_reset_password_email
 from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
@@ -334,6 +335,7 @@ class UserCreateView(CreateView):
         valid = super().form_valid(form)
         uid =_to_token(self.object, 'email')
         token = self.token_generator.make_token(self.object)
+        self.request.session['user_confirmation_token'] = token
         user_create_confirm_email(self.request, self.object, uid, token).send()
         return valid
 
@@ -355,12 +357,23 @@ class UserCreateConfirmView(TemplateView):
         user = _from_token(User, 'email', uid)
         if token and user is not None:
             if self.token_generator.check_token(user, token):
+
+                same_session_confirmation = False
+                if 'user_confirmation_token' in request.session:
+                    del request.session['user_confirmation_token']
+                    same_session_confirmation = not user.is_active
+
                 user.is_active = True
                 if Profile.objects.filter(contact_email=user.email).exists():
                     user.profile = Profile.objects.get(contact_email=user.email)
                 user.save()
 
-                messages.success(self.request, self.success_message)
+                # Same session confirmations are cool to direct login
+                if same_session_confirmation:
+                    login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
+                    return redirect('profiles:user')
+                else:
+                    messages.success(self.request, self.success_message)
             else:
                 messages.error(self.request, self.error_message)
             return redirect('profiles:login')
