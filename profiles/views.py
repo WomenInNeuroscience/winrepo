@@ -340,10 +340,16 @@ class UserDeleteView(LoginRequiredMixin, FormView):
         logout(self.request)
 
         try:
+            # User profile will be changed and saved (soft-delete)
             profile = user.profile
             profile.user = None
-            # Profile will be changed and saved (soft-delete)
             profile.delete()
+        except Profile.DoesNotExist:
+            pass
+
+        try:
+            # Soft-deleted profiles need to be manually updated (sqlite)
+            Profile.all_objects.filter(user=user).update(claimed_by=None)
         except Profile.DoesNotExist:
             pass
 
