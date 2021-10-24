@@ -134,27 +134,26 @@ class AccountTests(TestCase):
         r = Recommendation(profile=p, reviewer_email='another@test.com')
         r.save()
 
-        # self.client.force_login(u)
+        self.client.force_login(u)
 
-        # response = self.client.get(reverse('profiles:user_delete'))
-        # self.assertEqual(response.status_code, HTTPStatus.OK)
+        response = self.client.get(reverse('profiles:user_delete'))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
-        # User.objects.get(id=u.id)
+        User.objects.get(id=u.id)
 
-        # response = self.client.post(reverse('profiles:user_delete'), data={
-        #     'confirm': True,
-        # })
-        # self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        # self.assertEqual(response.url, reverse('profiles:login'))
+        response = self.client.post(reverse('profiles:user_delete'), data={
+            'confirm': True,
+        })
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(response.url, reverse('profiles:login'))
 
-        # with self.assertRaises(User.DoesNotExist):
-        #     User.objects.get(id=u.id)
+        with self.assertRaises(User.DoesNotExist):
+            User.objects.get(id=u.id)
 
-        # with self.assertRaises(Profile.DoesNotExist):
-        #     Profile.objects.get(id=p.id)
+        with self.assertRaises(Profile.DoesNotExist):
+            Profile.objects.get(id=p.id)
 
-        # with self.assertRaises(Recommendation.DoesNotExist):
-        #     Recommendation.objects.get(id=r.id)
+        Recommendation.objects.get(id=r.id)
 
     def test_account_changepassword(self):
 
