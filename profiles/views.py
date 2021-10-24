@@ -386,6 +386,7 @@ class UserCreateView(CreateView):
 class UserCreateConfirmView(TemplateView):
     template_name = 'registration/signup_confirm.html'
     success_message = 'Your account has been activated successfully! Please, sign-in!'
+    same_session_success_message = 'Your account has been activated successfully! Please, if you identify yourself as a woman, set-up your public profile!'
     error_message = 'There was an error with your activation. Please, try again.'
 
     token_generator = default_token_generator
@@ -407,10 +408,11 @@ class UserCreateConfirmView(TemplateView):
                 if Profile.objects.filter(contact_email=user.email).exists():
                     user.profile = Profile.objects.get(contact_email=user.email)
                 user.save()
-
+                
                 # Same session confirmations are cool to direct login
                 if same_session_confirmation:
                     login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
+                    messages.success(self.request, self.same_session_success_message)
                     return redirect(self.get_redirect_url())
                 else:
                     messages.success(self.request, self.success_message)
