@@ -336,10 +336,13 @@ class UserDeleteView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         user = self.request.user
 
+        # Logout the current user, so to delete it
         logout(self.request)
 
         try:
             profile = user.profile
+            profile.user = None
+            # Profile will be changed and saved (soft-delete)
             profile.delete()
         except Profile.DoesNotExist:
             pass
