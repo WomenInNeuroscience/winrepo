@@ -193,7 +193,7 @@ EMAIL_FROM = config('DEFAULT_FROM_EMAIL')
 EMAIL_REPLY_TO = config('DEFAULT_REPLY_TO_EMAIL')
 EMAIL_SUBJECT_PREFIX = 'WiNRepo - '
 
-SITE_ID = config('SITE_ID', cast=int)
+SITE_ID = config('SITE_ID', cast=int, default=1)
 ROBOTS_CACHE_TIMEOUT = 60 * 60 * 24
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
