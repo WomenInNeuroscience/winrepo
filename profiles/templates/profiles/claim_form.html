@@ -17,12 +17,16 @@
 		<div class="col-12">
 			<h2 class="text-primary font-weight-bold">Claim Profile</h2>
 
+			<p class="m-1">By claiming a profile, you take control of it and are able to edit its information.</p>
+
 			<h3 class="text-primary font-weight-bold mt-5">
 				<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
 				Are you absolutely sure?
 			</h3>
 
-			{% include "fragments/profile.html" with profile=profile %}
+			<div class="p-3 mt-4 border rounded">
+				{% include "fragments/profile.html" with profile=profile %}
+			</div>
 
 			<div class="pt-2 mt-4 w-100 text-muted">
 				<form method="post">

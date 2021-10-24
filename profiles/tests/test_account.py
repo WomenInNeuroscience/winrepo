@@ -26,8 +26,8 @@ class AccountTests(TestCase):
             'username': 'unittest',
             'name': 'Unit Test',
             'email': 'test@test.com',
-            'password1': 'myunitarytest1!',
-            'password2': 'myunitarytest1!',
+            'password1': 'Myunitarytest1!',
+            'password2': 'Myunitarytest1!',
             'g-recaptcha-response': 'abcdef',
         })
         self.assertEqual(response.status_code, HTTPStatus.FOUND, 'form' in response.context and response.context['form'].errors.as_text())
@@ -73,8 +73,8 @@ class AccountTests(TestCase):
             'username': 'unittest',
             'name': 'Unit Test',
             'email': 'test@test.com',
-            'password1': 'myunitarytest1!',
-            'password2': 'myunitarytest1!',
+            'password1': 'Myunitarytest1!',
+            'password2': 'Myunitarytest1!',
             'g-recaptcha-response': 'abcdef',
         })
         self.assertEqual(response.status_code, HTTPStatus.FOUND, 'form' in response.context and response.context['form'].errors.as_text())
@@ -104,6 +104,23 @@ class AccountTests(TestCase):
         response = self.client.get(reverse('profiles:user'))
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertContains(response, 'test@test.com')
+
+    def test_account_login(self):
+
+        u = User(email='test@test.com')
+        u.is_active = True
+        u.set_password('Myunitarytest1!')
+        u.save()
+
+        next = reverse('profiles:user_edit')
+        response = self.client.get(reverse('profiles:login') + '?next=' + next)
+
+        response = self.client.post(reverse('profiles:login'), {
+            'username': 'test@test.com',
+            'password': 'Myunitarytest1!',
+        })
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(response.url, next)
 
     def test_delete(self):
 
@@ -143,7 +160,7 @@ class AccountTests(TestCase):
 
         u = User(email='test@test.com')
         u.is_active = True
-        u.set_password('myunittest1!')
+        u.set_password('Myunittest1!')
         u.save()
 
         self.client.force_login(u)
@@ -161,9 +178,9 @@ class AccountTests(TestCase):
         self.assertIn('old_password', response.context['form'].errors)
 
         response = self.client.post(reverse('profiles:user_change_password'), data={
-            'old_password': 'myunittest1!',
-            'new_password1': 'myunittest1!passchange',
-            'new_password2': 'myunittest1!passchange',
+            'old_password': 'Myunittest1!',
+            'new_password1': 'Myunittest1!passchange',
+            'new_password2': 'Myunittest1!passchange',
         })
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)

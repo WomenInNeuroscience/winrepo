@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import random
 import re
 import time
@@ -19,7 +20,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode, url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import TemplateView, DetailView,  CreateView, FormView, ListView
@@ -165,6 +166,28 @@ class ProfileDetail(DetailView):
 
 class LoginView(auth_views.LoginView):
     form_class = AuthenticationForm
+
+    def dispatch(self, request, *args, **kwargs):
+        next = request.GET.get('next')
+        if next:
+            url_is_safe = url_has_allowed_host_and_scheme(
+                url=next,
+                allowed_hosts=self.get_success_url_allowed_hosts(),
+                require_https=self.request.is_secure(),
+            )
+            if url_is_safe:
+                request.session['next'] = next
+                request.session['next_expiration'] = datetime.timestamp(datetime.now() + timedelta(minutes=15))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_redirect_url(self):
+        if self.request.session.get('next') and \
+            self.request.session.get('next_expiration'):
+
+            if datetime.timestamp(datetime.now()) < self.request.session['next_expiration']:
+                return self.request.session.get('next')
+
+        return super().get_redirect_url()
 
 
 class UserProfileView(TemplateView):
@@ -379,7 +402,7 @@ class UserCreateConfirmView(TemplateView):
                 # Same session confirmations are cool to direct login
                 if same_session_confirmation:
                     login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
-                    return redirect('profiles:user')
+                    return redirect(self.get_redirect_url())
                 else:
                     messages.success(self.request, self.success_message)
             else:
@@ -388,6 +411,14 @@ class UserCreateConfirmView(TemplateView):
 
         return super().get(request, *args, **kwargs)
 
+    def get_redirect_url(self):
+        if self.request.session.get('next') and \
+            self.request.session.get('next_expiration'):
+
+            if datetime.timestamp(datetime.now()) < self.request.session['next_expiration']:
+                return self.request.session.get('next')
+
+        return reverse('profiles:user')
 
 class UserPasswordResetView(FormView):
     form_class = PasswordResetForm
@@ -518,7 +549,7 @@ class ProfileClaim(SuccessMessageMixin, FormView, LoginRequiredMixin):
 
         if user.any_claimed_profile:
             return redirect('profiles:detail', pk=profile_id)
-            
+
         self.profile = get_object_or_404(Profile, pk=profile_id)
 
         if self.profile.user:

@@ -19,19 +19,25 @@
 	{% block profile_buttons %}
 		<div class="col-xs-6 col-sm-4 col-md-3">
 			<a class="btn pill-btn text-white btn-secondary m-1 email-btn{% if profile.email == "" %} disabled{% endif %}" href="mailto:{{ profile.contact_email }}">
-				<i class="fas fa-envelope"></i> Send Email</a>
+				<i class="fas fa-envelope"></i> Send Email
+			</a>
 
-			<a class="btn pill-btn text-white btn-secondary m-1 webpage-btn{% if profile.webpage == "" %} disabled{% endif %}" href="{{ profile.webpage }}" target="_blank" rel="noopener">
-				<i class="fas fa-address-card"></i> View Page</a>
+			{% if profile.webpage == "" %}
+				<a class="btn pill-btn text-white btn-secondary m-1 webpage-btn" href="{{ profile.webpage }}" target="_blank" rel="noopener">
+					<i class="fas fa-address-card"></i> View Page
+				</a>
+			{% endif %}
 
 			{% if not user.is_authenticated or profile.id != user.profile.id %}
 				<a class="btn pill-btn btn-outline-primary m-1 recommend-btn" href="{% url 'profiles:recommend_profile' profile.id %}">
-					<i class="fas fa-comment"></i> Recommend</a>
+					<i class="fas fa-comment"></i> Recommend
+				</a>
 			{% endif %}
-			
-			{% if user.is_authenticated and not user.profile and not user.any_claimed_profile and not profile.user %}
+
+			{% if not user or not user.profile and not user.any_claimed_profile and not profile.user %}
 				<a class="btn pill-btn btn-outline-primary m-1 recommend-btn" href="{% url 'profiles:claim_profile' profile.id %}">
-					<i class="fas fa-star"></i> Claim</a>
+					<i class="fas fa-star"></i> Claim
+				</a>
 			{% endif %}
 		</div>
 	{% endblock profile_buttons %}
