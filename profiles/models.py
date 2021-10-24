@@ -361,6 +361,11 @@ class Recommendation(models.Model):
     profile = models.ForeignKey(Profile,
                                 on_delete=models.CASCADE,
                                 related_name='recommendations')
+
+    reviewer = models.ForeignKey(
+        User, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='recommended'
+    )
     reviewer_name = models.CharField(max_length=100, blank=False)
     reviewer_email = models.EmailField(blank=True)
     reviewer_position = models.CharField(max_length=50,
