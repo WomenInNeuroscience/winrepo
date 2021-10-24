@@ -520,6 +520,9 @@ class CreateRecommendation(SuccessMessageMixin, FormView):
     def form_valid(self, form):
         recommendation = form.save()
         self.profile_id = recommendation.profile.id
+        if self.request.user.is_authenticated:
+            recommendation.reviewer = self.request.user
+            recommendation.save()
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -531,6 +534,8 @@ class CreateRecommendation(SuccessMessageMixin, FormView):
         if profile_id is not None:
             profile = get_object_or_404(Profile, pk=profile_id)
             initial.update({'profile': profile})
+        if self.request.user.is_authenticated:
+            initial.update({'reviewer_name': self.request.user.name})
         return initial
 
 
