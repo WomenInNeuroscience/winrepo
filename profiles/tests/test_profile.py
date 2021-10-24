@@ -33,7 +33,7 @@ class ProfileTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertEqual(response.url, reverse('profiles:user'))
 
-        p.refresh_from_db()
+        p = Profile.all_objects.get(id=p.id)
         self.assertNotEquals(p.deleted_at, None)
 
     def test_profile_delete_new(self):
