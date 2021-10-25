@@ -197,6 +197,29 @@ class UserProfileView(TemplateView):
     template_name = "account/user_profile.html"
 
 
+class UserProfileClaimView(LoginRequiredMixin, TemplateView):
+    template_name = "account/user_profile_claim_form.html"
+
+    def get_queryset(self, search=None):
+        profiles = Profile.objects.all()
+        qs = Q(user__isnull=True)
+        if search:
+            terms = filter(None, search.strip().split(' '))
+            for term in terms:
+                qs &= Q(name__icontains=term)
+        profiles = profiles.filter(qs)
+        return profiles[:5]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        search = self.request.GET.get('s', self.request.user.name)
+        context.update({
+            "profiles": self.get_queryset(search),
+            "search": search,
+        })
+        return context
+
+
 class UserProfileEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, FormView):
     template_name = "account/user_profile_form.html"
     form_class = UserProfileForm
@@ -597,37 +620,30 @@ class ProfileClaim(SuccessMessageMixin, FormView, LoginRequiredMixin):
 
 
 class ProfilesAutocomplete(Select2QuerySetView):
+
     def get_queryset(self):
         profiles = Profile.objects.all()
-
-        # If search terms in request, split each word and search for them
-        # in name & institution
         if self.q:
-            qs = ~Q(pk=None)  # always true
-            search_terms = list(filter(None, self.q.split(' ')))
+            qs = ~Q(pk=None)
+            search_terms = filter(None, self.q.strip().split(' '))
             for st in search_terms:
-                qs = and_(or_(Q(name__icontains=st),
-                              Q(institution__icontains=st)), qs)
-
+                qs &= (
+                    Q(name__icontains=st) | Q(institution__icontains=st)
+                )
             profiles = profiles.filter(qs)
-
         return profiles
 
 
 class CountriesAutocomplete(Select2QuerySetView):
+
     def get_queryset(self):
         countries = Country.objects.all()
-
-        # If search terms in request, split each word and search for them
-        # in name & institution
         if self.q:
-            qs = ~Q(pk=None)  # always true
-            search_terms = list(filter(None, self.q.split(' ')))
+            qs = ~Q(pk=None)
+            search_terms = filter(None, self.q.split(' '))
             for st in search_terms:
-                qs = and_(Q(name__icontains=st), qs)
-
+                qs &= Q(name__icontains=st)
             countries = countries.filter(qs)
-
         return countries
 
 
