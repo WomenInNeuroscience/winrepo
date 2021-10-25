@@ -52,7 +52,7 @@ class AccountTests(TestCase):
             'token': token,
         })
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('profiles:user'))
+        self.assertEqual(response.url, reverse('profiles:user_profile'))
         self.assertTrue('first_login' in self.client.session)
 
         self.client.session.flush()
