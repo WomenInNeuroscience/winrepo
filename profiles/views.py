@@ -199,6 +199,13 @@ class UserProfileView(TemplateView):
 
 class UserProfileClaimView(LoginRequiredMixin, TemplateView):
     template_name = "account/user_profile_claim_form.html"
+    def get(self, request, *args, **kwargs):
+        try:
+            self.request.user.profile
+            return redirect('profiles:user_profile_edit')
+        except Profile.DoesNotExist:
+            pass
+        return super().get(request, *args, **kwargs)
 
     def get_queryset(self, search=None):
         profiles = Profile.objects.all()
