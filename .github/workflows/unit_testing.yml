@@ -22,7 +22,7 @@ jobs:
     - name: Set up environment
       run: |
         cp .env.default .env
-        rm db-dev.sqlite3
+        rm -f db-dev.sqlite3
 
     - name: Prepare project
       run: |
