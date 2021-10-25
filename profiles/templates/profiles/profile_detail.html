@@ -17,9 +17,9 @@
 
 {% blockinclude "fragments/profile.html" with profile=profile recommendations=True %}
 	{% block profile_buttons %}
-		<div class="col-xs-6 col-sm-4 col-md-3">
+		<div class="col-xs-6 col-sm-4 col-md-3 d-flex flex-column">
 			<a class="btn pill-btn text-white btn-secondary m-1 email-btn{% if profile.email == "" %} disabled{% endif %}" href="mailto:{{ profile.contact_email }}">
-				<i class="fas fa-envelope"></i> Send Email
+				<i class="fas fa-envelope"></i> Send E-mail
 			</a>
 
 			{% if profile.webpage == "" %}
