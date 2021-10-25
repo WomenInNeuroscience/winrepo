@@ -15,17 +15,27 @@
 
 {% block content %}
 
-{% include "fragments/profile.html" with profile=user.profile %}
-
-<div id="results-nav" class="border-top pt-2 mt-4 w-100 text-muted">
-	<div class="float-right">
-		<a class="btn btn-outline-primary pill-btn" href="{% url 'profiles:user_profile_edit' %}">Edit</a>
+{% if user.profile %}
+	{% include "fragments/profile.html" with profile=user.profile %}
+	<div class="border-top pt-2 mt-4 w-100 text-muted">
+		<div class="float-right">
+			<a class="btn btn-outline-primary pill-btn" href="{% url 'profiles:user_profile_edit' %}">Edit</a>
+		</div>
 	</div>
-</div>
+	{% else %}
+	<h3 class="text-primary font-weight-bold mt-2">
+		<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
+		Create your Public Profile
+	</h3>
+	<div class="p-3 mt-4 border rounded text-center col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+		<p>Do you identify yourself as a woman in the field of neuroscience? If so, create your public profile!</p>
+		<a class="btn btn-primary mt-5 ml-5 mr-5" style="white-space: normal;" href="{% url 'profiles:user_profile_edit' %}" role="button">
+			I identify myself as a woman <br> and want to create a public profile
+		</a>
+		<a class="btn mt-5 ml-5 mr-5" style="white-space: normal;" href="{% url 'profiles:user' %}" role="button">
+			Continue to the website
+		</a>
+	</div>
+{% endif %}
 
 {% endblock content %}
-
-{% block footer_scripts %}
-	{{ block.super }}
-	<script src="{% static 'profiles/js/profile-gtag.js' %}?v=1"></script>
-{% endblock footer_scripts %}

@@ -186,6 +186,9 @@ class LoginView(auth_views.LoginView):
 
             if datetime.timestamp(datetime.now()) < self.request.session['next_expiration']:
                 return self.request.session.get('next')
+        
+        if self.request.session.get('first_login', False):
+            return reverse('profiles:user_profile')
 
         return super().get_redirect_url()
 
