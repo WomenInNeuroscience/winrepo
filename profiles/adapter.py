@@ -6,7 +6,6 @@ from django.contrib import messages
 from allauth.account.adapter import DefaultAccountAdapter, get_adapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.exceptions import ImmediateHttpResponse
-from .models import User
 
 
 class AccountAdapter(DefaultAccountAdapter):
@@ -29,6 +28,9 @@ class AccountAdapter(DefaultAccountAdapter):
             user.save()
         return user
 
+    def get_signup_redirect_url(self, request):
+        return self.get_login_redirect_url(request)
+
     def get_login_redirect_url(self, request):
         assert request.user.is_authenticated
 
@@ -38,6 +40,9 @@ class AccountAdapter(DefaultAccountAdapter):
 
             if datetime.timestamp(datetime.now()) < request.session['next_expiration']:
                 return request.session.get('next')
+
+        if self.request.session.get('first_login', False):
+            return resolve_url('profiles:user_profile')
 
         url = settings.LOGIN_REDIRECT_URL
         return resolve_url(url)
