@@ -315,6 +315,9 @@ class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, Form
 
     def form_valid(self, form):
         if any(f in form.changed_data for f in form.base_fields):
+            if 'email' in form.changed_data:
+                original_user = User.objects.get(pk=self.object.pk)
+                user_update_email(self.request, original_user).send()
             user_update_email(self.request, self.object).send()
         form.save(self.request.user)
         return super().form_valid(form)
