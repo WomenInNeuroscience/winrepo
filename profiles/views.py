@@ -263,22 +263,6 @@ class UserProfileDeleteView(LoginRequiredMixin, FormView):
     template_name = 'account/user_profile_delete.html'
     success_message = 'Your profile has been deleted successfully!'
 
-    token_generator = default_token_generator
-
-    def get(self, request, *args, **kwargs):
-        uid = request.GET.get('uid')
-        token = request.GET.get('token')
-
-        user = _from_token(User, 'email', uid)
-        if token and user is not None:
-            if self.token_generator.check_token(user, token):
-                user.save()
-
-            messages.success(self.request, self.success_message)
-            return redirect('profiles:login')
-
-        return super().get(request, *args, **kwargs)
-
     def form_valid(self, form):
         user = self.request.user
         try:
@@ -349,25 +333,6 @@ class UserDeleteView(LoginRequiredMixin, FormView):
     form_class = UserDeleteForm
     template_name = 'account/user_delete.html'
     success_message = 'Your account has been deleted successfully!'
-
-    token_generator = default_token_generator
-
-    def get(self, request, *args, **kwargs):
-        uid = request.GET.get('uid')
-        token = request.GET.get('token')
-
-        user = _from_token(User, 'email', uid)
-        if token and user is not None:
-            if self.token_generator.check_token(user, token):
-                user.is_active = True
-                if Profile.objects.filter(contact_email=user.email).exists():
-                    user.profile = Profile.objects.get(contact_email=user.email)
-                user.save()
-
-            messages.success(self.request, self.success_message)
-            return redirect('profiles:login')
-
-        return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
         user = self.request.user
