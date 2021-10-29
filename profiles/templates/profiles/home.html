@@ -115,7 +115,7 @@
 <div class="container-fluid" id="stats">
 	<div class="text-center m-4" id="entries-container">
 		<p class="h1 text-secondary font-weight-bold mb-0" id="entries-number"> </p>
-		<p class="h5 text-primary" id="entries-text">entries in repository. </p>
+		<p class="h5 text-primary" id="entries-text"><a href="{% url 'profiles:index' %}">entries in repository</a>.</p>
 	</div>
 
 	<div class="d-flex flex-wrap justify-content-center align-items-start m-4" id="chart-stats">
@@ -129,7 +129,7 @@
 				</tr>
 			</table>
 			<span class="position-title text-secondary" id="PhDtext">PhD</span>
-			<p id="student-count" class="position-text"> profiles</p>
+			<p class="position-text"><a href="list?s=PhD%20student" id="student-count"> profiles</a></p>
 		</div>
 		<div class="p-2 text-center donutTab">
 			<table>
@@ -141,7 +141,7 @@
 				</tr>
 			</table>
 			<span class="position-title text-tertiary" id="PostDoctext">Post-doc</span>
-			<p id="postdoc-count" class="position-text"> profiles</p>
+			<p class="position-text"><a href="list?s=post-doc" id="postdoc-count"> profiles</a></p>
 		</div>
 		<div class="p-2 text-center donutTab">
 			<table>
@@ -153,7 +153,7 @@
 				</tr>
 			</table>
 			<span class="position-title text-quaternary" id="Seniortext">Senior</span>
-			<p id="senior-count" class="position-text"> profiles</p>
+			<p class="position-text"><a href="list?senior=on" id="senior-count"> profiles</a></p>
 		</div>
 		<div class="p-2 text-center donutTab">
 			<table>
