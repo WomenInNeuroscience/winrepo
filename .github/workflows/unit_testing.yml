@@ -39,4 +39,10 @@ jobs:
       run: |
         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
         ssh-add - <<< "${{ secrets.PYTHONANYWHERE_ACCESS }}"
+        mkdir -p ${HOME}/.ssh
+        echo "PYTHONANYWHERE_ACCESS=${PYTHONANYWHERE_ACCESS}" >> ${HOME}/.ssh/environment
+        echo "PYTHONANYWHERE_ADDRESS=${PYTHONANYWHERE_ADDRESS}" >> ${HOME}/.ssh/environment
+        echo "PYTHONANYWHERE_DOMAIN=${PYTHONANYWHERE_DOMAIN}" >> ${HOME}/.ssh/environment
+        echo "PYTHONANYWHERE_TOKEN=${PYTHONANYWHERE_TOKEN}" >> ${HOME}/.ssh/environment
+        echo "PYTHONANYWHERE_USERNAME=${PYTHONANYWHERE_USERNAME}" >> ${HOME}/.ssh/environment
         ssh -T -o StrictHostKeyChecking=no "${{ secrets.PYTHONANYWHERE_ADDRESS }}"
