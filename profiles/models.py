@@ -186,6 +186,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         except Profile.DoesNotExist:
             return False
 
+    def check_password(self, raw_password):
+        if self.password:
+            return super().check_password(raw_password)
+        return False
+
 
 class ProfileManager(models.Manager):
 

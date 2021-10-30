@@ -6,6 +6,7 @@ from django.contrib import messages
 from allauth.account.adapter import DefaultAccountAdapter, get_adapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.exceptions import ImmediateHttpResponse
+from allauth.socialaccount import providers
 
 
 class AccountAdapter(DefaultAccountAdapter):
@@ -44,13 +45,16 @@ class AccountAdapter(DefaultAccountAdapter):
         if self.request.session.get('first_login', False):
             return resolve_url('profiles:user_profile')
 
-        url = settings.LOGIN_REDIRECT_URL
-        return resolve_url(url)
+        return resolve_url(settings.LOGIN_REDIRECT_URL)
 
+    def respond_user_inactive(self, request, user):
+        messages.warning(request, "Your account is inactive. Please check your email for the activation link.")
+        return redirect(settings.LOGIN_URL)
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
     duplicated_email_error_message = "A user with this email already exists. Please sign-in or recover your password."
+    auth_error_message = "There was a problem authenticating with {provider:s}. Please try again."
 
     def pre_social_login(self, request, sociallogin):
         if not sociallogin.is_existing and sociallogin.user.email:
@@ -58,6 +62,18 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
                 messages.error(request, self.duplicated_email_error_message)
                 raise ImmediateHttpResponse(redirect(settings.LOGIN_REDIRECT_URL))
 
+    def authentication_error(
+        self,
+        request,
+        provider_id,
+        error=None,
+        exception=None,
+        extra_context=None,
+    ):
+        provider = providers.registry.by_id(provider_id)
+        messages.warning(request, self.auth_error_message.format(provider=provider.name))
+        raise ImmediateHttpResponse(redirect(settings.LOGIN_REDIRECT_URL))
+    
     def populate_user(self, request, sociallogin, data):
         username = data.get("username")
         first_name = data.get("first_name") or ""
