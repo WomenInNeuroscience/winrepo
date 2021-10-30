@@ -10,7 +10,6 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, update_session_auth_hash, views as auth_views
 from django.contrib.auth.forms import (PasswordResetForm, SetPasswordForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Q
@@ -19,8 +18,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode, url_has_allowed_host_and_scheme
+from django.utils.http import  url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import TemplateView, DetailView,  CreateView, FormView, ListView
@@ -28,25 +26,18 @@ from django.views.generic.edit import ModelFormMixin
 from rest_framework import viewsets
 from dal.autocomplete import Select2QuerySetView
 
-from .emails import profile_update_email, user_create_confirm_email, user_reset_password_email, user_update_email
+from .emails import (
+    profile_update_email,
+    user_create_confirm_email,
+    user_reset_password_email,
+    user_update_email
+)
 from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
                     UserDeleteForm, UserForm, UserProfileDeleteForm,
                     UserProfileForm, UserPasswordChangeForm, AuthenticationForm)
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
-
-
-def _to_token(obj, field):
-    return urlsafe_base64_encode(force_bytes(getattr(obj, field)))
-
-
-def _from_token(model, field, data_b64):
-    try:
-        data = urlsafe_base64_decode(data_b64).decode()
-        obj = model.objects.get(**{ field: data })
-    except (TypeError, ValueError, OverflowError, ValidationError, AttributeError, model.DoesNotExist):
-        obj = None
-    return obj
+from .tokens import UserCreateToken, UserPasswordResetToken
 
 
 class Home(ListView):
@@ -365,7 +356,6 @@ class UserDeleteView(LoginRequiredMixin, FormView):
 class UserCreateView(CreateView):
     form_class = UserCreateForm
     template_name = 'registration/signup.html'
-    token_generator = default_token_generator
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -374,10 +364,9 @@ class UserCreateView(CreateView):
 
     def form_valid(self, form):
         valid = super().form_valid(form)
-        uid =_to_token(self.object, 'email')
-        token = self.token_generator.make_token(self.object)
+        token = UserCreateToken.generate(self.object)
         self.request.session['user_confirmation_token'] = token
-        user_create_confirm_email(self.request, self.object, uid, token).send()
+        user_create_confirm_email(self.request, self.object, token).send()
         return valid
 
     def get_success_url(self):
@@ -393,32 +382,37 @@ class UserCreateConfirmView(TemplateView):
     token_generator = default_token_generator
 
     def get(self, request, *args, **kwargs):
-        uid = request.GET.get('uid')
         token = request.GET.get('token')
+        if token:  # if there's a token
 
-        user = _from_token(User, 'email', uid)
-        if token and user is not None:
-            if self.token_generator.check_token(user, token):
+            payload = UserCreateToken.check(token)
+            if payload:  # if the token is valid
+
+                user = User.objects.get(pk=payload['sub'])
+                user.is_active = True  # activate user
+                user.save()
+
+                if Profile.objects.filter(contact_email=user.email, user__isnull=True).exists():
+                    profile = Profile.objects.get(contact_email=user.email, user__isnull=True)
+                    profile.user = user  # assign user to profile if email matches
+                    profile.save()
 
                 same_session_confirmation = False
                 if 'user_confirmation_token' in request.session:
+                    same_session_confirmation = request.session['user_confirmation_token'] == token
                     del request.session['user_confirmation_token']
-                    same_session_confirmation = not user.is_active
-
-                user.is_active = True
-                if Profile.objects.filter(contact_email=user.email).exists():
-                    user.profile = Profile.objects.get(contact_email=user.email)
-                user.save()
                 
-                # Same session confirmations are cool to direct login
                 if same_session_confirmation:
+                    # Same session confirmations are cool to direct login
                     login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
                     messages.success(self.request, self.same_session_success_message)
                     return redirect(self.get_redirect_url())
                 else:
+                    # Not same session, so request for login
                     messages.success(self.request, self.success_message)
-            else:
-                messages.error(self.request, self.error_message)
+                    return redirect('profiles:login')
+
+            messages.error(self.request, self.error_message)
             return redirect('profiles:login')
 
         return super().get(request, *args, **kwargs)
@@ -435,10 +429,10 @@ class UserCreateConfirmView(TemplateView):
 
         return reverse('profiles:user')
 
+
 class UserPasswordResetView(FormView):
     form_class = PasswordResetForm
     template_name = 'registration/reset_password.html'
-    token_generator = default_token_generator
     success_message = 'If your e-mail address is in our registry, you will receive an e-mail soon on how to reset your password.'
 
     def get(self, request, *args, **kwargs):
@@ -450,9 +444,8 @@ class UserPasswordResetView(FormView):
         try:
             email = form.cleaned_data['email']
             user = User.objects.get(email=email)
-            uid =_to_token(user, 'email')
-            token = self.token_generator.make_token(user)
-            user_reset_password_email(self.request, user, uid, token).send()
+            token = UserPasswordResetToken.generate(user)
+            user_reset_password_email(self.request, user, token).send()
         except User.DoesNotExist:
             time.sleep(4)
 
@@ -469,24 +462,15 @@ class UserPasswordResetConfirmView(FormView):
     success_message = 'Your password has been resetted! Please, sign-in!'
     error_message = 'There was an error with your password reset. Please, try again.'
 
-    token_generator = default_token_generator
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.user
-        return kwargs
-
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
-        uid = request.GET.get('uid')
-        token = request.GET.get('token')
-        user = _from_token(User, 'email', uid)
-
         self.user = None
-        if token and user is not None:
-            if self.token_generator.check_token(user, token):
-                self.user = user
+        token = request.GET.get('token')
+        if token:  # if there's a token
+            payload = UserPasswordResetToken.check(token)
+            if payload:  # if the token is valid
+                self.user = User.objects.get(pk=payload['sub'])
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -496,6 +480,11 @@ class UserPasswordResetConfirmView(FormView):
 
         messages.error(self.request, self.error_message)
         return redirect('profiles:forgot')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.user
+        return kwargs
 
     def form_valid(self, form):
         form.user.is_active = True

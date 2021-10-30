@@ -9,4 +9,4 @@ After confirming your e-mail, you will be able to edit its information, if neede
 {% endif %}
 
 Please, confirm your e-mail address following the link:
-{% abs_url 'profiles:signup_confirm' %}?token={{ token }}&uid={{ uid }}
+{% abs_url 'profiles:signup_confirm' %}?token={{ token }}

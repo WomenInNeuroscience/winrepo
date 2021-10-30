@@ -67,7 +67,7 @@ def profile_update_email(
 
 
 def user_create_confirm_email(
-    request, user, uid, token,
+    request, user, token,
     subject_template_name='registration/signup_confirm_email_subject.txt',
     email_template_name='registration/signup_confirm_email_body.txt',
     html_email_template_name='registration/signup_confirm_email_body.html'
@@ -75,7 +75,6 @@ def user_create_confirm_email(
     context = {
         "request": request,
         "user": user,
-        "uid": uid,
         "token": token,
     }
 
@@ -90,7 +89,7 @@ def user_create_confirm_email(
 
 
 def user_reset_password_email(
-    request, user, uid, token,
+    request, user, token,
     subject_template_name='registration/reset_password_email_subject.txt',
     email_template_name='registration/reset_password_email_body.txt',
     html_email_template_name='registration/reset_password_email_body.html'
@@ -98,7 +97,6 @@ def user_reset_password_email(
     context = {
         "request": request,
         "user": user,
-        "uid": uid,
         "token": token,
     }
 

@@ -35,11 +35,9 @@ class AccountTests(TestCase):
 
         u = User.objects.get(email='test@test.com')
         token = response.context['token']
-        uid = response.context['uid']
 
         # Try tempering with the token
         response = self.client.get(reverse('profiles:signup_confirm'), data={
-            'uid': uid,
             'token': token + 'asdasd',
         })
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
@@ -48,7 +46,6 @@ class AccountTests(TestCase):
         self.assertEqual(messages[0].level, constants.ERROR)
 
         response = self.client.get(reverse('profiles:signup_confirm'), data={
-            'uid': uid,
             'token': token,
         })
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
@@ -84,12 +81,13 @@ class AccountTests(TestCase):
 
         u = User.objects.get(email='test@test.com')
         token = response.context['token']
-        uid = response.context['uid']
 
-        response = self.client.get(reverse('profiles:signup_confirm'), data={
-            'uid': uid,
-            'token': token,
-        })
+        response = self.client.get(
+            reverse('profiles:signup_confirm'),
+            data={
+                'token': token,
+            }
+        )
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertEqual(response.url, reverse('profiles:login'))
 
