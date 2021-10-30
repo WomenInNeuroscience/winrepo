@@ -1,6 +1,7 @@
 from http import HTTPStatus
 from django.test import TestCase
 from django.urls import reverse
+from django.core import mail
 from django.contrib.messages import get_messages, constants
 
 from profiles.models import Profile, Recommendation, User
@@ -55,6 +56,7 @@ class AccountTests(TestCase):
         self.client.session.flush()
         self.client.logout()
 
+        # Not first login anymore
         u = User.objects.get(email='test@test.com')
         self.client.force_login(u)
 
@@ -119,6 +121,44 @@ class AccountTests(TestCase):
         })
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertEqual(response.url, next)
+
+    def test_account_edit(self):
+
+        u = User(email='test@test.com')
+        u.username = 'unittest'
+        u.name = 'Unit Test'
+        u.is_active = True
+        u.set_password('Myunitarytest1!')
+        u.save()
+
+        self.client.force_login(u)
+  
+        with self.settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend'):
+            response = self.client.post(reverse('profiles:user_edit'), {
+                'username': u.username,
+                'name': 'Another Unit Test',
+                'email': 'different_email@test.com',
+            }, follow=True)
+            self.assertRedirects(response, reverse('profiles:login') + '?next=' + reverse('profiles:user'))
+            self.assertEqual(response.status_code, HTTPStatus.OK)
+            self.assertEqual(len(mail.outbox), 1)
+
+        u.refresh_from_db()
+
+        self.assertFalse(u.is_active)
+        self.assertEqual(u.name, 'Another Unit Test')
+        self.assertEqual(u.email, 'test@test.com')
+
+        token = mail.outbox[0].context['token']
+
+        self.assertTrue('user_confirmation_token' in self.client.session)
+        self.assertEqual(self.client.session['user_confirmation_token'], token)
+
+        response = self.client.get(reverse('profiles:signup_confirm'), data={
+            'token': token,
+        })
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(response.url, reverse('profiles:user'))
 
     def test_delete(self):
 

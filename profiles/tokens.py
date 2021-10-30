@@ -62,3 +62,16 @@ class UserPasswordResetToken(Token):
             sub=user.id,
         )
 
+
+class UserEmailChangeToken(Token):
+
+    audience = "user_create"
+    expires_in = 60 * 5
+
+    @classmethod
+    def generate(cls, user, email, **extra):
+        return super().generate(
+            **extra,
+            sub=user.id,
+            email=email,
+        )

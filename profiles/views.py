@@ -30,14 +30,15 @@ from .emails import (
     profile_update_email,
     user_create_confirm_email,
     user_reset_password_email,
-    user_update_email
+    user_update_email,
+    user_update_email_email
 )
 from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
                     UserDeleteForm, UserForm, UserProfileDeleteForm,
                     UserProfileForm, UserPasswordChangeForm, AuthenticationForm)
 from .models import Country, Profile, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
-from .tokens import UserCreateToken, UserPasswordResetToken
+from .tokens import UserCreateToken, UserEmailChangeToken, UserPasswordResetToken
 
 
 class Home(ListView):
@@ -279,21 +280,49 @@ class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, Form
     template_name = "account/user_form.html"
     form_class = UserForm
     success_message = 'Your account has been updated successfully!'
+    email_success_message = 'Your account has been updated successfully! Please check your email for the verification link.'
 
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         self.object = self.request.user
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.request.user
-        return super().post(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
+        # if any info was updated, send email
         if any(f in form.changed_data for f in form.base_fields):
+
+            # if email was changed, logout and goes through the
+            # email verification process
             if 'email' in form.changed_data:
+                # get the original user, so we have the original email
                 original_user = User.objects.get(pk=self.object.pk)
-                user_update_email(self.request, original_user).send()
+                token = UserEmailChangeToken.generate(
+                    user=original_user,
+                    # send the new email via token, so we update
+                    # the email upon verification
+                    email=form.cleaned_data['email']
+                )
+
+                # send confirmation email
+                user_update_email_email(self.request, original_user, token).send()
+
+                # logout the user
+                logout(self.request)
+
+                self.request.session['user_confirmation_token'] = token
+
+                # deactivate account until email is verified
+                self.object = original_user
+                form.instance.is_active = False
+                form.instance.email = original_user.email
+
+                self.success_message = self.email_success_message
+                form.changed_data.remove('email')  # do not save email change
+
+                return super().form_valid(form)
+
+            # send email to user
             user_update_email(self.request, self.object).send()
+        
         form.save(self.request.user)
         return super().form_valid(form)
 
@@ -375,11 +404,9 @@ class UserCreateView(CreateView):
 
 class UserCreateConfirmView(TemplateView):
     template_name = 'registration/signup_confirm.html'
-    success_message = 'Your account has been activated successfully! Please, sign-in!'
-    same_session_success_message = 'Your account has been activated successfully! Please, if you identify yourself as a woman, set-up your public profile!'
+    success_message = 'Your e-mail is confirmed! Please, sign-in!'
+    same_session_success_message = 'Your e-mail is confirmed! Please, if you identify yourself as a woman, set-up your public profile!'
     error_message = 'There was an error with your activation. Please, try again.'
-
-    token_generator = default_token_generator
 
     def get(self, request, *args, **kwargs):
         token = request.GET.get('token')
@@ -390,6 +417,8 @@ class UserCreateConfirmView(TemplateView):
 
                 user = User.objects.get(pk=payload['sub'])
                 user.is_active = True  # activate user
+                if 'email' in payload:  # e-mail update flow
+                    user.email = payload['email']
                 user.save()
 
                 if Profile.objects.filter(contact_email=user.email, user__isnull=True).exists():

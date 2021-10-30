@@ -18,6 +18,8 @@ def build_email(subject_template_name, email_template_name, html_email_template_
     html_email = loader.render_to_string(html_email_template_name, context)
     email_message.attach_alternative(html_email, 'text/html')
 
+    email_message.context = context
+
     return email_message
 
 
@@ -30,6 +32,29 @@ def user_update_email(
     context = {
         "request": request,
         "user": user,
+    }
+
+    message = build_email(
+        subject_template_name,
+        email_template_name,
+        html_email_template_name,
+        context,
+        True,
+    )
+    message.to = [user.email]
+    return message
+
+
+def user_update_email_email(
+    request, user, token,
+    subject_template_name='account/user_update_email_email_subject.txt',
+    email_template_name='account/user_update_email_email_body.txt',
+    html_email_template_name='account/user_update_email_email_body.html'
+):
+    context = {
+        "request": request,
+        "user": user,
+        "token": token,
     }
 
     message = build_email(
