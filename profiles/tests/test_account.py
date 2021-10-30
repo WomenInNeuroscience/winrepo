@@ -137,11 +137,39 @@ class AccountTests(TestCase):
             response = self.client.post(reverse('profiles:user_edit'), {
                 'username': u.username,
                 'name': 'Another Unit Test',
+                'email': u.email,
+            })
+            self.assertEqual(response.status_code, HTTPStatus.FOUND)
+            self.assertEqual(response.url, reverse('profiles:user'))
+            self.assertEqual(len(mail.outbox), 1)
+
+        u.refresh_from_db()
+
+        self.assertTrue(u.is_active)
+        self.assertEqual(u.name, 'Another Unit Test')
+
+    def test_account_edit_email(self):
+
+        u = User(email='test@test.com')
+        u.username = 'unittest'
+        u.name = 'Unit Test'
+        u.is_active = True
+        u.set_password('Myunitarytest1!')
+        u.save()
+
+        self.client.force_login(u)
+  
+        with self.settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend'):
+            response = self.client.post(reverse('profiles:user_edit'), {
+                'username': u.username,
+                'name': 'Another Unit Test',
                 'email': 'different_email@test.com',
             }, follow=True)
             self.assertRedirects(response, reverse('profiles:login') + '?next=' + reverse('profiles:user'))
             self.assertEqual(response.status_code, HTTPStatus.OK)
-            self.assertEqual(len(mail.outbox), 1)
+            self.assertEqual(len(mail.outbox), 2)
+            self.assertEqual(mail.outbox[0].to, ['different_email@test.com'])
+            self.assertEqual(mail.outbox[1].to, ['test@test.com'])
 
         u.refresh_from_db()
 

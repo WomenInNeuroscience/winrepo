@@ -302,8 +302,8 @@ class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, Form
                     email=form.cleaned_data['email']
                 )
 
-                # send confirmation email
-                user_update_email_email(self.request, original_user, token).send()
+                # send confirmation email to the new address
+                user_update_email_email(self.request, form.instance, token).send()
 
                 # logout the user
                 logout(self.request)
@@ -318,12 +318,9 @@ class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, Form
                 self.success_message = self.email_success_message
                 form.changed_data.remove('email')  # do not save email change
 
-                return super().form_valid(form)
-
-            # send email to user
+            # send email to old address
             user_update_email(self.request, self.object).send()
         
-        form.save(self.request.user)
         return super().form_valid(form)
 
     def get_success_url(self):

@@ -31,6 +31,9 @@ class UserForm(forms.ModelForm):
             'name',
             'email',
         )
+        help_texts = {
+            'email': 'If changed, you will be signed-out and an e-mail will be sent to the new address for confirmation.',
+        }
 
 
 class UserPasswordChangeForm(PasswordChangeForm):
