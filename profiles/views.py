@@ -402,7 +402,8 @@ class UserCreateView(CreateView):
 class UserCreateConfirmView(TemplateView):
     template_name = 'registration/signup_confirm.html'
     success_message = 'Your e-mail is confirmed! Please, sign-in!'
-    same_session_success_message = 'Your e-mail is confirmed! Please, if you identify yourself as a woman, set-up your public profile!'
+    same_session_success_message = 'Your e-mail is confirmed!'
+    same_session_success_profile_message = 'Your e-mail is confirmed! Please, if you identify yourself as a woman, set-up your public profile!'
     error_message = 'There was an error with your activation. Please, try again.'
 
     def get(self, request, *args, **kwargs):
@@ -431,7 +432,10 @@ class UserCreateConfirmView(TemplateView):
                 if same_session_confirmation:
                     # Same session confirmations are cool to direct login
                     login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
-                    messages.success(self.request, self.same_session_success_message)
+                    if Profile.objects.filter(user=user).exists():
+                        messages.success(self.request, self.same_session_success_profile_message)
+                    else:
+                        messages.success(self.request, self.same_session_success_message)
                     return redirect(self.get_redirect_url())
                 else:
                     # Not same session, so request for login
