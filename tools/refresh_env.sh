@@ -6,6 +6,10 @@ BASEDIR=$(realpath $(dirname "$0")/..)
 cd ${BASEDIR}
 git pull
 
+python manage.py collectstatic
+python manage.py makemigrations
+python manage.py migrate
+
 # ./tools/refresh_db.sh
 
 curl \
