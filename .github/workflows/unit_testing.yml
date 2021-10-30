@@ -46,3 +46,7 @@ jobs:
         echo "PYTHONANYWHERE_TOKEN=${PYTHONANYWHERE_TOKEN}" >> ${HOME}/.ssh/environment
         echo "PYTHONANYWHERE_USERNAME=${PYTHONANYWHERE_USERNAME}" >> ${HOME}/.ssh/environment
         ssh -T -o StrictHostKeyChecking=no "${{ secrets.PYTHONANYWHERE_ADDRESS }}"
+        if [ $? -eq 254 ]
+        then
+          echo "Not a paid-for PythonAnywhere account"
+        fi
