@@ -41,21 +41,25 @@
 						{{ form.researchgate|as_crispy_field }}
 					</fieldset>
 
-					<div class="form-row">
-						<div class="form-group col-md-6 mb-0">
-							{{ form.grad_month|as_crispy_field }}
+					<fieldset>
+						<legend>Graduation for the Highest Degree</legend>
+						<div class="form-row">
+							<div class="form-group col-md-6 mb-0">
+								{{ form.grad_month|as_crispy_field }}
+							</div>
+							<div class="form-group col-md-6 mb-0">
+								{{ form.grad_year|as_crispy_field }}
+							</div>
 						</div>
-						<div class="form-group col-md-6 mb-0">
-							{{ form.grad_year|as_crispy_field }}
-						</div>
-					</div>
+					</fieldset>
+
 					{{ form.brain_structure|as_crispy_field }}
 					{{ form.modalities|as_crispy_field }}
 					{{ form.methods|as_crispy_field }}
 					{{ form.domains|as_crispy_field }}
 					{{ form.keywords|as_crispy_field }}
 					{{ form.captcha }}
-					
+
 					<div class="text-right">
 						<a class="btn btn-outline-danger pill-btn" href="{% url 'profiles:user' %}" role="button">
 							Cancel

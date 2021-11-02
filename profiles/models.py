@@ -262,9 +262,9 @@ class Profile(models.Model):
                                 null=True)
     position = models.CharField(max_length=50, choices=POSITION_CHOICES,
                                 blank=True)
-    grad_month = models.CharField(max_length=2, choices=MONTHS_CHOICES,
-                                  blank=True)
-    grad_year = models.CharField(max_length=4, blank=True)
+    grad_month = models.CharField(verbose_name='Month', max_length=2,
+                                  choices=MONTHS_CHOICES, blank=True)
+    grad_year = models.CharField(verbose_name='Year', max_length=4, blank=True)
     brain_structure = MultiSelectField(choices=STRUCTURE_CHOICES, blank=True)
     modalities = MultiSelectField(choices=MODALITIES_CHOICES, blank=True)
     methods = MultiSelectField(choices=METHODS_CHOICES, blank=True)
