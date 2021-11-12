@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+	{{ block.super }} - Profile Search
+{% endblock title %}
+
+{% block nav-user-classes %}active{% endblock nav-user-classes %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row no-gutters">
+		<div class="col-12">
+			<h2 class="text-primary font-weight-bold">Search for your Profile</h2>
+			<p>
+				Do you know if you already have a profile at Women in Neuroscience?
+				Use the form below to check it out.
+			</p>
+
+			<div class="container-fluid">
+				<div class="row">
+					<div class="offset-md-1 offset-lg-2 offset-xl-2 col-12 col-md-10 col-lg-8 col-xl-8">
+						<form method="GET" class="input-group bg-white rounded p-1 mx-auto">
+							<input type="text" class="form-control" placeholder="Search for your name" value="{{ search }}" aria-label="Search" name="s" autofocus>
+							<button type="submit" class="btn btn-primary pl-4 pr-4">Search</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	{% if profiles %}
+		{% for profile in profiles %}
+			<div class="row my-4 no-gutters">
+				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+					<h5 class="text-primary font-weight-bold">
+						{% if profile.user %}
+							<a href="{% url 'profiles:detail_username' profile.user.username %}">{{ profile.name }}</a>
+						{% else %}
+							<a href="{% url 'profiles:detail' profile.id %}">{{ profile.name }}</a>
+						{% endif %}
+					</h5>
+				</div>
+				<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 details-grey text-muted">
+					<p class="m-1"><i class="fas fa-user"></i> <span>{{ profile.position }}</span></p>
+					<p class="m-1"><i class="fas fa-university"></i> <span>{{ profile.institution }}</span></p>
+					<p class="m-1"><i class="fas fa-map-marker-alt"></i> <span>{{ profile.country }}</span></p>
+				</div>
+				<div class="col-md-1 col-lg-2 keywords-list mt-1 d-none d-lg-block">
+					{%if profile.modalities %}
+						{{ profile.modalities }},
+					{% endif %}
+					{%if profile.domains %}
+						{{ profile.domains }},
+					{% endif %}
+					{{ profile.keywords }}
+				</div>
+				<div class="col-md-1 col-lg-1 mt-1 pl-4 d-none d-md-block text-primary">
+					{% if profile.recommendation_set.all|length %}
+						<span><i class="fas fa-comment num-rec"></i> {{ profile.recommendation_set.all|length }}</span>
+					{% endif %}
+				</div>
+				<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 actions text-xs-left text-sm-right">
+					<a class="btn pill-btn btn-outline-secondary w-75 m-2" href="{% url 'profiles:claim_profile' profile.id %}">Claim Profile</a>
+				</div>
+			</div>
+		{% endfor %}
+	{% else %}
+	<div class="row my-4 no-gutters">
+		<div class="col-12 text-center">
+			<p>No matching profiles.</p>
+		</div>
+	</div>
+	{% endif %}
+
+	<hr />
+
+	<div class="row my-5 no-gutters">
+		<div class="col-12 text-center">
+			<p>Cannot find your profile?</p>
+			<a class="btn btn-secondary" href="{% url 'profiles:user_profile_edit' %}">
+				Create a new profile
+			</a>
+		</div>
+	</div>
+</div>
+
+
+{% endblock content %}

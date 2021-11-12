@@ -1,16 +1,11 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load my_tags %}
+{% load param_replace %}
 
 {% block title %}
 	{{ block.super }} - Repository
 {% endblock title %}
-
-{% block css %}
-	{{ block.super }}
-	<link rel="stylesheet" type="text/css" href="{% static 'profiles/css/style.css' %}?v=4" />
-{% endblock css %}
 
 {% block nav-repository-classes %}{{ block.super }} active{% endblock nav-repository-classes %}
 
@@ -31,7 +26,7 @@
 				<div id="underrepresented-countries" class="col-12 col-sm-9 offset-sm-3 col-lg-3 offset-lg-3">
 					<div class="form-check custom-control custom-checkbox">
 						<input type="checkbox" class="custom-control-input" id="underrepresented-only" name="ur" {% if request.GET.ur %}checked{% endif %}>
-						<label class="custom-control-label" for="underrepresented-only">Under Represented Countries Only</label>
+						<label class="custom-control-label" for="underrepresented-only">Under-represented Countries Only</label>
 					</div>
 				</div>
 				<div id="senior-positions" class="col-12 col-sm-9 offset-sm-3 col-lg-3 offset-lg-0">
@@ -54,29 +49,35 @@
 			{% for profile in profiles %}
 				<div class="table-entry infinite-item">
 					<div class="row my-4 no-gutters">
-						<div class="profile_id d-none">{{ profile.id }}</div>
-						<div class="col-xs-12 col-sm-4 col-lg-3">
-							<h5 class="text-primary font-weight-bold">{{ profile.name }}</h5>
+						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+							<h5 class="text-primary font-weight-bold">
+								{% if profile.user %}
+									<a href="{% url 'profiles:detail_username' profile.user.username %}">{{ profile.name }}</a>
+								{% else %}
+									<a href="{% url 'profiles:detail' profile.id %}">{{ profile.name }}</a>
+								{% endif %}
+							</h5>
 						</div>
-						<div class="col-xs-12 col-sm-4 col-lg-3 details-grey text-muted">
+						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 details-grey text-muted">
 							<p class="m-1"><i class="fas fa-user"></i> <span>{{ profile.position }}</span></p>
 							<p class="m-1"><i class="fas fa-university"></i> <span>{{ profile.institution }}</span></p>
 							<p class="m-1"><i class="fas fa-map-marker-alt"></i> <span>{{ profile.country }}</span></p>
 						</div>
-
-						<div class="d-none">
-							<dl>
-								<dt>Brain Area</dt><dd>{{ profile.brain_structure }}</dd>
-								<dt>Methods</dt><dd>{{ profile.methods }}</dd>
-							</dl>
+						<div class="col-md-1 col-lg-2 keywords-list mt-1 d-none d-lg-block">
+							{%if profile.modalities %}
+								{{ profile.modalities }},
+							{% endif %}
+							{%if profile.domains %}
+								{{ profile.domains }},
+							{% endif %}
+							{{ profile.keywords }}
 						</div>
-						<div class="keywords-list col-lg-3 mt-1 d-none d-lg-block">{%if profile.modalities %}{{ profile.modalities }}, {% endif %} {%if profile.domains %}{{ profile.domains }}, {% endif %}{{ profile.keywords}}</div>
-						<div class="col-md-1 mt-1 pl-4 d-none d-md-block text-primary">
+						<div class="col-md-1 col-lg-1 mt-1 pl-4 d-none d-md-block text-primary">
 							{% if profile.recommendation_set.all|length %}
-							<span><i class="fas fa-comment num-rec"></i> {{ profile.recommendation_set.all|length }}</span>
+								<span><i class="fas fa-comment num-rec"></i> {{ profile.recommendation_set.all|length }}</span>
 							{% endif %}
 						</div>
-						<div class="actions col-xs-12 col-sm-4 col-md-2 text-xs-left text-sm-right">
+						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 actions text-xs-left text-sm-right">
 							<a class="btn pill-btn btn-outline-secondary w-75 m-2" href="{% url 'profiles:detail' profile.id %}">View Profile</a>
 							<a class="btn pill-btn btn-outline-secondary w-75 m-2" href="{% url 'profiles:recommend_profile' profile.id %}">Recommend</a>
 						</div>
@@ -97,7 +98,6 @@
 		<p>No matching entries.</p>
 	{% endif %}
 
-	<!-- from http://jsfiddle.net/gilbitron/Lt2wH/ -->
 	<a href="#" id="back-to-top" title="Back to top" class="btn"><i class="fas fa-chevron-circle-up"></i></a>
 {% endblock content %}
 

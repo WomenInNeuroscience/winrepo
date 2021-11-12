@@ -9,11 +9,9 @@
 		* {
   			box-sizing: border-box;
 		}
-		/* Create two equal columns that floats next to each other */
 		.column {
   			float: left;
 		}
-		/* Clear floats after the columns */
 		.row:before {
   			content: "";
   			display: table;
@@ -33,7 +31,7 @@
 		.scrollable {
     		overflow-y: auto !important;
     		overflow-x: hidden !important;
-    		height: 280px; <!--size of the scroll-->
+    		height: 280px;
 		}
 	</style>
 {% endblock css%}
@@ -52,7 +50,7 @@
 	</picture>
 </div>
 <div class="container-fluid" id="home-search">
-	<form action="list" method="get" class="input-group bg-white rounded p-1 mx-auto">
+	<form action="{% url 'profiles:index' %}" method="get" class="input-group bg-white rounded p-1 mx-auto">
 		<input type="text" id="search-input" class="form-control" placeholder="Enter search keywords here..." aria-label="Search" name="s" autofocus>
 		<button type="submit" id="search-btn" class="btn btn-secondary pl-4 pr-4">Search</button>
 	</form>
@@ -77,7 +75,7 @@
 			<a href="{% url 'profiles:index' %}" class="btn pill-btn header-btn text-white">View Repository</a>
 		</div>
 		<div class="m-2">
-			<a href="{% url 'profiles:create' %}" class="btn pill-btn header-btn text-white">Create Profile</a>
+			<a href="" class="btn pill-btn header-btn text-white">Create Profile</a>
 		</div>
 		<div class="m-2">
 			<a href="{% url 'profiles:recommend' %}" class="btn pill-btn header-btn text-white">Recommend</a>
@@ -97,7 +95,13 @@
 	<span class="text-secondary quote-icon float-left m-2"><i class="fas fa-quote-left"></i></span>
 	<blockquote class="blockquote text-center m-2">
 		<p class="mb-0">{{ reco.comment|truncatechars:255 }}</p>
-		<footer class="blockquote-footer">{{ reco.reviewer_name }}, about <a class="text-primary" href="{% url 'profiles:detail' reco.profile.id %}">{{ reco.profile.name }}</a></footer>
+		<footer class="blockquote-footer">{{ reco.reviewer_name }}, about 
+			{% if reco.profile.user %}
+				<a class="text-primary" href="{% url 'profiles:detail_username' reco.profile.user.username %}">{{ reco.profile.name }}</a>
+			{% else %}
+				<a class="text-primary" href="{% url 'profiles:detail' reco.profile.id %}">{{ reco.profile.name }}</a>
+			{% endif %}
+		</footer>
 	</blockquote>
     </div>
   {% endfor %}
@@ -177,26 +181,22 @@
 	</div>
 </div>
 
-<div class=row>
-	<div class="col-sm-7 col-md-7 col-lg-7">
-		<div class="container-fluid">
-			<div class="row no-gutters m-4 pt-4">
-				<div class="col-12 col-md-8 offset-md-2 text-center">
-					<h2 class="text-secondary">Going to a conference soon?</h2>
-					<p class="text-dark text-justify">Download our slide and insert it at the end of your presentation!
-						It will raise awareness on the issue of gender equity in neuroscience and show that there are resources to
-						help conference organizers. In addition, it will encourage researchers to submit recommendations of their peers.</p>
-					<a href="{% static 'images/slide_feb2021.pdf' %}" id="download-slide" class="btn pill-btn slide-btn text-white btn-secondary" download="WiNRepo_Slide">Download slide</a>
-				</div>
-			</div>
+<div class="container-fluid" id="stats">
+	<div class=row>
+		<div class="offset-md-1 offset-xl-2 col-12 col-md-5 col-lg-4 col-xl-4 col-xxl-3 p-5">
+			<h2 class="text-secondary">Going to a conference soon?</h2>
+			<p class="text-dark text-justify">Download our slide and insert it at the end of your presentation!
+				It will raise awareness on the issue of gender equity in neuroscience and show that there are resources to
+				help conference organizers. In addition, it will encourage researchers to submit recommendations of their peers.</p>
+			<a href="{% static 'images/slide_feb2021.pdf' %}" id="download-slide" class="btn pill-btn slide-btn text-white btn-secondary" download="WiNRepo_Slide">Download slide</a>
 		</div>
-	</div>
-	<div class="col-sm-5 col-md-5 col-lg-5">
-		<div id="twitter-widget-holder">
-			<section class="scrollable">
-				<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="5">Tweets by WINRePo1</a>
-				<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
-			</section>
+		<div class="col-12 col-md-5 col-lg-4 p-3">
+			<div id="twitter-widget-holder">
+				<section class="scrollable">
+					<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="5">Tweets by WINRePo1</a>
+					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+				</section>
+			</div>
 		</div>
 	</div>
 </div>

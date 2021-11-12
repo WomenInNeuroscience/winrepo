@@ -1,29 +1,71 @@
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
+from dal.autocomplete import ModelSelect2
 from django import forms
+from django.contrib.auth.forms import (
+    AuthenticationForm as _AuthenticationForm,
+    PasswordChangeForm,
+    UserCreationForm,
+    UsernameField
+)
 from django.utils.translation import gettext_lazy as _
 
-from captcha.fields import ReCaptchaField
-from dal.autocomplete import ModelSelect2
-from captcha.widgets import ReCaptchaV3
-
-from .models import Profile, Recommendation
+from .models import Profile, Recommendation, User
 
 
 class CaptchaForm(forms.Form):
-    captcha = ReCaptchaField(widget=ReCaptchaV3, label=False)
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox, label=False)
 
 
-class CreateProfileModelForm(CaptchaForm, forms.ModelForm):
-    use_required_attribute = False
+class AuthenticationForm(_AuthenticationForm):
+    username = UsernameField(
+        widget=forms.TextInput(attrs={'autofocus': True, 'placeholder': 'Username or E-mail'}),
+    )
 
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'name',
+            'email',
+        )
+        help_texts = {
+            'email': 'If changed, you will be signed-out and an e-mail will be sent to the new address for confirmation.',
+        }
+
+
+class UserPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="Old password",
+        strip=False,
+        required=False,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'autofocus': True}),
+    )
+
+    def clean_old_password(self):
+        if self.user.password is None:
+            return None
+        return super().clean_old_password()
+
+
+class UserProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = [
+        fields = (
             'name',
             'institution',
             'country',
-            'email',
+            'contact_email',
             'webpage',
             'position',
+            'orcid',
+            'twitter',
+            'linkedin',
+            'github',
+            'google_scholar',
+            'researchgate',
             'grad_month',
             'grad_year',
             'brain_structure',
@@ -31,53 +73,66 @@ class CreateProfileModelForm(CaptchaForm, forms.ModelForm):
             'methods',
             'domains',
             'keywords',
-        ]
+        )
+
+    def save(self, user=None):
+        user_profile = super(UserProfileForm, self).save(commit=False)
+        if user:
+            user_profile.user = user
+        user_profile.save()
+        return user_profile
+
+
+class UserProfileDeleteForm(forms.Form):
+    confirm = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=True,
+        initial=True
+    )
+
+
+class UserDeleteForm(forms.Form):
+    confirm = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=True,
+        initial=True
+    )
+
+
+class ProfileClaimForm(CaptchaForm, forms.Form):
+    confirm = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=True,
+        initial=True
+    )
+
+
+class UserCreateForm(CaptchaForm, UserCreationForm):
+    username = forms.SlugField(required=True)
+    email = forms.EmailField(required=True)
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_active = False
+
+        if commit:
+            user.save()
+
+        return user
+
+    class Meta:
+        model = User
+        fields = ('username', 'name', 'email',)
         labels = {
-            'name': _('Full Name'),
-            'institution': _('Institution/Company'),
+            'username': _('User Name'),
             'email': _('Email Address'),
-            'webpage': _('Linked In or web page'),
-            'grad_month': _('Date PhD was obtained: Month'),
-            'grad_year': _('Year'),
-            'brain_structure': _('Field of Research - Brain Structure'),
-            'modalities': _('Field of Research - Modalities'),
-            'methods': _('Field of Research - Methods'),
-            'domains': _('Field of Research - Domain'),
-            'keywords': _('Field of Research - Keywords'),
         }
         help_texts = {
-            'country': _('Country of the institution'),
-            'webpage': _('Make sure people can look you up easily by '
-                         'providing a link to a personal website, profile '
-                         'or institution site.'),
-            'position': _('Please choose your \'highest\' title from the '
-                          'proposed options to ease future searches.'),
-            'grad_month': _('Leave empty if no PhD (yet).'),
-            'grad_year': _('Please enter the full year (4 digits).'),
-            'domains': _('There are free keywords at the end of the '
-                         'questionnaire to input further information.'),
-            'keywords': _('Optionally you can add some more specific terms '
-                          'to describe your field of research, separated '
-                          'by commas.'),
+            'email': _('We will use this address only when we need to '
+                       'communicate with you about this website - it will not '
+                       'be displayed to anyone else. It is recommended to enter '
+                       'an email address that is not likely to change in the future.'),
         }
-        widgets = {
-            'country': ModelSelect2(
-                url='profiles:countries_autocomplete',
-                attrs={
-                    # 'data-minimum-input-length': 2,
-                    'data-placeholder': 'Search Country...',
-                },
-            )
-        }
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-
-        if email and Profile.objects.filter(email=email).exists():
-            raise forms.ValidationError(_('This email is already being used'),
-                                        code='duplicate_email')
-
-        return email
 
 
 class RecommendModelForm(CaptchaForm, forms.ModelForm):
@@ -86,14 +141,14 @@ class RecommendModelForm(CaptchaForm, forms.ModelForm):
     class Meta:
         model = Recommendation
 
-        fields = [
+        fields = (
             'profile',
             'reviewer_name',
             'reviewer_institution',
             'reviewer_position',
             'seen_at_conf',
             'comment',
-        ]
+        )
 
         labels = {
             'profile': _('Recommended Person'),

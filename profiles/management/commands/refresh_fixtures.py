@@ -1,11 +1,17 @@
 import random
-from django.db import connection
 from django.core import management
-from django.core.management.color import no_style
 from django.core.management.base import BaseCommand, CommandError
 
 import winrepo.settings as settings
-from profiles.models import Country, Profile, Recommendation
+from profiles.models import Country, User, Profile, Recommendation
+from profiles.models import (
+    STRUCTURE_CHOICES,
+    MODALITIES_CHOICES,
+    METHODS_CHOICES,
+    DOMAINS_CHOICES,
+    MONTHS_CHOICES,
+    POSITION_CHOICES,
+)
 
 class Command(BaseCommand):
     help = 'Re-create fixtures based on models'
@@ -29,13 +35,13 @@ class Command(BaseCommand):
 
         countries_data = []
         with open('profiles/fixtures/countries.txt') as f:
-            countries_data = [c.split('\t') for c in f.read().splitlines()]
+            countries_data = [c.split('\t') for c in f.read().splitlines() if c]
 
         Country.objects.all().delete()
 
         countries = []
-        for name, code in countries_data:
-            is_under_represented = random.random() > 0.5
+        for code, name, under in countries_data:
+            is_under_represented = under == '1'
 
             country =  Country(
                 code=code,
@@ -65,12 +71,12 @@ class Command(BaseCommand):
         profiles = []
         for _ in range(n_profiles):
 
-            brain_structure = random.choice(Profile.STRUCTURE_CHOICES)[0]
-            modalities = random.choice(Profile.MODALITIES_CHOICES)[0]
-            methods = random.choice(Profile.METHODS_CHOICES)[0]
-            domains = random.choice(Profile.DOMAINS_CHOICES)[0]
+            brain_structure = random.choice(STRUCTURE_CHOICES)[0]
+            modalities = random.choice(MODALITIES_CHOICES)[0]
+            methods = random.choice(METHODS_CHOICES)[0]
+            domains = random.choice(DOMAINS_CHOICES)[0]
 
-            grad_month = random.choice(Profile.MONTHS_CHOICES)[0]
+            grad_month = random.choice(MONTHS_CHOICES)[0]
             grad_year = str(random.randint(1950, 2020))
 
             name = random.choice(names)
@@ -80,12 +86,12 @@ class Command(BaseCommand):
             slug = fullname.lower().replace(' ', '-')
             email = slug + '@' + institution.lower().replace(' ', '-') + '.edu'
 
-            position = random.choice(Profile.POSITION_CHOICES)[0]
+            position = random.choice(POSITION_CHOICES)[0]
 
             profile = Profile(
                 name=fullname,
-                email=email,
-                webpage=slug + '.me',
+                contact_email=email,
+                webpage='http://' + slug + '.me',
                 institution=institution,
                 country=random.choice(countries),
                 position=position,
@@ -118,7 +124,7 @@ class Command(BaseCommand):
             institution = random.choice(institutions)
             slug = fullname.lower().replace(' ', '-')
             email = slug + '@' + institution.lower().replace(' ', '-') + '.edu'
-            position = random.choice(Profile.POSITION_CHOICES)[0]
+            position = random.choice(POSITION_CHOICES)[0]
 
             recommendation = ' '.join(
                 recommendation_words[0:2] + \
@@ -135,9 +141,67 @@ class Command(BaseCommand):
                 comment=recommendation,
             ).save()
 
+
+        # Accounts
+        user = User.objects.create_user(
+            username='admin',
+            name='Admin',
+            email='admin@winrepo.org',
+            password='admin',
+            is_staff=True,
+            is_superuser=True,
+        )
+        user.save()
+
+        user = User.objects.create_user(
+            username='user',
+            name='User Resu',
+            email='user@winrepo.org',
+            password='user'
+        )
+        user.save()
+
+        user = User.objects.create_user(
+            username='user-profile',
+            name='User Resu',
+            email='user-profile@winrepo.org',
+            password='user'
+        )
+        user.save()
+
+        position = random.choice(POSITION_CHOICES)[0]
+        brain_structure = random.choice(STRUCTURE_CHOICES)[0]
+        modalities = random.choice(MODALITIES_CHOICES)[0]
+        methods = random.choice(METHODS_CHOICES)[0]
+        domains = random.choice(DOMAINS_CHOICES)[0]
+
+        grad_month = random.choice(MONTHS_CHOICES)[0]
+        grad_year = str(random.randint(1950, 2020))
+
+        profile = Profile(
+            user=user,
+            name='User Resu',
+            contact_email='user-profile@winrepo.org',
+            webpage='http://user-resu.me',
+            institution='User University',
+            country=random.choice(countries),
+            position=position,
+            grad_month=grad_month,
+            grad_year=grad_year,
+            brain_structure=brain_structure,
+            modalities=modalities,
+            methods=methods,
+            domains=domains,
+            keywords='',
+        )
+        profile.save()
+
+
         management.call_command(
             'dumpdata',
             'profiles',
+            'auth',
+            natural_primary=True,
             natural_foreign=True,
             output='profiles/fixtures/winrepo.json'
-        )
+        ) 

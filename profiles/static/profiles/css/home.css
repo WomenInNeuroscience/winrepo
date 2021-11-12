@@ -3,7 +3,7 @@
 }
 
 #hero-image > img{
-	width: 100vw;
+	width: 100%;
 	padding-top: 28px;
 	/* min-height: 200px; */
 }
@@ -53,19 +53,19 @@
 /* Stats */
 .donutCell
 {
-    position: relative;
+	position: relative;
 }
 
 .donutValue
 {
-    position: absolute;
-    left: 50%;
-    top: 50%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
 	transform: translate(-50%,-50%);
 	-ms-transform: translate(-50%,-50%);
-    text-align: center;
-    font-size: 16px;
-    color: #555555;
+	text-align: center;
+	font-size: 16px;
+	color: #555555;
 }
 
 .position-title {
@@ -85,13 +85,14 @@
 /* carousel */
 #reco-carousel {
 	min-height: 240px;
+	display: flex;
 }
 
 .carousel-inner {
 	max-width: 800px;
 }
 .carousel-control-next, .carousel-control-prev, .carousel-indicators {
-    filter: invert(50%);
+	filter: invert(50%);
 }
 
 .quote-icon {
