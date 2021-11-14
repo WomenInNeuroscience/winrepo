@@ -81,15 +81,16 @@ section .section-title {
     -ms-transform-style: preserve-3d;
     transition: 1s;
     transform-style: preserve-3d;
+    width: 100%;
 }
 
 #cont .card {
-    width: 14rem;
+    width: 100%;
     height: 20rem;
 }
 
 #boardvol .card {
-    width: 14rem;
+    width: 100%;
     height: 24rem;
 }
 

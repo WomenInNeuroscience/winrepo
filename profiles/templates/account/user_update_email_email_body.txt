@@ -1,0 +1,7 @@
+{% load abs_url %}
+
+Someone changed the e-mail address from your WiNRepo account.
+To confirm this change, please access the following URL:
+{% abs_url 'profiles:signup_confirm' %}?token={{ token }}
+
+If it was not you, please reply to this e-mail.

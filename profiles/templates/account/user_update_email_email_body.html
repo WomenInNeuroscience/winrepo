@@ -1,0 +1,15 @@
+{% extends "base_email.html" %}
+{% load abs_url %}
+
+{% block content %}
+
+<p style="font-size: 140%">Someone changed information from your WiNRepo account.</p>
+<p style="text-align: center; font-size: 140%">To confirm this change, please access the following URL:</p>
+<p style="text-align: center; font-size: 140%">
+	<a href="{% abs_url 'profiles:signup_confirm' %}?token={{ token }}">
+		{% abs_url 'profiles:signup_confirm' %}?token={{ token }}
+	</a>
+</p>
+<p>If it was not you, please reply to this e-mail.</p>
+
+{% endblock content %}

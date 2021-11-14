@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+	{{ block.super }} - Sign Up
+{% endblock title %}
+
+{% block nav-signup-classes %}active{% endblock nav-signup-classes %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+	<div class="row no-gutters">
+		<div class="col-12">
+			<h2 class="text-primary font-weight-bold">Create your Account</h2>
+			<p class="text-center mt-4">Sign-up using your social accounts or fill the form below:</p>
+			<div class="text-center mb-4">
+				<a href="{% url 'google_login' %}" class="px-4"><span class="iconify" data-icon="akar-icons:google-fill" data-inline="false"></span></a>
+				<a href="{% url 'twitter_login' %}" class="px-4"><span class="iconify" data-icon="akar-icons:twitter-fill" data-inline="false"></span></a>
+				<a href="{% url 'github_login' %}" class="px-4"><span class="iconify" data-icon="akar-icons:github-fill" data-inline="false"></span></a>
+			</div>
+			<hr class="my-12"/>
+			<div class="pt-2 mt-4 w-100 text-muted">
+				{% if form.errors %}
+					{% for error in form.non_field_errors %}
+						<div class="alert alert-danger">
+							<strong>{{ error|escape }}</strong>
+						</div>
+					{% endfor %}
+				{% endif %}
+				<form method="post">
+					{% csrf_token %}
+					{{ form.username|as_crispy_field }}
+					{{ form.name|as_crispy_field }}
+					{{ form.email|as_crispy_field }}
+					{{ form.password1|as_crispy_field }}
+					{{ form.password2|as_crispy_field }}
+					{{ form.captcha }}
+					<div class="text-right">
+						<a class="btn btn-outline-danger pill-btn" href="{% url 'profiles:user' %}" role="button">
+							Cancel
+						</a>
+						<button type="submit" class="btn btn-primary pill-btn">
+							Create
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

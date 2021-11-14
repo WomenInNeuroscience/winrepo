@@ -91,6 +91,15 @@ $(document).ready(function() {
         };
 
         const chart = new google.visualization.GeoChart(document.getElementById(divId));
+
+        google.visualization.events.addListener(chart, 'select', function() {
+            const selection = chart.getSelection();
+            if (selection.length > 0) {
+                const country = data.getValue(selection[0].row, 0);
+                window.location.href = '/list?s=' + encodeURIComponent(country);
+            }
+        });
+
         chart.draw(data, options);
     }
 

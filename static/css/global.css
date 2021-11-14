@@ -1,5 +1,8 @@
 body {
 	font-family:'Open Sans', 'Lato', sans-serif;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -9,8 +12,14 @@ h1, h2, h3, h4, h5, h6 {
 .full_page {
 	padding: 65px 0px 0px 0px;
 }
-.page-container {
-	padding: 20px 50px 70px 50px;
+#page-container {
+	padding: 20px 10px 70px 10px;
+	flex-grow: 1;
+}
+@media (min-width: 768px){
+	#page-container {
+		padding: 20px 20px 70px 20px;
+	}
 }
 
 .intro p {
@@ -135,4 +144,17 @@ h1, h2, h3, h4, h5, h6 {
 
 #winrepo-logo > img {
 	height: 38px;
+}
+
+form fieldset {
+	border: 1px solid #CCC;
+	padding: 1rem;
+}
+
+form fieldset legend {
+	font-size: 1rem;
+	padding: 1rem;
+	display: inline-block;
+	width: auto;
+	background: #FFF;
 }

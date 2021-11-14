@@ -5,6 +5,35 @@
 {% block css %}
 	{{ block.super }}
 	<link rel="stylesheet" type="text/css" href="{% static 'profiles/css/home.css' %}?v=3" />
+	<style>
+		* {
+  			box-sizing: border-box;
+		}
+		.column {
+  			float: left;
+		}
+		.row:before {
+  			content: "";
+  			display: table;
+  			clear: both;
+		}
+		#twitter-widget-holder{ 
+			height: 300px;
+			max-width: 600px;
+			padding-top: 10px;
+			padding-left: 10px;
+			padding-bottom: 10px;
+			background:#fff; 
+			border-radius:3px; 
+			box-shadow:2px 2px 3px rgba(0,0,0,.1);
+			overflow: hidden; 
+		}
+		.scrollable {
+    		overflow-y: auto !important;
+    		overflow-x: hidden !important;
+    		height: 280px;
+		}
+	</style>
 {% endblock css%}
 
 {% block nav-home-classes %}active{% endblock nav-home-classes %}
@@ -21,7 +50,7 @@
 	</picture>
 </div>
 <div class="container-fluid" id="home-search">
-	<form action="list" method="get" class="input-group bg-white rounded p-1 mx-auto">
+	<form action="{% url 'profiles:index' %}" method="get" class="input-group bg-white rounded p-1 mx-auto">
 		<input type="text" id="search-input" class="form-control" placeholder="Enter search keywords here..." aria-label="Search" name="s" autofocus>
 		<button type="submit" id="search-btn" class="btn btn-secondary pl-4 pr-4">Search</button>
 	</form>
@@ -46,7 +75,7 @@
 			<a href="{% url 'profiles:index' %}" class="btn pill-btn header-btn text-white">View Repository</a>
 		</div>
 		<div class="m-2">
-			<a href="{% url 'profiles:create' %}" class="btn pill-btn header-btn text-white">Create Profile</a>
+			<a href="" class="btn pill-btn header-btn text-white">Create Profile</a>
 		</div>
 		<div class="m-2">
 			<a href="{% url 'profiles:recommend' %}" class="btn pill-btn header-btn text-white">Recommend</a>
@@ -66,7 +95,13 @@
 	<span class="text-secondary quote-icon float-left m-2"><i class="fas fa-quote-left"></i></span>
 	<blockquote class="blockquote text-center m-2">
 		<p class="mb-0">{{ reco.comment|truncatechars:255 }}</p>
-		<footer class="blockquote-footer">{{ reco.reviewer_name }}, about <a class="text-primary" href="{% url 'profiles:detail' reco.profile.id %}">{{ reco.profile.name }}</a></footer>
+		<footer class="blockquote-footer">{{ reco.reviewer_name }}, about 
+			{% if reco.profile.user %}
+				<a class="text-primary" href="{% url 'profiles:detail_username' reco.profile.user.username %}">{{ reco.profile.name }}</a>
+			{% else %}
+				<a class="text-primary" href="{% url 'profiles:detail' reco.profile.id %}">{{ reco.profile.name }}</a>
+			{% endif %}
+		</footer>
 	</blockquote>
     </div>
   {% endfor %}
@@ -84,7 +119,7 @@
 <div class="container-fluid" id="stats">
 	<div class="text-center m-4" id="entries-container">
 		<p class="h1 text-secondary font-weight-bold mb-0" id="entries-number"> </p>
-		<p class="h5 text-primary" id="entries-text">entries in repository. </p>
+		<p class="h5 text-primary" id="entries-text"><a href="{% url 'profiles:index' %}">entries in repository</a>.</p>
 	</div>
 
 	<div class="d-flex flex-wrap justify-content-center align-items-start m-4" id="chart-stats">
@@ -98,7 +133,7 @@
 				</tr>
 			</table>
 			<span class="position-title text-secondary" id="PhDtext">PhD</span>
-			<p id="student-count" class="position-text"> profiles</p>
+			<p class="position-text"><a href="list?s=PhD%20student" id="student-count"> profiles</a></p>
 		</div>
 		<div class="p-2 text-center donutTab">
 			<table>
@@ -110,7 +145,7 @@
 				</tr>
 			</table>
 			<span class="position-title text-tertiary" id="PostDoctext">Post-doc</span>
-			<p id="postdoc-count" class="position-text"> profiles</p>
+			<p class="position-text"><a href="list?s=post-doc" id="postdoc-count"> profiles</a></p>
 		</div>
 		<div class="p-2 text-center donutTab">
 			<table>
@@ -122,7 +157,7 @@
 				</tr>
 			</table>
 			<span class="position-title text-quaternary" id="Seniortext">Senior</span>
-			<p id="senior-count" class="position-text"> profiles</p>
+			<p class="position-text"><a href="list?senior=on" id="senior-count"> profiles</a></p>
 		</div>
 		<div class="p-2 text-center donutTab">
 			<table>
@@ -146,14 +181,22 @@
 	</div>
 </div>
 
-<div class="container-fluid">
-	<div class="row no-gutters m-4 pt-4">
-		<div class="col-12 col-md-8 offset-md-2 text-center">
+<div class="container-fluid" id="stats">
+	<div class=row>
+		<div class="offset-md-1 offset-xl-2 col-12 col-md-5 col-lg-4 col-xl-4 col-xxl-3 p-5">
 			<h2 class="text-secondary">Going to a conference soon?</h2>
 			<p class="text-dark text-justify">Download our slide and insert it at the end of your presentation!
 				It will raise awareness on the issue of gender equity in neuroscience and show that there are resources to
 				help conference organizers. In addition, it will encourage researchers to submit recommendations of their peers.</p>
 			<a href="{% static 'images/slide_feb2021.pdf' %}" id="download-slide" class="btn pill-btn slide-btn text-white btn-secondary" download="WiNRepo_Slide">Download slide</a>
+		</div>
+		<div class="col-12 col-md-5 col-lg-4 p-3">
+			<div id="twitter-widget-holder">
+				<section class="scrollable">
+					<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="5">Tweets by WINRePo1</a>
+					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+				</section>
+			</div>
 		</div>
 	</div>
 </div>
