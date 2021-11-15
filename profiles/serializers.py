@@ -5,7 +5,7 @@ from .models import Profile, Country
 
 
 class CountrySerializer(serializers.ModelSerializer):
-    profiles_count = serializers.ReadOnlyField(source='profile_set.count')
+    profiles_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Country
