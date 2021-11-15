@@ -103,8 +103,10 @@ $(document).ready(function() {
         chart.draw(data, options);
     }
 
+    var countries = []
+
     function init() {
-        $.get('/api/countries/?format=json', function(data) { return drawMap('regions_div', data); });
+        $.get('/api/countries/?format=json', function(data) { countries = data; return drawMap('regions_div', countries); });
         $.get('/api/positions/?format=json', function(data) { return preparePiecharts(data); });
     }
 
@@ -113,14 +115,14 @@ $(document).ready(function() {
 
     //create trigger to resizeEnd event
     $(window).resize(function () {
-        if (this.resizeTO) clearTimeout(this.resizeTO);
-        this.resizeTO = setTimeout(function () {
+        if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(function () {
             $(this).trigger('resizeEnd');
         }, 500);
     });
 
     //redraw graph when window resize is completed
     $(window).on('resizeEnd', function () {
-        $.get('/api/countries/?format=json', function (data) { return drawMap('regions_div', data); });
+        drawMap('regions_div', countries);
     });
 });
