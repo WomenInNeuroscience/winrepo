@@ -19,6 +19,28 @@ and load the following page address in your browser: `http://localhost:8000/`.
 
 ### Important:
 <ol>
-<li>Do not forget to hard reload the page to visualize your updates.</li>
-<li>Please check whether your new features work in all range of different devices by enabling the <i>Responsive Design Mode</i> in your browser.</li>
+  <li>Do not forget to hard reload the page to visualize your updates.</li>
+  <li>Please check whether your new features work in all range of different devices by enabling the <i>Responsive Design Mode</i> in your browser.</li>
+</ol>
+
+## Contributions Guidelines
+
+To report a bug, suggest a new feature, add information or any other type of enhancement, please submit an issue. We will make all possible efforts to discuss and evaluate them with maximum brevity. When submitting a new Pull Request (PR), link it to the issues that it attempts to address through mention "Closes #XXXX".
+
+### PR Structure
+<ol>
+  <li>Clear name</li>
+  <li>Clearly outline goals and changes proposed</li>
+  <li>Doesn’t include “unrelated” code change</li>
+  <li></li>
+</ol>
+
+### Coding Style
+
+<ol>
+  <li>Variables, functions, arguments have clear names</li>
+  <li>Follows PEP8</li>
+  <li>Low redundancy</li>
+  <li>No new dependency</li>
+  <li>Backward compatibility</li>
 </ol>
