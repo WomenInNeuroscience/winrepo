@@ -102,6 +102,12 @@ class Command(BaseCommand):
                 methods=methods,
                 domains=domains,
                 keywords='',
+                orcid='orcid',
+                twitter='twitter',
+                linkedin='linkedin',
+                github='github',
+                google_scholar='google_scholar',
+                researchgate='researchgate',
             )
             profiles += [profile]
             profile.save()

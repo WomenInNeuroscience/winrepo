@@ -12,6 +12,42 @@
 					<small class="d-block ml-4">Highest Degree</small>
 				</p>
 			{% endif %}
+
+			<div class="row no-gutters mt-3 mb-3">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 offset-lg-2 col-xl-10 offset-xl-1 col-xxl-1 offset-xxl-4 text-center">
+				{% if profile.orcid %}
+					<a class="btn pill-btn btn-primary m-1" href="https://orcid.org/{{ profile.orcid }}" target="_blank" rel="noopener">
+						<i class="fab fa-orcid"></i> ORCID
+					</a>
+				{% endif %}
+				{% if profile.twitter %}
+					<a class="btn pill-btn btn-primary m-1" href="https://twitter.com/{{ profile.twitter }}" target="_blank" rel="noopener">
+						<i class="fab fa-twitter"></i> Twitter
+					</a>
+				{% endif %}
+
+				{% if profile.linkedin %}
+					<a class="btn pill-btn btn-primary m-1" href="https://linkedin.com/in/{{ profile.linkedin }}" target="_blank" rel="noopener">
+						<i class="fab fa-linkedin"></i> LinkedIn
+					</a>
+				{% endif %}
+				{% if profile.github %}
+					<a class="btn pill-btn btn-primary m-1" href="https://github.com/{{ profile.github }}" target="_blank" rel="noopener">
+						<i class="fab fa-github"></i> GitHub
+					</a>
+				{% endif %}
+				{% if profile.google_scholar %}
+					<a class="btn pill-btn btn-primary m-1" href="https://scholar.google.com/citations?user={{ profile.google_scholar }}" target="_blank" rel="noopener">
+						<i class="fas fa-scroll"></i> Google Scholar
+					</a>
+				{% endif %}
+				{% if profile.researchgate %}
+					<a class="btn pill-btn btn-primary m-1" href="https://www.researchgate.net/profile/{{ profile.researchgate }}" target="_blank" rel="noopener">
+						<i class="fab fa-researchgate"></i> ResearchGate
+					</a>
+				{% endif %}
+				</div>
+			</div>
 			<div id="profile-id" class="d-none">{{ profile.id }}</div><!-- Used to pass profile ID to jQuery in profile_details.js -->
 		</div>
 
