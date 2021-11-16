@@ -84,5 +84,7 @@ class BlockIncludeNode(IncludeNode):
         }
         if self.isolated_context:
             context = context.new(values)
+        else:
+            context.update(values)
         with context.render_context.push_state(template, isolated_context=False):
             return template._render(context)
