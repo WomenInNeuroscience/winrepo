@@ -12,7 +12,7 @@
 {% block full_page_content %}
 	<div id="list-search" class="w-100 bg-primary text-white">
 		<form method="get">
-			<div id="search-container" class="form-row p-2">
+			<div id="search-container" class="form-row mx-0 py-2">
 				<div class="col-12 col-sm-6 offset-sm-3">
 					<div id="search-form" class="input-group bg-white rounded">
 						<div class="input-group-prepend p-1 w-100">
@@ -22,7 +22,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-row p-2">
+			<div class="form-row mx-0 py-2">
 				<div id="underrepresented-countries" class="col-12 col-sm-9 offset-sm-3 col-lg-3 offset-lg-3">
 					<div class="form-check custom-control custom-checkbox">
 						<input type="checkbox" class="custom-control-input" id="underrepresented-only" name="ur" {% if request.GET.ur %}checked{% endif %}>
