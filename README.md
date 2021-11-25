@@ -37,7 +37,7 @@ To report a bug, suggest a new feature, add information or any other type of enh
 ### Coding Style
 
 <ol>
-  <li>Variables, functions, arguments have clear names</li>
+  <li>Variables, functions, arguments must have clear names</li>
   <li>Follows PEP 8 -- Style Guide for Python Code: https://www.python.org/dev/peps/pep-0008</li>
   <li>Low redundancy</li>
   <li>No new dependency</li>
