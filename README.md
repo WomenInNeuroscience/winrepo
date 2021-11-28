@@ -16,7 +16,8 @@ In order to have data to run the website, run the following command to generate 
 ./tools/refresh_db.sh
 ```
 
-As you develop, if you'd like to revert the changes you did to your local DB, you can run the command as much as you like.
+The local website uses SQLite, so there is no need to install any other dependencies.
+As you develop, if you would like to revert the changes you did to your local DB, you can run the command as much as you like.
 After setting up the DB, you can run the website locally using:
 
 ```
