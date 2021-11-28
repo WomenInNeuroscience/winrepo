@@ -2,7 +2,7 @@
 This GitHub public repository stands for the development of the website of WiNRepo - [https://www.winrepo.org](https://www.winrepo.org).
 
 ## Dependencies
-All dependencies are listed in the `requirements.txt` file, stored in the main directory of the repository. Alternatively, you can run also in the main directory:
+All dependencies are listed in the [`requirements.txt`](requirements.txt) file, stored in the root directory of the repository. To install them, you can run in the main directory:
 
 ```
 pip install -r requirements.txt
