@@ -9,7 +9,15 @@ pip install -r requirements.txt
 ```
 
 ## Development
-To contribute, please fork the repository. In the dev branch of your own repository, rename the file `.env.default` to `.env`. To compile and check your changes locally, run:
+To contribute, please fork the repository. In the dev branch of your own repository, rename the file `.env.default` to `.env`.
+In order to have data to run the website, run the following command to generate a mock dataset: 
+
+```
+./tools/refresh_db.sh
+```
+
+As you develop, if you'd like to revert the changes you did to your local DB, you can run the command as much as you like.
+After setting up the DB, you can run the website locally using:
 
 ```
 python manage.py runserver
