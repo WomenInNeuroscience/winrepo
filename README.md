@@ -28,7 +28,7 @@ and load the following page address in your browser: `http://localhost:8000/`.
 
 ### Important:
 <ol>
-  <li>Do not forget to hard reload the page to visualize your updates.</li>
+  <li>Do not forget to hard reload the page to visualize your code changes.</li>
   <li>Please check whether your new features work in all range of different devices by enabling the <i>Responsive Design Mode</i> in your browser.</li>
 </ol>
 
