@@ -50,5 +50,4 @@ To report a bug, suggest a new feature, add information or any other type of enh
   <li>Follows PEP 8 -- Style Guide for Python Code: https://www.python.org/dev/peps/pep-0008</li>
   <li>Low redundancy</li>
   <li>No new dependency</li>
-  <li>No data loss</li>
 </ol>
