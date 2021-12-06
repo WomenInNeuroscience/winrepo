@@ -54,12 +54,12 @@ class UserPasswordChangeForm(PasswordChangeForm):
 
 class UserProfileForm(forms.ModelForm):
 
-    orcid = forms.CharField(max_length=200)
-    twitter = forms.CharField(max_length=200)
-    linkedin = forms.CharField(max_length=200)
-    github = forms.CharField(max_length=200)
-    google_scholar = forms.CharField(max_length=200)
-    researchgate = forms.CharField(max_length=200)
+    orcid = forms.CharField(max_length=200, label='ORCID', help_text='Please insert the information from the brackets: https://orcid.org/[ID]')
+    twitter = forms.CharField(max_length=200, label='Twitter', help_text='Please insert the information from the brackets: https://twitter.com/[username]')
+    linkedin = forms.CharField(max_length=200, label='LinkedIn', help_text='Please insert the information from the brackets: https://linkedin.com/in/[username]')
+    github = forms.CharField(max_length=200, label='GitHub', help_text='Please insert the information from the brackets: https://github.com/[username]')
+    google_scholar = forms.CharField(max_length=200, label='Google Scholar', help_text='Please insert the information from the brackets: https://scholar.google.com/citations?user=[ID]')
+    researchgate = forms.CharField(max_length=200, label='ResearchGate', help_text='Please insert the information from the brackets: https://www.researchgate.net/profile/[username]')
 
     class Meta:
         model = Profile
