@@ -1,3 +1,5 @@
+import re
+from urllib import parse
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from dal.autocomplete import ModelSelect2
@@ -51,6 +53,14 @@ class UserPasswordChangeForm(PasswordChangeForm):
 
 
 class UserProfileForm(forms.ModelForm):
+
+    orcid = forms.CharField(max_length=200)
+    twitter = forms.CharField(max_length=200)
+    linkedin = forms.CharField(max_length=200)
+    github = forms.CharField(max_length=200)
+    google_scholar = forms.CharField(max_length=200)
+    researchgate = forms.CharField(max_length=200)
+
     class Meta:
         model = Profile
         fields = (
@@ -74,6 +84,97 @@ class UserProfileForm(forms.ModelForm):
             'domains',
             'keywords',
         )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        orcid_regex = r'^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9X]{4}$'
+        orcid = cleaned_data.get('orcid', '')
+        if 'orcid.org' in orcid:
+            try:
+                [_, _, path, _, _, _] = parse.urlparse(orcid)
+                orcid = path.strip('/').split('/')[0]
+            except:
+                orcid = ''
+        if not re.match(orcid_regex, orcid):
+            self.add_error('orcid', 'The ORCID you have provided is not valid. Please check the format specified in the field.')
+        else:
+            cleaned_data['orcid'] = orcid
+
+
+        twitter_id_regex = r'^[a-zA-Z0-9_]{1,15}$'
+        twitter_id = cleaned_data.get('twitter', '')
+        if 'twitter.com' in twitter_id:
+            try:
+                [_, _, path, _, _, _] = parse.urlparse(twitter_id)
+                twitter_id = path.strip('/').split('/')[0]
+            except:
+                twitter_id = ''
+        twitter_id = twitter_id.replace('@', '')
+        if not re.match(twitter_id_regex, twitter_id):
+            self.add_error('twitter', 'The Twitter ID you have provided is not valid. Please check the format specified in the field.')
+        else:
+            cleaned_data['twitter'] = twitter_id
+
+
+        linkedin_id_regex = r'^[a-zA-Z0-9_]{1,15}$'
+        linkedin_id = cleaned_data.get('linkedin', '')
+        if 'linkedin.com' in linkedin_id:
+            try:
+                [_, _, path, _, _, _] = parse.urlparse(linkedin_id)
+                linkedin_id = path.strip('/').split('/')[1]
+            except:
+                linkedin_id = ''
+        if not re.match(linkedin_id_regex, linkedin_id):
+            self.add_error('linkedin', 'The Linkedin ID you have provided is not valid. Please check the format specified in the field.')
+        else:
+            cleaned_data['linkedin'] = linkedin_id
+
+
+        github_id_regex = r'^[a-zA-Z0-9\-]{1,40}$'
+        github_id = cleaned_data.get('github', '')
+        if 'github.com' in github_id:
+            try:
+                [_, _, path, _, _, _] = parse.urlparse(github_id)
+                github_id = path.strip('/').split('/')[0]
+            except:
+                github_id = ''
+        if not re.match(github_id_regex, github_id):
+            self.add_error('github', 'The Github ID you have provided is not valid. Please check the format specified in the field.')
+        else:
+            cleaned_data['github'] = github_id
+
+
+        google_scholar_id_regex = r'^[a-zA-Z0-9]*$'
+        google_scholar_id = cleaned_data.get('google_scholar', '')
+        if google_scholar_id.startswith('https://'):
+            params = dict(parse.parse_qsl(parse.urlsplit(google_scholar_id).query))
+            google_scholar_id = params.get('user', '')
+        if not re.match(google_scholar_id_regex, google_scholar_id):  # try to clean it up
+                params = dict(parse.parse_qsl(google_scholar_id))
+                if 'user' in params:
+                    google_scholar_id = params['user']
+                else:
+                    google_scholar_id = google_scholar_id.split('&')[0]
+        if not re.match(google_scholar_id_regex, google_scholar_id):
+            self.add_error('google_scholar', 'The Google Scholar URL you have provided is not valid. Please check the format specified in the field.')
+        else:
+            cleaned_data['google_scholar'] = google_scholar_id
+
+
+        researchgate_id_regex = r'^[a-zA-Z0-9_-]+$'
+        researchgate_id = cleaned_data.get('researchgate', '')
+        if 'researchgate.net' in researchgate_id:
+            try:
+                [_, _, path, _, _, _] = parse.urlparse(researchgate_id)
+                researchgate_id = path.strip('/').split('/')[1]
+            except:
+                researchgate_id = ''
+        if not re.match(researchgate_id_regex, researchgate_id):
+            self.add_error('researchgate', 'The ResearchGate ID you have provided is not valid. Please check the format specified in the field.')
+        else:
+            cleaned_data['researchgate'] = researchgate_id
+
 
     def save(self, user=None):
         user_profile = super(UserProfileForm, self).save(commit=False)
