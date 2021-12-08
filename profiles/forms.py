@@ -89,7 +89,7 @@ class UserProfileForm(forms.ModelForm):
         cleaned_data = super().clean()
 
         orcid_regex = r'^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9X]{4}$'
-        orcid = cleaned_data.get('orcid', '')
+        orcid = cleaned_data.get('orcid', '').strip()
         if 'orcid.org' in orcid:
             try:
                 [_, _, path, _, _, _] = parse.urlparse(orcid)
@@ -103,7 +103,7 @@ class UserProfileForm(forms.ModelForm):
 
 
         twitter_id_regex = r'^[a-zA-Z0-9_]{1,15}$'
-        twitter_id = cleaned_data.get('twitter', '')
+        twitter_id = cleaned_data.get('twitter', '').strip()
         if 'twitter.com' in twitter_id:
             try:
                 [_, _, path, _, _, _] = parse.urlparse(twitter_id)
@@ -117,14 +117,16 @@ class UserProfileForm(forms.ModelForm):
             cleaned_data['twitter'] = twitter_id
 
 
-        linkedin_id_regex = r'^[a-zA-Z0-9_]{1,15}$'
-        linkedin_id = cleaned_data.get('linkedin', '')
+        linkedin_id_regex = r'^[a-zA-Z0-9\-_]{1,100}$'
+        linkedin_id = cleaned_data.get('linkedin', '').strip()
+        print(f'"{linkedin_id}"')
         if 'linkedin.com' in linkedin_id:
             try:
                 [_, _, path, _, _, _] = parse.urlparse(linkedin_id)
                 linkedin_id = path.strip('/').split('/')[1]
             except:
                 linkedin_id = ''
+        print(f'"{linkedin_id}"')
         if not re.match(linkedin_id_regex, linkedin_id):
             self.add_error('linkedin', 'The Linkedin ID you have provided is not valid. Please check the format specified in the field.')
         else:
@@ -132,7 +134,7 @@ class UserProfileForm(forms.ModelForm):
 
 
         github_id_regex = r'^[a-zA-Z0-9\-]{1,40}$'
-        github_id = cleaned_data.get('github', '')
+        github_id = cleaned_data.get('github', '').strip()
         if 'github.com' in github_id:
             try:
                 [_, _, path, _, _, _] = parse.urlparse(github_id)
@@ -145,8 +147,8 @@ class UserProfileForm(forms.ModelForm):
             cleaned_data['github'] = github_id
 
 
-        google_scholar_id_regex = r'^[a-zA-Z0-9]*$'
-        google_scholar_id = cleaned_data.get('google_scholar', '')
+        google_scholar_id_regex = r'^[a-zA-Z0-9]{1,100}$'
+        google_scholar_id = cleaned_data.get('google_scholar', '').strip()
         if google_scholar_id.startswith('https://'):
             params = dict(parse.parse_qsl(parse.urlsplit(google_scholar_id).query))
             google_scholar_id = params.get('user', '')
@@ -162,8 +164,8 @@ class UserProfileForm(forms.ModelForm):
             cleaned_data['google_scholar'] = google_scholar_id
 
 
-        researchgate_id_regex = r'^[a-zA-Z0-9_-]+$'
-        researchgate_id = cleaned_data.get('researchgate', '')
+        researchgate_id_regex = r'^[a-zA-Z0-9_-]{1,100}$'
+        researchgate_id = cleaned_data.get('researchgate', '').strip()
         if 'researchgate.net' in researchgate_id:
             try:
                 [_, _, path, _, _, _] = parse.urlparse(researchgate_id)
