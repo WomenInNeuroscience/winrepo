@@ -268,12 +268,12 @@ class Profile(models.Model):
     domains = MultiSelectField(choices=DOMAINS_CHOICES, blank=True)
     keywords = models.CharField(max_length=250, blank=True)
 
-    orcid = models.CharField(verbose_name='ORCID', help_text='Please insert the information from the brackets: https://orcid.org/[ID]', max_length=30, blank=True)
-    twitter = models.CharField(max_length=200, help_text='Please insert the information from the brackets: https://twitter.com/[username]', blank=True)
-    linkedin = models.CharField(verbose_name='LinkedIn', help_text='Please insert the information from the brackets: https://linkedin.com/in/[username]', max_length=200, blank=True)
-    github = models.CharField(verbose_name='GitHub', max_length=200, blank=True, help_text='Please insert the information from the brackets: https://github.com/[username]')
-    google_scholar = models.CharField(verbose_name='Google Scholar', help_text='Please insert the information from the brackets: https://scholar.google.com/citations?user=[ID]', max_length=200, blank=True)
-    researchgate = models.CharField(verbose_name='ResearchGate', help_text='Please insert the information from the brackets: https://www.researchgate.net/profile/[username]', max_length=200, blank=True)
+    orcid = models.CharField(null=True, blank=True, verbose_name='ORCID', max_length=30, help_text='Please insert the information from the brackets: https://orcid.org/[ID]')
+    twitter = models.CharField(null=True, blank=True, max_length=200, help_text='Please insert the information from the brackets: https://twitter.com/[username]')
+    linkedin = models.CharField(null=True, blank=True, verbose_name='LinkedIn', max_length=200, help_text='Please insert the information from the brackets: https://linkedin.com/in/[username]')
+    github = models.CharField(null=True, blank=True, verbose_name='GitHub', max_length=200, help_text='Please insert the information from the brackets: https://github.com/[username]')
+    google_scholar = models.CharField(null=True, blank=True, verbose_name='Google Scholar', max_length=200, help_text='Please insert the information from the brackets: https://scholar.google.com/citations?user=[ID]')
+    researchgate = models.CharField(null=True, blank=True, verbose_name='ResearchGate', max_length=200, help_text='Please insert the information from the brackets: https://www.researchgate.net/profile/[username]')
 
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

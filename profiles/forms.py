@@ -54,12 +54,12 @@ class UserPasswordChangeForm(PasswordChangeForm):
 
 class UserProfileForm(forms.ModelForm):
 
-    orcid = forms.CharField(max_length=200, label='ORCID', help_text='Please insert the information from the brackets: https://orcid.org/[ID]')
-    twitter = forms.CharField(max_length=200, label='Twitter', help_text='Please insert the information from the brackets: https://twitter.com/[username]')
-    linkedin = forms.CharField(max_length=200, label='LinkedIn', help_text='Please insert the information from the brackets: https://linkedin.com/in/[username]')
-    github = forms.CharField(max_length=200, label='GitHub', help_text='Please insert the information from the brackets: https://github.com/[username]')
-    google_scholar = forms.CharField(max_length=200, label='Google Scholar', help_text='Please insert the information from the brackets: https://scholar.google.com/citations?user=[ID]')
-    researchgate = forms.CharField(max_length=200, label='ResearchGate', help_text='Please insert the information from the brackets: https://www.researchgate.net/profile/[username]')
+    orcid = forms.CharField(required=False, max_length=200, label='ORCID', help_text='Please insert the information from the brackets: https://orcid.org/[ID]')
+    twitter = forms.CharField(required=False, max_length=200, label='Twitter', help_text='Please insert the information from the brackets: https://twitter.com/[username]')
+    linkedin = forms.CharField(required=False, max_length=200, label='LinkedIn', help_text='Please insert the information from the brackets: https://linkedin.com/in/[username]')
+    github = forms.CharField(required=False, max_length=200, label='GitHub', help_text='Please insert the information from the brackets: https://github.com/[username]')
+    google_scholar = forms.CharField(required=False, max_length=200, label='Google Scholar', help_text='Please insert the information from the brackets: https://scholar.google.com/citations?user=[ID]')
+    researchgate = forms.CharField(required=False, max_length=200, label='ResearchGate', help_text='Please insert the information from the brackets: https://www.researchgate.net/profile/[username]')
 
     class Meta:
         model = Profile
@@ -96,10 +96,10 @@ class UserProfileForm(forms.ModelForm):
                 orcid = path.strip('/').split('/')[0]
             except:
                 orcid = ''
-        if not re.match(orcid_regex, orcid):
+        if orcid and not re.match(orcid_regex, orcid):
             self.add_error('orcid', 'The ORCID you have provided is not valid. Please check the format specified in the field.')
         else:
-            cleaned_data['orcid'] = orcid
+            cleaned_data['orcid'] = orcid if orcid else None
 
 
         twitter_id_regex = r'^[a-zA-Z0-9_]{1,15}$'
@@ -111,26 +111,24 @@ class UserProfileForm(forms.ModelForm):
             except:
                 twitter_id = ''
         twitter_id = twitter_id.replace('@', '')
-        if not re.match(twitter_id_regex, twitter_id):
+        if twitter_id and not re.match(twitter_id_regex, twitter_id):
             self.add_error('twitter', 'The Twitter ID you have provided is not valid. Please check the format specified in the field.')
         else:
-            cleaned_data['twitter'] = twitter_id
+            cleaned_data['twitter'] = twitter_id if twitter_id else None
 
 
         linkedin_id_regex = r'^[a-zA-Z0-9\-_]{1,100}$'
         linkedin_id = cleaned_data.get('linkedin', '').strip()
-        print(f'"{linkedin_id}"')
         if 'linkedin.com' in linkedin_id:
             try:
                 [_, _, path, _, _, _] = parse.urlparse(linkedin_id)
                 linkedin_id = path.strip('/').split('/')[1]
             except:
                 linkedin_id = ''
-        print(f'"{linkedin_id}"')
-        if not re.match(linkedin_id_regex, linkedin_id):
+        if linkedin_id and not re.match(linkedin_id_regex, linkedin_id):
             self.add_error('linkedin', 'The Linkedin ID you have provided is not valid. Please check the format specified in the field.')
         else:
-            cleaned_data['linkedin'] = linkedin_id
+            cleaned_data['linkedin'] = linkedin_id if linkedin_id else None
 
 
         github_id_regex = r'^[a-zA-Z0-9\-]{1,40}$'
@@ -141,10 +139,10 @@ class UserProfileForm(forms.ModelForm):
                 github_id = path.strip('/').split('/')[0]
             except:
                 github_id = ''
-        if not re.match(github_id_regex, github_id):
+        if github_id and not re.match(github_id_regex, github_id):
             self.add_error('github', 'The Github ID you have provided is not valid. Please check the format specified in the field.')
         else:
-            cleaned_data['github'] = github_id
+            cleaned_data['github'] = github_id if github_id else None
 
 
         google_scholar_id_regex = r'^[a-zA-Z0-9]{1,100}$'
@@ -158,10 +156,10 @@ class UserProfileForm(forms.ModelForm):
                     google_scholar_id = params['user']
                 else:
                     google_scholar_id = google_scholar_id.split('&')[0]
-        if not re.match(google_scholar_id_regex, google_scholar_id):
+        if google_scholar_id and not re.match(google_scholar_id_regex, google_scholar_id):
             self.add_error('google_scholar', 'The Google Scholar URL you have provided is not valid. Please check the format specified in the field.')
         else:
-            cleaned_data['google_scholar'] = google_scholar_id
+            cleaned_data['google_scholar'] = google_scholar_id if google_scholar_id else None
 
 
         researchgate_id_regex = r'^[a-zA-Z0-9_-]{1,100}$'
@@ -172,10 +170,10 @@ class UserProfileForm(forms.ModelForm):
                 researchgate_id = path.strip('/').split('/')[1]
             except:
                 researchgate_id = ''
-        if not re.match(researchgate_id_regex, researchgate_id):
+        if researchgate_id and not re.match(researchgate_id_regex, researchgate_id):
             self.add_error('researchgate', 'The ResearchGate ID you have provided is not valid. Please check the format specified in the field.')
         else:
-            cleaned_data['researchgate'] = researchgate_id
+            cleaned_data['researchgate'] = researchgate_id if researchgate_id else None
 
 
     def save(self, user=None):
