@@ -1,9 +1,22 @@
 from django import template
-from django.template.loader_tags import IncludeNode, construct_relative_path
+from django.template.loader_tags import BlockNode, IncludeNode, construct_relative_path
 
 register = template.Library()
 
 BLOCK_CONTEXT_KEY = 'block_context'
+
+
+def get_blocks(nodelist):
+    for nl in nodelist:
+        if isinstance(nl, BlockNode):
+            yield nl
+            continue
+
+        for attr in nl.child_nodelists:
+            nodelist = getattr(nl, attr, None)
+            if nodelist:
+                yield from get_blocks(nodelist)
+
 
 @register.tag('blockinclude')
 def blockinclude(parser, token):
@@ -42,17 +55,36 @@ def blockinclude(parser, token):
 
     nodelist = parser.parse(('endblockinclude',))
     parser.delete_first_token()
-    
+
+    blocks_renaming = {}
+
+    for nl in get_blocks(nodelist):
+        if nl.name in parser.__loaded_blocks:
+            parser.__loaded_blocks.remove(nl.name)
+
+        idx = 1
+        name = nl.name + '_' + str(idx)
+        while name in parser.__loaded_blocks:
+            idx += 1
+            name = nl.name + '_' + str(idx)
+
+        blocks_renaming[nl.name] = name
+        nl.name = name
+
+        parser.__loaded_blocks.append(nl.name)
+
     return BlockIncludeNode(
         nodelist, filter_compile,
         extra_context=namemap,
-        isolated_context=isolated_context
+        isolated_context=isolated_context,
+        blocks_renaming=blocks_renaming
     )
- 
+
 class BlockIncludeNode(IncludeNode):
 
     def __init__(self, nodelist, *args, **kwargs):
         self.nodelist = nodelist
+        self.blocks_renaming = kwargs.pop('blocks_renaming', {})
         super().__init__(*args, **kwargs)
 
     def __repr__(self):
@@ -78,6 +110,13 @@ class BlockIncludeNode(IncludeNode):
                 cache[template_name] = template
         elif hasattr(template, 'template'):
             template = template.template
+
+        for nl in get_blocks(template.nodelist):
+            if not isinstance(nl, BlockNode):
+                continue
+            if nl.name in self.blocks_renaming:
+                nl.name = self.blocks_renaming[nl.name]
+
         values = {
             name: var.resolve(context)
             for name, var in self.extra_context.items()
@@ -86,5 +125,15 @@ class BlockIncludeNode(IncludeNode):
             context = context.new(values)
         else:
             context.update(values)
+
         with context.render_context.push_state(template, isolated_context=False):
-            return template._render(context)
+            rendering = template._render(context)
+
+        rev_blocks_renaming = {v: k for k, v in self.blocks_renaming.items()}
+        for nl in get_blocks(template.nodelist):
+            if not isinstance(nl, BlockNode):
+                continue
+            if nl.name in rev_blocks_renaming:
+                nl.name = rev_blocks_renaming[nl.name]
+
+        return rendering
