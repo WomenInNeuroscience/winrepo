@@ -28,6 +28,9 @@ app_name = 'profiles'
 faq_updated_at = datetime.fromtimestamp(
     os.path.getmtime('profiles/templates/profiles/faq.html')
 )
+about_updated_at = datetime.fromtimestamp(
+    os.path.getmtime('profiles/templates/profiles/about.html')
+)
 
 urlpatterns = [
     path('', views.Home.as_view(), name='home'),
@@ -45,7 +48,10 @@ urlpatterns = [
         extra_context={'updated_at': faq_updated_at}
     ), name='faq'),
     path('tips/', TemplateView.as_view(template_name='profiles/tips.html'), name='tips'),
-    path('about/', TemplateView.as_view(template_name='profiles/about.html'), name='about'),
+    path('about/', TemplateView.as_view(
+        template_name='profiles/about.html',
+        extra_context={'updated_at': about_updated_at}
+    ), name='about'),
 
     path('profiles-autocomplete/', views.ProfilesAutocomplete.as_view(), name='profiles_autocomplete'),
     path('countries-autocomplete/', views.CountriesAutocomplete.as_view(), name='countries_autocomplete'),
