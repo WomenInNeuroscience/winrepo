@@ -1,3 +1,5 @@
+import os
+from datetime import datetime
 from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic import TemplateView
@@ -23,6 +25,9 @@ sitemaps = {
 }
 
 app_name = 'profiles'
+faq_updated_at = datetime.fromtimestamp(
+    os.path.getmtime('profiles/templates/profiles/faq.html')
+)
 
 urlpatterns = [
     path('', views.Home.as_view(), name='home'),
@@ -35,7 +40,10 @@ urlpatterns = [
     path('repo/<str:user__username>/recommend/', views.CreateRecommendation.as_view(), name='recommend_profile_username'),
     path('repo/<str:user__username>/claim/', views.ProfileClaim.as_view(), name='claim_profile_username'),
 
-    path('faq/', TemplateView.as_view(template_name='profiles/faq.html'), name='faq'),
+    path('faq/', TemplateView.as_view(
+        template_name='profiles/faq.html',
+        extra_context={'updated_at': faq_updated_at}
+    ), name='faq'),
     path('tips/', TemplateView.as_view(template_name='profiles/tips.html'), name='tips'),
     path('about/', TemplateView.as_view(template_name='profiles/about.html'), name='about'),
 

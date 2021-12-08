@@ -1,0 +1,8 @@
+<div class="card">
+	<div class="card-header link-secondary h6 p-4" id="heading-{{ question_id }}" data-toggle="collapse" data-target="#{{ question_id }}" aria-expanded="true" aria-controls="{{ question_id }}" >
+		{% block question %}{% endblock %}
+	</div>
+	<div id="{{ question_id }}" class="collapse card-body p-4" aria-labelledby="heading-{{ question_id }}" data-parent="#faq">
+		{% block answer %}{% endblock %}
+	</div>
+</div>

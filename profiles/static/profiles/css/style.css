@@ -123,3 +123,7 @@ li.quote .quote-date {
 .select2-container {
   width: 100%!important;
 }
+
+#faq .card-header {
+  cursor: pointer;
+}

@@ -1,11 +1,11 @@
 
 {% load captureas %}
 
-{% captureas profile_buttons %}{% block profile_buttons %}{% endblock %}{% endcaptureas %}
+{% captureas profile_buttons_cap %}{% block profile_buttons %}{% endblock %}{% endcaptureas %}
 
 <div class="container-fluid">
 	<div class="row no-gutters">
-		{% if profile_buttons %}
+		{% if profile_buttons_cap %}
 		<div class="col-xs-6 col-sm-8 col-md-9 text-muted details-grey">
 		{% else %}
 		<div class="col-xs-12 text-muted details-grey">
@@ -22,7 +22,7 @@
 			{% endif %}
 
 			<div class="row no-gutters mt-3 mb-3">
-				{% if not profile_buttons %}
+				{% if not profile_buttons_cap %}
 				<div class="col-xs-12 col-sm-12 text-center mt-4">
 				{% else %}
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 offset-lg-2 col-xl-10 offset-xl-1 col-xxl-1 offset-xxl-4 text-center mt-4">
@@ -63,7 +63,7 @@
 			<div id="profile-id" class="d-none">{{ profile.id }}</div>
 		</div>
 		{% autoescape off %}
-			{{ profile_buttons }}
+			{{ profile_buttons_cap }}
 		{% endautoescape %}
 	</div>
 	<div class="row no-gutters">
@@ -106,7 +106,7 @@
 			</div>
 		</div>
 	</div>
-		
+
 	{% if profile.keywords %}
 	<div class="row no-gutters">
 		<div id="keywords">
@@ -125,7 +125,7 @@
 	<div id="recommendations">
 		<h5 class="text-primary font-weight-bold mt-5">
 			<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
-				Recommendations
+			Recommendations
 		</h5>
 		{% if profile.recommendations.all %}
 		<span class="text-primary float-right" style="margin-top:-34px;"><i class="fas fa-comment num-rec"></i> {{ profile.recommendations.count }}</span>
