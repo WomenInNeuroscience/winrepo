@@ -125,5 +125,15 @@ class BlockIncludeNode(IncludeNode):
             context = context.new(values)
         else:
             context.update(values)
+
         with context.render_context.push_state(template, isolated_context=False):
-            return template._render(context)
+            rendering = template._render(context)
+
+        rev_blocks_renaming = {v: k for k, v in self.blocks_renaming.items()}
+        for nl in get_blocks(template.nodelist):
+            if not isinstance(nl, BlockNode):
+                continue
+            if nl.name in rev_blocks_renaming:
+                nl.name = rev_blocks_renaming[nl.name]
+
+        return rendering
