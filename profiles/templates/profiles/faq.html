@@ -2,7 +2,7 @@
 {% load blockinclude %}
 
 {% block title %}
-	{{ block.super }} - Resources
+    {{ block.super }} - Resources
 {% endblock title %}
 
 {% block nav-resources-classes %}active{% endblock nav-resources-classes %}
@@ -10,98 +10,98 @@
 {% block content %}
 
 <div class="container-fluid">
-	<div class="row no-gutters">
-		<div class="col-12">
-			<h2 class="text-primary font-weight-bold mb-4">Frequently asked questions</h2>
+    <div class="row no-gutters">
+        <div class="col-12">
+            <h2 class="text-primary font-weight-bold mb-4">Frequently asked questions</h2>
 
-			<div id="faq">
-				{% blockinclude "fragments/faq_card.html" only with question_id="how_to_search" %}
-					{% block question %}
-						How do I search the repository?
-					{% endblock question %}
-					{% block answer %}
-						<p>Visit our <a href="{% url 'profiles:index' %}">Repository</a> and use
-						the search bar to narrow your search.
-						Keywords should be separated by white spaces and can mix words from different fields
-						(e.g. 'machine learning London' or 'neuron computational modeling'). You can filter
-						results to display only profiles from under-represented countries (list based on the
-						<a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups">World's Bank</a>
-						list of Low, Lower-Middle and Upper-Middle income economies as of August 2017).</p>
+            <div id="faq">
+                {% blockinclude "fragments/faq_card.html" only with question_id="how_to_search" %}
+                    {% block question %}
+                        How do I search the repository?
+                    {% endblock question %}
+                    {% block answer %}
+                        <p>Visit our <a href="{% url 'profiles:index' %}">Repository</a> and use
+                        the search bar to narrow your search.
+                        Keywords should be separated by white spaces and can mix words from different fields
+                        (e.g. 'machine learning London' or 'neuron computational modeling'). You can filter
+                        results to display only profiles from under-represented countries (list based on the
+                        <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups">World's Bank</a>
+                        list of Low, Lower-Middle and Upper-Middle income economies as of August 2017).</p>
 
-						<p>Look at the profile provided by the researcher and
-						Google them for other profiles (e.g. LinkedIn, institution, ResearchGate, …).
-						Read the recommendations if any, making sure they are sound (e.g. if Recommender A says 'great talk at OHBM 2017', check the OHBM 2017 program and maybe watch the video if available). Important note: the
-						researchers are sole responsible for their profiles and we cannot guarantee authenticity.</p>
+                        <p>Look at the profile provided by the researcher and
+                        Google them for other profiles (e.g. LinkedIn, institution, ResearchGate, …).
+                        Read the recommendations if any, making sure they are sound (e.g. if Recommender A says 'great talk at OHBM 2017', check the OHBM 2017 program and maybe watch the video if available). Important note: the
+                        researchers are sole responsible for their profiles and we cannot guarantee authenticity.</p>
 
-						<p>It is a vicious circle: researchers need to be known to get
-						invited as speakers but they need to be invited as speaker to get known. This cycle
-						can be broken by taking a chance and inviting someone less recognized. Don't forget that younger scientists
-						also have things to say and they might be more approachable/committed.</p>
-					{% endblock answer %}
-				{% endblockinclude %}
+                        <p>It is a vicious circle: researchers need to be known to get
+                        invited as speakers but they need to be invited as speaker to get known. This cycle
+                        can be broken by taking a chance and inviting someone less recognized. Don't forget that younger scientists
+                        also have things to say and they might be more approachable/committed.</p>
+                    {% endblock answer %}
+                {% endblockinclude %}
 
-				{% blockinclude "fragments/faq_card.html" with question_id="resources" %}
-					{% block question %}
-						What if I don't find a suitable candidate? Are there other resources?
-					{% endblock question %}
-					{% block answer %}
-						<p>If you cannot identify potential speakers for your event, check out these other great resources:</p>
-						<ul>
-							<li><a href="https://anneslist.net">Anne's list</a>, a list of women in systems cognitive neuroscience.</li>
-							<li><a href="http://womeninbrainstim.com/">Women in Brain Simulation</a></li>
-							<li><a href="http://www.academia-net.org/">AcademiaNet</a>, a database of women in all fields of science, nominated by partner agencies.</li>
-							<li><a href="https://500womenscientists.org/">500 women scientists</a>, a list of women in STEM.</li>
-							<li><a href="https://blackinai2020.vercel.app/">
-							BlackInAI</a>, Black researchers in AI, ML and related application areas (health, agriculture, politics, economics, law etc.)</li>
-							<li><a href="https://www.latinxinai.org/">LatinXAI</a>, Global Community of LatinX in AI Professionals</li>
-							<li><a href="https://sites.google.com/view/queer-in-ai">Queer in AI</a>, an initiative to raise awareness of queer issues in AI/ML</li>
-							<li><a href="https://www.blackinneuro.com/">BlackInNeuro</a>, an initiative to improve the diversity within neuroscience communities that celebrates and empowers black scholars and professionals in neuroscience-related fields.</li>
-							<li><a href="https://twitter.com/queerinneuro">Queer in Neuro</a>, a network for LGBTQIA+ scientists in Neuro.</li>
-						</ul>
-					{% endblock answer %}
-				{% endblockinclude %}
+                {% blockinclude "fragments/faq_card.html" with question_id="resources" %}
+                    {% block question %}
+                        What if I don't find a suitable candidate? Are there other resources?
+                    {% endblock question %}
+                    {% block answer %}
+                        <p>If you cannot identify potential speakers for your event, check out these other great resources:</p>
+                        <ul>
+                            <li><a href="https://anneslist.net">Anne's list</a>, a list of women in systems cognitive neuroscience.</li>
+                            <li><a href="http://womeninbrainstim.com/">Women in Brain Simulation</a></li>
+                            <li><a href="http://www.academia-net.org/">AcademiaNet</a>, a database of women in all fields of science, nominated by partner agencies.</li>
+                            <li><a href="https://500womenscientists.org/">500 women scientists</a>, a list of women in STEM.</li>
+                            <li><a href="https://blackinai2020.vercel.app/">
+                            BlackInAI</a>, Black researchers in AI, ML and related application areas (health, agriculture, politics, economics, law etc.)</li>
+                            <li><a href="https://www.latinxinai.org/">LatinXAI</a>, Global Community of LatinX in AI Professionals</li>
+                            <li><a href="https://sites.google.com/view/queer-in-ai">Queer in AI</a>, an initiative to raise awareness of queer issues in AI/ML</li>
+                            <li><a href="https://www.blackinneuro.com/">BlackInNeuro</a>, an initiative to improve the diversity within neuroscience communities that celebrates and empowers black scholars and professionals in neuroscience-related fields.</li>
+                            <li><a href="https://twitter.com/queerinneuro">Queer in Neuro</a>, a network for LGBTQIA+ scientists in Neuro.</li>
+                        </ul>
+                    {% endblock answer %}
+                {% endblockinclude %}
 
-				{% blockinclude "fragments/faq_card.html" with question_id="recommend" %}
-					{% block question %}
-						How do I make a recommendation?
-					{% endblock question %}
-					{% block answer %}
-						<p>Visit our <a href="{% url 'profiles:index' %}">Repository</a> and enter the researcher's name in the search bar or keywords related to your field. Click on 'View Profile' to view the detailed profile of a scientist you would like to recommend. You can then click the 'Recommend' button at the top right corner or click the 'write her one' link in the Recommendation section. Anyone can submit a recommendation, disregarding their gender. Recommendations must be positive. When recommending a researcher, please make sure to include all relevant information, e.g. whether you have seen this person talk at an event before, and where and when that was (as videos of the event might be available). Also include any potential conflicts of interest, disclosing any personal relationship with the scientist (e.g. colleague, close friend, student, ...). At the moment, it is NOT possible to edit a recommendation, but <a href="mailto:admin@winrepo.org">contact us</a> for related queries.</p>
-					{% endblock answer %}
-				{% endblockinclude %}
+                {% blockinclude "fragments/faq_card.html" with question_id="recommend" %}
+                    {% block question %}
+                        How do I make a recommendation?
+                    {% endblock question %}
+                    {% block answer %}
+                        <p>Visit our <a href="{% url 'profiles:index' %}">Repository</a> and enter the researcher's name in the search bar or keywords related to your field. Click on 'View Profile' to view the detailed profile of a scientist you would like to recommend. You can then click the 'Recommend' button at the top right corner or click the 'write her one' link in the Recommendation section. Anyone can submit a recommendation, disregarding their gender. Recommendations must be positive. When recommending a researcher, please make sure to include all relevant information, e.g. whether you have seen this person talk at an event before, and where and when that was (as videos of the event might be available). Also include any potential conflicts of interest, disclosing any personal relationship with the scientist (e.g. colleague, close friend, student, ...). At the moment, it is NOT possible to edit a recommendation, but <a href="mailto:admin@winrepo.org">contact us</a> for related queries.</p>
+                    {% endblock answer %}
+                {% endblockinclude %}
 
-				{% blockinclude "fragments/faq_card.html" with question_id="enter" %}
-					{% block question %}
-						How can I add my profile to the repository?
-					{% endblock question %}
-					{% block answer %}
-						<p>To enter your name on the repository, follow the instructions at <a href="{% url 'profiles:user_profile_claim' %}">Create profile</a> page. Make sure you agree with our data storing terms (see <a href="#gdpr" data-toggle="collapse" data-target="#gdpr" aria-expanded="true" aria-controls="gdpr">here</a>).</p>
-					{% endblock answer %}
-				{% endblockinclude %}
+                {% blockinclude "fragments/faq_card.html" with question_id="enter" %}
+                    {% block question %}
+                        How can I add my profile to the repository?
+                    {% endblock question %}
+                    {% block answer %}
+                        <p>To enter your name on the repository, follow the instructions at <a href="{% url 'profiles:user_profile_claim' %}">Create profile</a> page. Make sure you agree with our data storing terms (see <a href="#gdpr" data-toggle="collapse" data-target="#gdpr" aria-expanded="true" aria-controls="gdpr">here</a>).</p>
+                    {% endblock answer %}
+                {% endblockinclude %}
 
-				{% blockinclude "fragments/faq_card.html" with question_id="edit" %}
-					{% block question %}
-						How can I edit my information?
-					{% endblock question %}
-					{% block answer %}
-						<p>At the moment, editing your information can be done by contacting <a href="mailto:admin@winrepo.org">Women in Neuroscience Repository</a>, mentioning the exact information to modify.</p>
-					{% endblock answer %}
-				{% endblockinclude %}
+                {% blockinclude "fragments/faq_card.html" with question_id="edit" %}
+                    {% block question %}
+                        How can I edit my information?
+                    {% endblock question %}
+                    {% block answer %}
+                        <p>At the moment, editing your information can be done by contacting <a href="mailto:admin@winrepo.org">Women in Neuroscience Repository</a>, mentioning the exact information to modify.</p>
+                    {% endblock answer %}
+                {% endblockinclude %}
 
-				{% blockinclude "fragments/faq_card.html" with question_id="gdpr" %}
-					{% block question %}
-						What do you do with my information?
-					{% endblock question %}
-					{% block answer %}
-						<p>We store the data provided (by you) only for display on this website, with the intent to increase the visibility of women in neuroscience. We do not distribute it to third-parties within or outside the EU under any circumstances. You have the right to access your data, as well as for the data to be erased from our database at any time. To do so, simply email us at <a href="mailto:admin@winrepo.org">Women in Neuroscience Repository</a>. To know more about your rights as users of this website, please refer to the <a href="https://ec.europa.eu/info/law/law-topic/data-protection_en">European Commission</a> data protection policies.</p>
-					{% endblock answer %}
-				{% endblockinclude %}
-			</div>
+                {% blockinclude "fragments/faq_card.html" with question_id="gdpr" %}
+                    {% block question %}
+                        What do you do with my information?
+                    {% endblock question %}
+                    {% block answer %}
+                        <p>We store the data provided (by you) only for display on this website, with the intent to increase the visibility of women in neuroscience. We do not distribute it to third-parties within or outside the EU under any circumstances. You have the right to access your data, as well as for the data to be erased from our database at any time. To do so, simply email us at <a href="mailto:admin@winrepo.org">Women in Neuroscience Repository</a>. To know more about your rights as users of this website, please refer to the <a href="https://ec.europa.eu/info/law/law-topic/data-protection_en">European Commission</a> data protection policies.</p>
+                    {% endblock answer %}
+                {% endblockinclude %}
+            </div>
 
-			<p class="mt-5 text-center text-muted">
-				Last updated at: {{ updated_at | date:"F Y" }}
-			</p>
-		</div>
-	</div>
+            <p class="mt-5 text-center text-muted">
+                Last update: {{ updated_at | date:"F Y" }}
+            </p>
+        </div>
+    </div>
 </div>
 {% endblock content %}
