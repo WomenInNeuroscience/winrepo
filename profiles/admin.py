@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Profile, Recommendation, Country
+from .models import Profile, Recommendation, Country, Publication
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -19,6 +19,12 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ('name', 'institution', 'email', 'is_public')
 
 
+class PublicationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'authors', 'journal_issue', 'date', 'doi')
+    search_fields = ('title', 'authors', 'journal_issue', 'date', 'doi')
+
+
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Recommendation, RecommendationAdmin)
 admin.site.register(Country, CountryAdmin)
+admin.site.register(Publication, PublicationAdmin)

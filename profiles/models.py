@@ -384,3 +384,22 @@ class Recommendation(models.Model):
 
     def __str__(self):
         return self.comment[:50]
+
+
+class Publication(models.Model):
+
+    title = models.CharField(max_length=200, blank=False)
+    authors = models.TextField(blank=False, help_text='First Middle Last → Last, F. M.<br>One author per line.')
+    description = models.TextField(blank=False)
+    date = models.DateField(blank=False, help_text='')
+
+    url = models.URLField(verbose_name='URL', blank=True)
+
+    journal_issue = models.CharField(max_length=200, blank=True)
+    doi = models.CharField(max_length=200, verbose_name='DOI', blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-date']
