@@ -25,6 +25,9 @@ sitemaps = {
 }
 
 app_name = 'profiles'
+tips_updated_at = datetime.fromtimestamp(
+    os.path.getmtime('profiles/templates/profiles/tips.html')
+)
 faq_updated_at = datetime.fromtimestamp(
     os.path.getmtime('profiles/templates/profiles/faq.html')
 )
@@ -47,7 +50,10 @@ urlpatterns = [
         template_name='profiles/faq.html',
         extra_context={'updated_at': faq_updated_at}
     ), name='faq'),
-    path('tips/', TemplateView.as_view(template_name='profiles/tips.html'), name='tips'),
+    path('tips/', TemplateView.as_view(
+        template_name='profiles/tips.html',
+        extra_context={'updated_at': tips_updated_at}
+    ), name='tips'),
     path('about/', TemplateView.as_view(
         template_name='profiles/about.html',
         extra_context={'updated_at': about_updated_at}
