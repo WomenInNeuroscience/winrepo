@@ -46,6 +46,7 @@ urlpatterns = [
     path('repo/<str:user__username>/recommend/', views.CreateRecommendation.as_view(), name='recommend_profile_username'),
     path('repo/<str:user__username>/claim/', views.ProfileClaim.as_view(), name='claim_profile_username'),
 
+    path('publications/', views.PublicationsList.as_view(), name='publications'),
     path('faq/', TemplateView.as_view(
         template_name='profiles/faq.html',
         extra_context={'updated_at': faq_updated_at}

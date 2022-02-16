@@ -3,7 +3,7 @@ from django.core import management
 from django.core.management.base import BaseCommand, CommandError
 
 import winrepo.settings as settings
-from profiles.models import Country, User, Profile, Recommendation
+from profiles.models import Country, User, Profile, Recommendation, Publication
 from profiles.models import (
     STRUCTURE_CHOICES,
     MODALITIES_CHOICES,
@@ -201,6 +201,17 @@ class Command(BaseCommand):
             keywords='',
         )
         profile.save()
+
+        pub = Publication(
+            title='Characteristics of Faculty Position Advertisements Associated with Applicant Diversity',
+            authors='Schmaling, K. B.\nBlume, A. W.\nBaker, D. L.',
+            description='This pilot study examined the associations between faculty position advertisement characteristics and the gender and ethnicity of applicants. Eighteen advertisements were coded for required and preferred qualifications, types of materials to submit, and type of application closure. More women applicants were associated with positions that required more types of application materials, and that had flexible closing dates. The proportion of ethnic minority applicants was not significantly associated with advertisement parameters, but medium-sized effects were discussed in terms of their implications. These preliminary data suggest that attending to the details of constructing faculty position advertisements may enhance applicant diversity.',
+            published_at='2017-01-01',
+            url='http://digitalcommons.www.na-businesspress.com/JHETP/JHETP17-8/SchmalingKB_17_8.pdf',
+            journal_issue='Journal of Higher Education Theory & Practice, 17(8), 10–17',
+            doi=None,
+        )
+        pub.save()
 
 
         management.call_command(

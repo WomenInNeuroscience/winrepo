@@ -1,6 +1,6 @@
 from django.contrib import admin
+from django.apps import apps
 
-# Register your models here.
 from .models import Profile, Recommendation, Country, Publication
 
 
@@ -20,9 +20,11 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class PublicationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'authors', 'journal_issue', 'date', 'doi')
-    search_fields = ('title', 'authors', 'journal_issue', 'date', 'doi')
+    list_display = ('title', 'authors', 'journal_issue', 'published_at', 'doi')
+    search_fields = ('title', 'authors', 'journal_issue', 'published_at', 'doi')
 
+
+admin.site.site_header = 'WiNRepo Admin'
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Recommendation, RecommendationAdmin)

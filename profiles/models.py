@@ -107,6 +107,25 @@ DOMAINS_CHOICES = (
     ('ET', 'Ethics')
 )
 
+POSITION_CHOICES = (
+    ('PhD student', 'PhD student'),
+    ('Medical Doctor', 'Medical Doctor'),
+    ('Post-doctoral researcher', 'Post-doctoral researcher'),
+    ('Senior researcher/ scientist', 'Senior researcher/ scientist'),
+    ('Lecturer', 'Lecturer'),
+    ('Assistant Professor', 'Assistant Professor'),
+    ('Associate Professor', 'Associate Professor'),
+    ('Professor', 'Professor'),
+    ('Group leader/ Director/ Head of Department', 'Group leader/ Director/ Head of Department'),
+)
+
+PUBLICATION_TYPE = (
+    ('Peer-reviewed Paper', 'Peer-reviewed Paper'),
+    ('Conference Paper', 'Conference Paper'),
+    ('Preprint', 'Preprint'),
+    ('Book', 'Book'),
+    ('Blog Post', 'Blog Post')
+)
 
 class Country(models.Model):
     code = models.CharField(max_length=3, blank=False, unique=True)
@@ -338,27 +357,6 @@ class RecommendationManager(models.Manager):
 
 
 class Recommendation(models.Model):
-    PHD = 'PhD student'
-    MDR = 'Medical Doctor'
-    PDR = 'Post-doctoral researcher'
-    SRE = 'Senior researcher/ scientist'
-    LEC = 'Lecturer'
-    ATP = 'Assistant Professor'
-    ACP = 'Associate Professor'
-    PRF = 'Professor'
-    DIR = 'Group leader/ Director/ Head of Department'
-
-    POSITION_CHOICES = (
-        (PHD, PHD),
-        (MDR, MDR),
-        (PDR, PDR),
-        (SRE, SRE),
-        (LEC, LEC),
-        (ATP, ATP),
-        (ACP, ACP),
-        (PRF, PRF),
-        (DIR, DIR),
-    )
 
     profile = models.ForeignKey(Profile,
                                 on_delete=models.CASCADE,
@@ -388,18 +386,28 @@ class Recommendation(models.Model):
 
 class Publication(models.Model):
 
+    type = models.CharField(max_length=30, choices=PUBLICATION_TYPE, blank=False)
     title = models.CharField(max_length=200, blank=False)
     authors = models.TextField(blank=False, help_text='First Middle Last → Last, F. M.<br>One author per line.')
     description = models.TextField(blank=False)
-    date = models.DateField(blank=False, help_text='')
+    published_at = models.DateField(blank=False, help_text='')
 
-    url = models.URLField(verbose_name='URL', blank=True)
-
-    journal_issue = models.CharField(max_length=200, blank=True)
-    doi = models.CharField(max_length=200, verbose_name='DOI', blank=True)
+    url = models.URLField(verbose_name='URL', null=True, blank=True)
+    journal_issue = models.CharField(max_length=200, null=True, blank=True)
+    doi = models.CharField(max_length=200, verbose_name='DOI', null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL,
+        related_name='publications',
+        null=True
+    )
+
+    @property
+    def formatted_authors(self):
+        return [a.strip() for a in self.authors.split('\n')]
+
     class Meta:
-        ordering = ['-date']
+        ordering = ['-published_at']

@@ -36,7 +36,7 @@ from .emails import (
 from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
                     UserDeleteForm, UserForm, UserProfileDeleteForm,
                     UserProfileForm, UserPasswordChangeForm, AuthenticationForm)
-from .models import Country, Profile, Recommendation, User
+from .models import Country, Profile, Recommendation, User, Publication
 from .serializers import CountrySerializer, PositionsCountSerializer
 from .tokens import UserCreateToken, UserEmailChangeToken, UserPasswordResetToken
 
@@ -611,6 +611,18 @@ class ProfileClaim(SuccessMessageMixin, FormView, LoginRequiredMixin):
         context = {"profile": self.profile}
         context.update(kwargs)
         return super().get_context_data(**context)
+
+
+class PublicationsList(ListView):
+    template_name = 'publications/list.html'
+    context_object_name = 'publications'
+    model = Publication
+    paginate_by = 20
+
+    def get_queryset(self):
+        publications = Publication.objects \
+            .order_by('-published_at')
+        return publications
 
 
 class ProfilesAutocomplete(Select2QuerySetView):

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load param_replace %}
+
+{% block title %}
+	{{ block.super }} - Publications
+{% endblock title %}
+
+{% block nav-resources-classes %}{{ block.super }} active{% endblock nav-resources-classes %}
+
+{% block content %}
+	<h2 class="text-primary font-weight-bold mb-4">Publications</h2>
+
+	<p>List of references regarding diversity, biases, and inclusivity studies and opinion pieces, among others.</p>
+
+	{% if publications %}
+		<div class="infinite-container">
+			{% for publication in publications %}
+				<div class="table-entry infinite-item">
+					<div class="row my-4 no-gutters">
+						<div class="col-xs-12">
+							<h5 class="text-primary font-weight-bold">
+								{{ publication.title }}
+							</h5>
+						</div>
+						<div class="col-xs-12 details-grey text-muted">
+							<p class="m-1"><i class="fas fa-user"></i> <span>
+								{% for author in publication.formatted_authors %}
+									{{ author }}
+									{% if not forloop.last %}; {% endif %}
+								{% endfor %}</span></p>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<p>No matching entries.</p>
+	{% endif %}
+	<a href="#" id="back-to-top" title="Back to top" class="btn"><i class="fas fa-chevron-circle-up"></i></a>
+{% endblock content %}
