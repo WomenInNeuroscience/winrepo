@@ -119,13 +119,37 @@ POSITION_CHOICES = (
     ('Group leader/ Director/ Head of Department', 'Group leader/ Director/ Head of Department'),
 )
 
+
 PUBLICATION_TYPE = (
-    ('Peer-reviewed Paper', 'Peer-reviewed Paper'),
-    ('Conference Paper', 'Conference Paper'),
-    ('Preprint', 'Preprint'),
-    ('Book', 'Book'),
-    ('Blog Post', 'Blog Post')
+    ('peer-reviewed-paper', 'Peer-reviewed Paper'),
+    ('conference-paper', 'Conference Paper'),
+    ('preprint', 'Preprint'),
+    ('book', 'Book'),
+    ('blog-post', 'Blog Post')
 )
+
+
+class EnumField(models.CharField):
+
+    # TODO update all enum fields to use this
+
+    def __init__(self, enum=None, *args, **kwargs):
+        self.enum = enum
+        if enum:
+            kwargs['choices'] = enum.choices
+        super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if value is not None:
+            return self.enum(value)
+
+    def from_db_value(self, value, expression, connection):
+        return self.to_python(value)
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        return self.to_python(value)
+
 
 class Country(models.Model):
     code = models.CharField(max_length=3, blank=False, unique=True)
@@ -386,7 +410,18 @@ class Recommendation(models.Model):
 
 class Publication(models.Model):
 
-    type = models.CharField(max_length=30, choices=PUBLICATION_TYPE, blank=False)
+    class Type(models.TextChoices):
+        PEER_REVIEWED_PAPER = 'PR', 'Peer-reviewed Paper'
+        CONFERENCE_PAPER = 'CP', 'Conference Paper'
+        PREPRINT = 'PP', 'Preprint'
+        BOOK = 'BO', 'Book'
+        BLOG_POST = 'BP', 'Blog Post'
+
+    type = EnumField(
+        enum=Type,
+        max_length=2, 
+        blank=False
+    )
     title = models.CharField(max_length=200, blank=False)
     authors = models.TextField(blank=False, help_text='First Middle Last → Last, F. M.<br>One author per line.')
     description = models.TextField(blank=False)

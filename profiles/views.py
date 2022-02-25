@@ -617,12 +617,45 @@ class PublicationsList(ListView):
     template_name = 'publications/list.html'
     context_object_name = 'publications'
     model = Publication
-    paginate_by = 20
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        s = self.request.GET.get('s', '')
+        t = self.request.GET.get('t', '')
+        context.update({
+            "s": s,
+            "t": t,
+            "types": Publication.Type.choices,
+        })
+        return context
 
     def get_queryset(self):
-        publications = Publication.objects \
+        q_st = ~Q(pk=None)  # always true
+
+        t = self.request.GET.get('t')
+        if t:
+            q_st = q_st & Q(type=t)
+
+        s = self.request.GET.get('s')
+        if s:
+            # split search terms and filter empty words (if successive spaces)
+            search_terms = list(filter(None, s.split(' ')))
+
+            for st in search_terms:
+                st_regex = re.compile(f'.*{st}.*', re.IGNORECASE)
+
+                st_conditions = [
+                    Q(title__icontains=st),
+                    Q(authors__icontains=st),
+                    Q(description__icontains=st),
+                 ]
+
+                q_st = q_st & reduce(or_, st_conditions)
+
+        return Publication.objects \
+            .filter(q_st) \
             .order_by('-published_at')
-        return publications
 
 
 class ProfilesAutocomplete(Select2QuerySetView):

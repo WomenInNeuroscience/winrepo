@@ -112,7 +112,7 @@ class Command(BaseCommand):
             profiles += [profile]
             profile.save()
 
-        recommendation_words = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' \
+        random_words = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' \
         'Curabitur maximus, elit in ornare convallis, eros mi pharetra erat, ' \
         'sed dictum dolor nulla viverra odio. Vivamus pulvinar blandit massa ' \
         'ac facilisis. Ut et odio fringilla, dictum tellus non, aliquam est.' \
@@ -133,8 +133,8 @@ class Command(BaseCommand):
             position = random.choice(POSITION_CHOICES)[0]
 
             recommendation = ' '.join(
-                recommendation_words[0:2] + \
-                list(random.sample(recommendation_words[2:], 20))
+                random_words[0:2] + \
+                list(random.sample(random_words[2:], 20))
             )
 
             Recommendation(
@@ -203,6 +203,7 @@ class Command(BaseCommand):
         profile.save()
 
         pub = Publication(
+            type='PR',
             title='Characteristics of Faculty Position Advertisements Associated with Applicant Diversity',
             authors='Schmaling, K. B.\nBlume, A. W.\nBaker, D. L.',
             description='This pilot study examined the associations between faculty position advertisement characteristics and the gender and ethnicity of applicants. Eighteen advertisements were coded for required and preferred qualifications, types of materials to submit, and type of application closure. More women applicants were associated with positions that required more types of application materials, and that had flexible closing dates. The proportion of ethnic minority applicants was not significantly associated with advertisement parameters, but medium-sized effects were discussed in terms of their implications. These preliminary data suggest that attending to the details of constructing faculty position advertisements may enhance applicant diversity.',
@@ -210,8 +211,81 @@ class Command(BaseCommand):
             url='http://digitalcommons.www.na-businesspress.com/JHETP/JHETP17-8/SchmalingKB_17_8.pdf',
             journal_issue='Journal of Higher Education Theory & Practice, 17(8), 10–17',
             doi=None,
+            created_by=user,
         )
         pub.save()
+
+        pub = Publication(
+            type='PR',
+            title='Can We Reduce Bias in the Recruiting Process and Diversify Pools of Candidates by Using Different Types of Words in Job Descriptions?',
+            authors='Collier, D.\nZhang, C.',
+            description='Intuitively, we all know diversity matters in recruiting and leadership development. McKinsey research points out that companies in the top quartile for racial and ethnic diversity are 35% more likely to have financial returns above their respective national industry medians. Strategic diversity recruitment is a way to effectively send talent through the recruitment pipeline, but it is crucial to mitigate bias. A candidate’s first interaction with employers is often through a job post that includes the job description and responsibilities. Without examining potential unconscious biases, job postings can include language that might deter a certain pool of candidates from applying, thus reducing the diversity of candidates. Through our research, we identified the beneficial use of gender fair language and flexible and inclusive wording in job advertisement and postings.',
+            published_at='2016-01-01',
+            url='https://hdl.handle.net/1813/74363',
+            journal_issue='Executive Summaries on Current HR Topics (ILRHR 6640)',
+            doi=None,
+            created_by=user,
+        )
+        pub.save()
+
+        pub = Publication(
+            type='PR',
+            title='Diversifying collaboration networks to increase equity in psychology',
+            authors='Hsiung Wojcik, E.',
+            description='Insular collaboration networks contribute to inequities in academic psychology by concentrating resources and reputation among members of majority groups. By actively diversifying their networks, researchers can improve their science and reduce inequity.',
+            published_at='2022-01-01',
+            url='https://www.nature.com/articles/s44159-021-00014-y',
+            journal_issue='Nature Reviews Psychology volume 1, pages 9–10',
+            doi='10.1038/s44159-021-00014-y',
+            created_by=user,
+        )
+        pub.save()
+
+        for (k, _) in Publication.Type.choices:
+
+            for _ in range(10):
+
+                title = ' '.join(
+                    random.sample(random_words[2:], 6)
+                ).capitalize()
+
+                description = ' '.join(
+                    random.sample(random_words[2:], 20)
+                )
+
+                journal_issue = None
+                if k == Publication.Type.PEER_REVIEWED_PAPER:
+                    journal_issue = 'Journal of ' + ' '.join(
+                        random.sample(random_words[2:], 3)
+                    )
+
+                authors = []
+                for i in range(4):
+                    name = random.choice(names)[0]
+                    surname = random.choice(surnames)
+                    authors += [f'{surname}, {name}']
+                authors = '\n'.join(authors)
+
+                year = str(random.randint(1950, 2020))
+                published_at = year + '-01-01'
+
+                site = 'https://site.com/articles/' + ((' '.join(
+                    random.sample(random_words[2:], 2)
+                )).lower())
+                doi = f'10.{year}/' + site
+                
+                pub = Publication(
+                    type=k,
+                    title=title,
+                    authors=authors,
+                    description=description,
+                    published_at=published_at,
+                    url=site,
+                    journal_issue=journal_issue,
+                    doi=doi,
+                    created_by=user,
+                )
+                pub.save()
 
 
         management.call_command(
