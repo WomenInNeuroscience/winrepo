@@ -161,7 +161,7 @@ class Command(BaseCommand):
 
         user = User.objects.create_user(
             username='user',
-            name='User Resu',
+            name='Shaquille Oatmeal',
             email='user@winrepo.org',
             password='user'
         )
@@ -169,7 +169,7 @@ class Command(BaseCommand):
 
         user = User.objects.create_user(
             username='user-profile',
-            name='User Resu',
+            name='Lorie C. Salas',
             email='user-profile@winrepo.org',
             password='user'
         )
