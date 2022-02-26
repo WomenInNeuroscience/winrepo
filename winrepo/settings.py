@@ -14,7 +14,6 @@ ALLOWED_HOSTS = \
 
 
 INSTALLED_APPS = [
-    'profiles',
     'multiselectfield',
     'crispy_forms',
     'captcha',
@@ -39,6 +38,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.twitter',
 
+    'profiles',
     'django.contrib.admin',
 ]
 
