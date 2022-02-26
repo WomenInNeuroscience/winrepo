@@ -1,8 +1,9 @@
 from http import HTTPStatus
+
+from django.contrib.messages import constants, get_messages
+from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
-from django.core import mail
-from django.contrib.messages import get_messages, constants
 
 from profiles.models import Profile, Recommendation, User
 
