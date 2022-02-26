@@ -269,10 +269,14 @@ class Command(BaseCommand):
                 year = str(random.randint(1950, 2020))
                 published_at = year + '-01-01'
 
-                site = 'https://site.com/articles/' + ((' '.join(
+                uid = ('-'.join(
                     random.sample(random_words[2:], 2)
-                )).lower())
-                doi = f'10.{year}/' + site
+                )).lower()
+                doi = f'10.{year}/' + uid
+
+                site = None
+                if k != Publication.Type.PEER_REVIEWED_PAPER:
+                    site = 'https://site.com/articles/' + uid
                 
                 pub = Publication(
                     type=k,

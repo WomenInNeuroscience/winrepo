@@ -53,8 +53,14 @@
 								{% elif publication.type == 'BP' %}
 								<i class="fas fa-globe"></i>
 								{% endif %}
+								{% if publication.url %}
+								<a href="{{ publication.url }}">{{ publication.title }}</a>
+								{% elif publication.doi %}
+								<a href="https://doi.org/{{ publication.doi }}">{{ publication.title }}</a>
+								{% else %}
 								{{ publication.title }}
-                                <span class="badge badge-secondary">{{ publication.type.label }}</span>
+								{% endif %}
+								<span class="badge badge-secondary">{{ publication.type.label }}</span>
 							</h5>
 						</div>
 						<div class="col-12 details-grey text-muted">
