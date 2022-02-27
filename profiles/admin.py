@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.apps import apps
 
 from .models import User, Profile, Recommendation, Country, Publication
+from .forms import PublicationAdminForm
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -28,8 +29,17 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class PublicationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'authors', 'journal_issue', 'published_at', 'doi')
-    search_fields = ('title', 'authors', 'journal_issue', 'published_at', 'doi')
+    list_display = ('type', 'title', 'authors', 'published_at', 'doi', '_created_by')
+    search_fields = ('type', 'title', 'authors', 'published_at', 'doi', '_created_by')
+    form = PublicationAdminForm
+
+    def _created_by(self, obj):
+        return obj.created_by.name
+
+    def get_changeform_initial_data(self, request):
+        initial = super().get_changeform_initial_data(request)
+        initial['created_by'] = request.user
+        return initial
 
 
 admin.site.site_header = 'WiNRepo Admin'

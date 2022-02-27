@@ -163,7 +163,7 @@ class Command(BaseCommand):
             username='user',
             name='Shaquille Oatmeal',
             email='user@winrepo.org',
-            password='user'
+            password='user',
         )
         user.save()
 
@@ -171,7 +171,9 @@ class Command(BaseCommand):
             username='user-profile',
             name='Lorie C. Salas',
             email='user-profile@winrepo.org',
-            password='user'
+            password='user',
+            is_staff=True,
+            is_superuser=True,
         )
         user.save()
 
