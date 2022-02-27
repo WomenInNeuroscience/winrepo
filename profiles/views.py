@@ -11,7 +11,6 @@ from django.contrib.auth import login, logout, update_session_auth_hash, views a
 from django.contrib.auth.forms import (PasswordResetForm, SetPasswordForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.exceptions import ValidationError
 from django.db.models import Count, Q
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404, redirect

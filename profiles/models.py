@@ -363,7 +363,6 @@ class Profile(models.Model):
         return dict(MONTHS_CHOICES).get(self.grad_month)
 
 
-
 class RecommendationQuerySet(QuerySet):
     pass
 
