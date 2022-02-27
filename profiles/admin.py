@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.apps import apps
 
-from .models import Profile, Recommendation, Country, Publication
+from .models import User, Profile, Recommendation, Country, Publication
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -12,6 +12,14 @@ class RecommendationAdmin(admin.ModelAdmin):
     list_display = ('profile', 'reviewer_name', 'reviewer_email', 'comment')
     search_fields = ('profile__name', 'reviewer_name',
                      'reviewer_email', 'comment')
+
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'name', 'email', '_has_profile')
+    search_fields = ('username', 'name', 'email')
+
+    def _has_profile(self, obj):
+        return obj.profile
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -30,6 +38,7 @@ for model in apps.get_models():
     if model.__name__ and admin.site.is_registered(model):
         admin.site.unregister(model)
 
+admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Recommendation, RecommendationAdmin)
 admin.site.register(Country, CountryAdmin)
