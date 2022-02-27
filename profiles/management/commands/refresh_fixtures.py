@@ -203,7 +203,7 @@ class Command(BaseCommand):
         profile.save()
 
         pub = Publication(
-            type='PR',
+            type='JP',
             title='Characteristics of Faculty Position Advertisements Associated with Applicant Diversity',
             authors='Schmaling, K. B.\nBlume, A. W.\nBaker, D. L.',
             description='This pilot study examined the associations between faculty position advertisement characteristics and the gender and ethnicity of applicants. Eighteen advertisements were coded for required and preferred qualifications, types of materials to submit, and type of application closure. More women applicants were associated with positions that required more types of application materials, and that had flexible closing dates. The proportion of ethnic minority applicants was not significantly associated with advertisement parameters, but medium-sized effects were discussed in terms of their implications. These preliminary data suggest that attending to the details of constructing faculty position advertisements may enhance applicant diversity.',
@@ -216,7 +216,7 @@ class Command(BaseCommand):
         pub.save()
 
         pub = Publication(
-            type='PR',
+            type='JP',
             title='Can We Reduce Bias in the Recruiting Process and Diversify Pools of Candidates by Using Different Types of Words in Job Descriptions?',
             authors='Collier, D.\nZhang, C.',
             description='Intuitively, we all know diversity matters in recruiting and leadership development. McKinsey research points out that companies in the top quartile for racial and ethnic diversity are 35% more likely to have financial returns above their respective national industry medians. Strategic diversity recruitment is a way to effectively send talent through the recruitment pipeline, but it is crucial to mitigate bias. A candidate’s first interaction with employers is often through a job post that includes the job description and responsibilities. Without examining potential unconscious biases, job postings can include language that might deter a certain pool of candidates from applying, thus reducing the diversity of candidates. Through our research, we identified the beneficial use of gender fair language and flexible and inclusive wording in job advertisement and postings.',
@@ -229,7 +229,7 @@ class Command(BaseCommand):
         pub.save()
 
         pub = Publication(
-            type='PR',
+            type='JP',
             title='Diversifying collaboration networks to increase equity in psychology',
             authors='Hsiung Wojcik, E.',
             description='Insular collaboration networks contribute to inequities in academic psychology by concentrating resources and reputation among members of majority groups. By actively diversifying their networks, researchers can improve their science and reduce inequity.',
@@ -254,7 +254,7 @@ class Command(BaseCommand):
                 )
 
                 journal_issue = None
-                if k == Publication.Type.PEER_REVIEWED_PAPER:
+                if k == Publication.Type.JOURNAL_PAPER:
                     journal_issue = 'Journal of ' + ' '.join(
                         random.sample(random_words[2:], 3)
                     )
@@ -275,7 +275,7 @@ class Command(BaseCommand):
                 doi = f'10.{year}/' + uid
 
                 site = None
-                if k != Publication.Type.PEER_REVIEWED_PAPER:
+                if k != Publication.Type.JOURNAL_PAPER:
                     site = 'https://site.com/articles/' + uid
                 
                 pub = Publication(

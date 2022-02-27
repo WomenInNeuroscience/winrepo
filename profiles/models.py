@@ -411,11 +411,12 @@ class Recommendation(models.Model):
 class Publication(models.Model):
 
     class Type(models.TextChoices):
-        PEER_REVIEWED_PAPER = 'PR', 'Peer-reviewed Paper'
+        JOURNAL_PAPER = 'JP', 'Journal Paper'
         CONFERENCE_PAPER = 'CP', 'Conference Paper'
         PREPRINT = 'PP', 'Preprint'
         BOOK = 'BO', 'Book'
         BLOG_POST = 'BP', 'Blog Post'
+        NEWS = 'NE', 'News/Magazine'
 
     type = EnumField(
         enum=Type,
