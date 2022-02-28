@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.apps import apps
 
 from .models import User, Profile, Recommendation, Country, Publication
-from .forms import PublicationAdminForm
+from .forms import PublicationAdminForm, UserAdminForm
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -21,6 +21,7 @@ class RecommendationAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'name', 'email', '_has_profile')
     search_fields = ('username', 'name', 'email')
+    form = UserAdminForm
 
     def has_module_permission(self, request) -> bool:
         return request.user.is_superuser

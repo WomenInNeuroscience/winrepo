@@ -313,4 +313,24 @@ class PublicationAdminForm(forms.ModelForm):
     class Meta:
         model = Publication
         fields = ('type', 'title', 'authors', 'description', 'published_at', 'journal_issue', 'doi', 'created_by')
-    
+
+
+class UserAdminForm(forms.ModelForm):
+
+    new_password = forms.CharField(label=_('Password'), widget=forms.PasswordInput, required=False, strip=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'name', 'email', 'is_active', 'is_staff', 'is_superuser')
+
+
+    def save(self, commit=True):
+        password = self.cleaned_data["new_password"]
+        if password:
+            self.instance.set_password(password)
+        if commit:
+            self.instance.save()
+            self._save_m2m()
+        else:
+            self.save_m2m = self._save_m2m
+        return self.instance

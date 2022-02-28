@@ -51,6 +51,7 @@ class AccountAdapter(DefaultAccountAdapter):
         messages.warning(request, "Your account is inactive. Please check your email for the activation link.")
         return redirect(settings.LOGIN_URL)
 
+
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
     duplicated_email_error_message = "A user with this email already exists. Please sign-in or recover your password."
