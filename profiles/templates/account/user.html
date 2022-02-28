@@ -24,6 +24,17 @@
 				<a class="btn btn-outline-primary pill-btn" href="{% url 'profiles:user_edit' %}">Edit</a>
 				<a class="btn btn-outline-primary pill-btn" href="{% url 'profiles:user_change_password' %}">Change password</a>
 			</div>
+
+			{% if user.is_superuser or user.is_staff %}
+				<h3 class="text-primary font-weight-bold mt-4">
+					<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
+					Administration
+				</h3>
+				<a class="btn btn-primary pill-btn" href="{% url 'admin:index' %}" role="button">
+					Go to admin panel
+				</a>
+			{% endif %}
+
 		</div>
 			
 		<div class="col-12 col-lg-7 pl-3 mt-5 mt-lg-0">

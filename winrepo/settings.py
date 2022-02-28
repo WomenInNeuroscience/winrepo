@@ -1,9 +1,7 @@
 import os
 from decouple import config
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
@@ -16,7 +14,6 @@ ALLOWED_HOSTS = \
 
 
 INSTALLED_APPS = [
-    'profiles',
     'multiselectfield',
     'crispy_forms',
     'captcha',
@@ -25,7 +22,6 @@ INSTALLED_APPS = [
     'dal_select2',
     'robots',
     'rest_framework',
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -41,6 +37,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.twitter',
+
+    'profiles',
+    'django.contrib.admin',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +57,7 @@ ROOT_URLCONF = 'winrepo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [(os.path.join(BASE_DIR, 'templates')), ],
+        'DIRS': [(os.path.join(BASE_DIR, 'templates'))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,6 +85,8 @@ DATABASES = {
         }
     }
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = 'profiles:user'

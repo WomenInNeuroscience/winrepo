@@ -12,7 +12,7 @@ from django.contrib.auth.forms import (
 )
 from django.utils.translation import gettext_lazy as _
 
-from .models import Profile, Recommendation, User
+from .models import Profile, Recommendation, User, Publication
 
 
 class CaptchaForm(forms.Form):
@@ -299,3 +299,18 @@ class RecommendModelForm(CaptchaForm, forms.ModelForm):
                                         code='aready_recommended')
 
         return cleaned_data
+
+
+class ModelChoiceUserNameField(forms.ModelChoiceField):
+    def label_from_instance(self, obj: User) -> str:
+        return obj.name
+
+
+class PublicationAdminForm(forms.ModelForm):
+
+    created_by = ModelChoiceUserNameField(queryset=User.objects.filter(is_staff=True))
+
+    class Meta:
+        model = Publication
+        fields = ('type', 'title', 'authors', 'description', 'published_at', 'journal_issue', 'doi', 'created_by')
+    

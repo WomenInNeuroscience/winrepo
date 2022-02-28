@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load param_replace %}
+
+{% block title %}
+	{{ block.super }} - Publications
+{% endblock title %}
+
+{% block nav-resources-classes %}{{ block.super }} active{% endblock nav-resources-classes %}
+
+{% block content %}
+	<h2 class="text-primary font-weight-bold mb-4">Publications</h2>
+
+	<p>List of references regarding diversity, biases, and inclusivity studies and opinion pieces, among others.</p>
+	
+	<form method="get" action="">
+		<input type="hidden" id="t" name="t" value="{{ t }}" />
+		<div class="form-row mx-0 py-2">
+			<div class="col-12 col-sm-8 offset-sm-2">
+				<div class="input-group rounded">
+					<div class="input-group-prepend p-1 w-100">
+						<input class="form-control" type="search" placeholder="Enter keywords to search for publications" name="s" autofocus {% if request.GET.s %}value="{{ request.GET.s }}"{% endif %}/>
+						<input type="submit" value="Search" class="btn btn-secondary pl-4 pr-4 rounded mx-auto">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-row mx-0 py-2 justify-content-center">
+			{% for type_id, type in types %}
+				<input type="submit" value="{{ type }}" onclick="document.getElementById('t').value = '{{ type_id }}'" class="btn {% if t == type_id %}btn-secondary{% else %}btn-primary{% endif %} m-1" />
+			{% endfor %}
+		</div>
+	</form>
+
+	{% if publications %}
+		<hr />
+
+		<div class="infinite-container">
+			{% for publication in publications %}
+				<div class="table-entry infinite-item">
+					<div class="row my-4 no-gutters">
+						<div class="col-12">
+							<h5 class="text-primary font-weight-bold">
+								{% if publication.type == 'PR' %}
+								<i class="fas fa-copy"></i>
+								{% elif publication.type == 'CP' %}
+								<i class="fas fa-copy"></i>
+								{% elif publication.type == 'PP' %}
+								<i class="fas fa-users"></i>
+								{% elif publication.type == 'BO' %}
+								<i class="fas fa-book"></i>
+								{% elif publication.type == 'BP' %}
+								<i class="fas fa-globe"></i>
+								{% endif %}
+								{% if publication.url %}
+								<a href="{{ publication.url }}">{{ publication.title }}</a>
+								{% elif publication.doi %}
+								<a href="https://doi.org/{{ publication.doi }}">{{ publication.title }}</a>
+								{% else %}
+								{{ publication.title }}
+								{% endif %}
+								<span class="badge badge-secondary">{{ publication.type.label }}</span>
+								<span class="badge badge-primary"><i class="fas fa-calendar"></i> {{ publication.published_at | date:"M Y" }}</span>
+							</h5>
+						</div>
+						<div class="col-12 details-grey text-muted p-1 font-weight-bold">
+							<i class="fas fa-user"></i> <span>
+								{% for author in publication.formatted_authors %}
+									{{ author }}
+									{% if not forloop.last %}; {% endif %}
+								{% endfor %}</span>
+						</div>
+						{% if publication.type == 'PR' %}
+						<div class="col-12 details-grey text-muted p-1">
+							<i class="fas fa-book-open"></i> <span>{{ publication.journal_issue }}</span>
+						</div>
+						{% endif %}
+						<div class="col-12 details-grey text-muted p-1">
+							<i class="fas fa-user-plus"></i> Added by <span>{{ publication.created_by.name }}</span>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+		{% if page_obj.has_next %}
+			<a class="infinite-more-link" href="?{% param_replace page=page_obj.next_page_number %}">More</a>
+	  	{% endif %}
+
+		<div class="loading" style="display: none;">
+			Loading...
+		</div>
+
+	{% else %}
+		<p>No matching entries.</p>
+	{% endif %}
+	<a href="#" id="back-to-top" title="Back to top" class="btn"><i class="fas fa-chevron-circle-up"></i></a>
+{% endblock content %}
+
+{% block footer_scripts %}
+	{{ block.super }}
+	<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+	<script src="{% static 'js/infinite.min.js' %}"></script>
+	<script src="{% static 'profiles/js/list.js' %}?v=2"></script>
+{% endblock footer_scripts %}

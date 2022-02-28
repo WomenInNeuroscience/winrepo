@@ -11,7 +11,6 @@ from django.contrib.auth import login, logout, update_session_auth_hash, views a
 from django.contrib.auth.forms import (PasswordResetForm, SetPasswordForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.exceptions import ValidationError
 from django.db.models import Count, Q
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404, redirect
@@ -36,7 +35,7 @@ from .emails import (
 from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
                     UserDeleteForm, UserForm, UserProfileDeleteForm,
                     UserProfileForm, UserPasswordChangeForm, AuthenticationForm)
-from .models import Country, Profile, Recommendation, User
+from .models import Country, Profile, Recommendation, User, Publication
 from .serializers import CountrySerializer, PositionsCountSerializer
 from .tokens import UserCreateToken, UserEmailChangeToken, UserPasswordResetToken
 
@@ -611,6 +610,51 @@ class ProfileClaim(SuccessMessageMixin, FormView, LoginRequiredMixin):
         context = {"profile": self.profile}
         context.update(kwargs)
         return super().get_context_data(**context)
+
+
+class PublicationsList(ListView):
+    template_name = 'publications/list.html'
+    context_object_name = 'publications'
+    model = Publication
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        s = self.request.GET.get('s', '')
+        t = self.request.GET.get('t', '')
+        context.update({
+            "s": s,
+            "t": t,
+            "types": Publication.Type.choices,
+        })
+        return context
+
+    def get_queryset(self):
+        q_st = ~Q(pk=None)  # always true
+
+        t = self.request.GET.get('t')
+        if t:
+            q_st = q_st & Q(type=t)
+
+        s = self.request.GET.get('s')
+        if s:
+            # split search terms and filter empty words (if successive spaces)
+            search_terms = list(filter(None, s.split(' ')))
+
+            for st in search_terms:
+                st_regex = re.compile(f'.*{st}.*', re.IGNORECASE)
+
+                st_conditions = [
+                    Q(title__icontains=st),
+                    Q(authors__icontains=st),
+                    Q(description__icontains=st),
+                 ]
+
+                q_st = q_st & reduce(or_, st_conditions)
+
+        return Publication.objects \
+            .filter(q_st) \
+            .order_by('-published_at')
 
 
 class ProfilesAutocomplete(Select2QuerySetView):

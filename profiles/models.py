@@ -107,6 +107,49 @@ DOMAINS_CHOICES = (
     ('ET', 'Ethics')
 )
 
+POSITION_CHOICES = (
+    ('PhD student', 'PhD student'),
+    ('Medical Doctor', 'Medical Doctor'),
+    ('Post-doctoral researcher', 'Post-doctoral researcher'),
+    ('Senior researcher/ scientist', 'Senior researcher/ scientist'),
+    ('Lecturer', 'Lecturer'),
+    ('Assistant Professor', 'Assistant Professor'),
+    ('Associate Professor', 'Associate Professor'),
+    ('Professor', 'Professor'),
+    ('Group leader/ Director/ Head of Department', 'Group leader/ Director/ Head of Department'),
+)
+
+
+PUBLICATION_TYPE = (
+    ('peer-reviewed-paper', 'Peer-reviewed Paper'),
+    ('conference-paper', 'Conference Paper'),
+    ('preprint', 'Preprint'),
+    ('book', 'Book'),
+    ('blog-post', 'Blog Post')
+)
+
+
+class EnumField(models.CharField):
+
+    # TODO update all enum fields to use this
+
+    def __init__(self, enum=None, *args, **kwargs):
+        self.enum = enum
+        if enum:
+            kwargs['choices'] = enum.choices
+        super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if value is not None:
+            return self.enum(value)
+
+    def from_db_value(self, value, expression, connection):
+        return self.to_python(value)
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        return self.to_python(value)
+
 
 class Country(models.Model):
     code = models.CharField(max_length=3, blank=False, unique=True)
@@ -320,7 +363,6 @@ class Profile(models.Model):
         return dict(MONTHS_CHOICES).get(self.grad_month)
 
 
-
 class RecommendationQuerySet(QuerySet):
     pass
 
@@ -338,27 +380,6 @@ class RecommendationManager(models.Manager):
 
 
 class Recommendation(models.Model):
-    PHD = 'PhD student'
-    MDR = 'Medical Doctor'
-    PDR = 'Post-doctoral researcher'
-    SRE = 'Senior researcher/ scientist'
-    LEC = 'Lecturer'
-    ATP = 'Assistant Professor'
-    ACP = 'Associate Professor'
-    PRF = 'Professor'
-    DIR = 'Group leader/ Director/ Head of Department'
-
-    POSITION_CHOICES = (
-        (PHD, PHD),
-        (MDR, MDR),
-        (PDR, PDR),
-        (SRE, SRE),
-        (LEC, LEC),
-        (ATP, ATP),
-        (ACP, ACP),
-        (PRF, PRF),
-        (DIR, DIR),
-    )
 
     profile = models.ForeignKey(Profile,
                                 on_delete=models.CASCADE,
@@ -384,3 +405,44 @@ class Recommendation(models.Model):
 
     def __str__(self):
         return self.comment[:50]
+
+
+class Publication(models.Model):
+
+    class Type(models.TextChoices):
+        JOURNAL_PAPER = 'JP', 'Journal Paper'
+        CONFERENCE_PAPER = 'CP', 'Conference Paper'
+        PREPRINT = 'PP', 'Preprint'
+        BOOK = 'BO', 'Book'
+        BLOG_POST = 'BP', 'Blog Post'
+        NEWS = 'NE', 'News/Magazine'
+
+    type = EnumField(
+        enum=Type,
+        max_length=2, 
+        blank=False
+    )
+    title = models.CharField(max_length=200, blank=False)
+    authors = models.TextField(blank=False, help_text='First Middle Last → Last, F. M.<br>One author per line.')
+    description = models.TextField(blank=False)
+    published_at = models.DateField(blank=False, help_text='')
+
+    url = models.URLField(verbose_name='URL', null=True, blank=True)
+    journal_issue = models.CharField(max_length=200, null=True, blank=True)
+    doi = models.CharField(max_length=200, verbose_name='DOI', null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL,
+        related_name='publications',
+        null=True
+    )
+
+    @property
+    def formatted_authors(self):
+        return [a.strip() for a in self.authors.split('\n')]
+
+    class Meta:
+        ordering = ['-published_at']
