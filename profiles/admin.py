@@ -8,6 +8,9 @@ from .forms import PublicationAdminForm
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('code', 'name', 'is_under_represented')
 
+    def has_module_permission(self, request) -> bool:
+        return request.user.is_superuser
+
 
 class RecommendationAdmin(admin.ModelAdmin):
     list_display = ('profile', 'reviewer_name', 'reviewer_email', 'comment')
@@ -18,6 +21,9 @@ class RecommendationAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'name', 'email', '_has_profile')
     search_fields = ('username', 'name', 'email')
+
+    def has_module_permission(self, request) -> bool:
+        return request.user.is_superuser
 
     def _has_profile(self, obj):
         return obj.profile
