@@ -42,16 +42,18 @@
 					<div class="row my-4 no-gutters">
 						<div class="col-12">
 							<h5 class="text-primary font-weight-bold">
-								{% if publication.type == 'PR' %}
+								{% if publication.type == 'JP' %}
 								<i class="fas fa-copy"></i>
-								{% elif publication.type == 'CP' %}
-								<i class="fas fa-copy"></i>
+								{% elif publication.type == 'RE' %}
+								<i class="fas fa-file-alt"></i>
 								{% elif publication.type == 'PP' %}
 								<i class="fas fa-users"></i>
 								{% elif publication.type == 'BO' %}
 								<i class="fas fa-book"></i>
 								{% elif publication.type == 'BP' %}
 								<i class="fas fa-globe"></i>
+								{% elif publication.type == 'NE' %}
+								<i class="fas fa-newspaper"></i>
 								{% endif %}
 								{% if publication.url %}
 								<a href="{{ publication.url }}">{{ publication.title }}</a>
@@ -71,11 +73,6 @@
 									{% if not forloop.last %}; {% endif %}
 								{% endfor %}</span>
 						</div>
-						{% if publication.type == 'PR' %}
-						<div class="col-12 details-grey text-muted p-1">
-							<i class="fas fa-book-open"></i> <span>{{ publication.journal_issue }}</span>
-						</div>
-						{% endif %}
 						<div class="col-12 details-grey text-muted p-1">
 							<i class="fas fa-user-plus"></i> Added by
 							<span>

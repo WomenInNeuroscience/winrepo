@@ -122,7 +122,7 @@ POSITION_CHOICES = (
 
 PUBLICATION_TYPE = (
     ('peer-reviewed-paper', 'Peer-reviewed Paper'),
-    ('conference-paper', 'Conference Paper'),
+    ('report', 'Report'),
     ('preprint', 'Preprint'),
     ('book', 'Book'),
     ('blog-post', 'Blog Post')
@@ -411,7 +411,7 @@ class Publication(models.Model):
 
     class Type(models.TextChoices):
         JOURNAL_PAPER = 'JP', 'Journal Paper'
-        CONFERENCE_PAPER = 'CP', 'Conference Paper'
+        REPORT = 'RE', 'Report'
         PREPRINT = 'PP', 'Preprint'
         BOOK = 'BO', 'Book'
         BLOG_POST = 'BP', 'Blog Post'
@@ -424,11 +424,10 @@ class Publication(models.Model):
     )
     title = models.CharField(max_length=200, blank=False)
     authors = models.TextField(blank=False, help_text='First Middle Last → Last, F. M.<br>One author per line.')
-    description = models.TextField(blank=False)
+    description = models.TextField(null=True, blank=True)
     published_at = models.DateField(blank=False, help_text='')
 
     url = models.URLField(verbose_name='URL', null=True, blank=True)
-    journal_issue = models.CharField(max_length=200, null=True, blank=True)
     doi = models.CharField(max_length=200, verbose_name='DOI', null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)

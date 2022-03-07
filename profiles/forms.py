@@ -312,7 +312,7 @@ class PublicationAdminForm(forms.ModelForm):
 
     class Meta:
         model = Publication
-        fields = ('type', 'title', 'authors', 'description', 'published_at', 'journal_issue', 'doi', 'created_by')
+        fields = ('type', 'title', 'authors', 'description', 'published_at', 'url', 'doi', 'created_by')
 
 
 class UserAdminForm(forms.ModelForm):
