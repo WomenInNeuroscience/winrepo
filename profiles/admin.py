@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.apps import apps
 
 from .models import User, Profile, Recommendation, Country, Publication
-from .forms import PublicationAdminForm, UserAdminForm
+from .forms import PublicationAdminForm, UserAdminForm, ProfileAdminForm
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -31,8 +31,9 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'position', 'institution')
+    list_display = ('name', 'position', 'institution', 'published_at')
     search_fields = ('name', 'institution', 'email', 'is_public')
+    form = ProfileAdminForm
 
 
 class PublicationAdmin(admin.ModelAdmin):

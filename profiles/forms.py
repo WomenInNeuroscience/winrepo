@@ -334,3 +334,16 @@ class UserAdminForm(forms.ModelForm):
         else:
             self.save_m2m = self._save_m2m
         return self.instance
+
+
+class ProfileAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = (
+            'is_public', 'name', 'contact_email', 'webpage',
+            'institution', 'country', 'position', 'grad_month', 'grad_year',
+            'brain_structure', 'modalities', 'methods', 'domains', 'keywords',
+            'orcid', 'twitter', 'linkedin', 'github', 'google_scholar', 'researchgate'
+        )
+
