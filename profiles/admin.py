@@ -41,6 +41,18 @@ class PublicationAdmin(admin.ModelAdmin):
     search_fields = ('type', 'title', 'authors', 'published_at', 'doi', '_created_by')
     form = PublicationAdminForm
 
+    def has_add_permission(self, request):
+        return request.user.is_staff
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_module_permission(self, request):
+        return request.user.is_staff
+
     def _created_by(self, obj):
         return obj.created_by.name
 
