@@ -2,7 +2,8 @@ bandit==1.7.0
 coverage==5.5
 Django==3.2
 django-autocomplete-light==3.8.2
-django-bootstrap4==2.3.1
+django-bootstrap5==22.1
+crispy-bootstrap5==0.6
 django-crispy-forms==1.11.2
 django-extensions==3.1.1
 django-multiselectfield==0.1.12

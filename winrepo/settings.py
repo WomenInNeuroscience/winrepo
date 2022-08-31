@@ -14,9 +14,10 @@ ALLOWED_HOSTS = \
 
 INSTALLED_APPS = [
     'multiselectfield',
-    'crispy_forms',
+    'django_bootstrap5',
+    "crispy_forms",
+    "crispy_bootstrap5",
     'captcha',
-    'bootstrap4',
     'dal',
     'dal_select2',
     'robots',
@@ -196,13 +197,8 @@ EMAIL_SUBJECT_PREFIX = 'WiNRepo - '
 SITE_ID = config('SITE_ID', cast=int, default=1)
 ROBOTS_CACHE_TIMEOUT = 60 * 60 * 24
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-BOOTSTRAP4 = {
-    'jquery_url': 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js',
-    'base_url': 'https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/',
-    'css_url':  STATIC_URL + 'css/bootstrap-winrepo.min.css',
-    'javascript_url': 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'
-}
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 SELECT2_CSS = ''
 

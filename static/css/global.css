@@ -1,3 +1,47 @@
+:root {
+	--bs-blue: #007bff;
+	--bs-indigo: #6610f2;
+	--bs-purple: #6f42c1;
+	--bs-pink: #e83e8c;
+	--bs-red: #dc3545;
+	--bs-orange: #fd7e14;
+	--bs-yellow: #ffc107;
+	--bs-green: #28a745;
+	--bs-teal: #20c997;
+	--bs-cyan: #17a2b8;
+	--bs-white: #fff;
+	--bs-gray: #6c757d;
+	--bs-gray-dark: #343a40;
+	--bs-success: #28a745;
+	--bs-info: #17a2b8;
+	--bs-warning: #ffc107;
+	--bs-danger: #dc3545;
+	--bs-light: #f8f9fa;
+	--bs-dark: #343a40;
+
+    --bs-success-rgb: 40,167,69;
+    --bs-info-rgb: 23,162,184;
+    --bs-warning-rgb: 255,193,7;
+    --bs-danger-rgb: 220,53,69;
+    --bs-light-rgb: 248,249,250;
+    --bs-dark-rgb: 33,37,41;
+    --bs-white-rgb: 255,255,255;
+    --bs-black-rgb: 0,0,0;
+    --bs-body-color-rgb: 33,37,41;
+    --bs-body-bg-rgb: 255,255,255;
+    
+	--bs-link-color: #10898B;
+	
+	--bs-primary: #10898B;
+	--bs-primary-rgb: 16,137,139;
+	--bs-secondary: #CC063E;
+	--bs-secondary-rgb: 204,6,62;
+	--bs-tertiary: #E83535;
+	--bs-quaternary: #FD9407;
+	--bs-quinary: #E2D9C2;
+	--bs-senary: #999;
+}
+
 body {
 	font-family:'Open Sans', 'Lato', sans-serif;
 	display: flex;
@@ -7,6 +51,24 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
 	font-family:'Nunito', 'Lato', sans-serif;
+}
+
+a {
+	text-decoration: none;
+}
+
+form fieldset {
+	border: 1px solid #CCC;
+	padding: 1rem;
+	margin-bottom: 1rem;
+}
+
+form fieldset legend {
+	font-size: 1rem;
+	padding: 1rem;
+	display: inline-block;
+	width: auto;
+	background: #FFF;
 }
 
 .full_page {
@@ -22,38 +84,72 @@ h1, h2, h3, h4, h5, h6 {
 	}
 }
 
+.btn-secondary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--bs-secondary);
+    --bs-btn-border-color: var(--bs-secondary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--bs-secondary);
+    --bs-btn-hover-border-color: var(--bs-secondary);
+    --bs-btn-focus-shadow-rgb: 130,138,145;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--bs-secondary);
+    --bs-btn-active-border-color: var(--bs-secondary);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: var(--bs-gray);
+    --bs-btn-disabled-border-color: var(--bs-gray);
+}
+
+.btn-outline-secondary {
+    --bs-btn-color: var(--bs-secondary);
+    --bs-btn-border-color: var(--bs-secondary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--bs-secondary);
+    --bs-btn-hover-border-color: var(--bs-secondary);
+    --bs-btn-focus-shadow-rgb: 108,117,125;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--bs-secondary);
+    --bs-btn-active-border-color: var(--bs-secondary);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: var(--bs-secondary);
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: var(--bs-secondary);
+    --bs-gradient: none;
+}
+
 .intro p {
 	font-size: medium;
 }
 
 /* navbar */
 
-.navbar-custom  {
+.navbar  {
 	background-color: white;
 }
-.navbar-custom .navbar-brand,
-.navbar-custom .navbar-text {
+.navbar .navbar-brand,
+.navbar .navbar-text {
     color: #555;
 }
-.navbar-custom .navbar-nav .nav-link {
+.navbar .navbar-nav .nav-link {
     color: #555;
 }
 
 /* Settings for active links in the navigation bar */
-.navbar-custom .nav-item.active .nav-link {
+.navbar .nav-item.active .nav-link {
 	color: #10898B; /*red #CC063E*/
 	text-decoration: underline;
 	font-weight: bold;
 }
 
 /* Settings when cursor is on the top of item in navigation bar*/
-.navbar-custom .nav-item:hover .nav-link {
+.navbar .nav-item:hover .nav-link {
     color: #10898B;
 }
 
 /* The dropdown container */
 .dropdown {
-    display: inline-block
+    display: inline-block;
     overflow: hidden;
 }
 
@@ -142,19 +238,14 @@ h1, h2, h3, h4, h5, h6 {
 	border-radius: 50px;
 }
 
+.text-quinary {
+	color: var(--bs-quinary) !important;
+}
+
+.text-justify {
+	text-align: justify;
+}
+
 #winrepo-logo > img {
 	height: 38px;
-}
-
-form fieldset {
-	border: 1px solid #CCC;
-	padding: 1rem;
-}
-
-form fieldset legend {
-	font-size: 1rem;
-	padding: 1rem;
-	display: inline-block;
-	width: auto;
-	background: #FFF;
 }

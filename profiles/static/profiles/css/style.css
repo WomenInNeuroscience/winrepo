@@ -15,13 +15,12 @@
 }
 
 #search-message>span {
-  font-size:18px;
+  font-size: 18px;
   padding-top: 20px;
   padding-bottom: 20px;
 }
 
 #search {
-  line-height: 2.5rem;
   border: white;
   border-left: #e6e6e6;
 }
