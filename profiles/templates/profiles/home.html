@@ -19,7 +19,6 @@
 		}
 		#twitter-widget-holder{ 
 			height: 300px;
-			max-width: 600px;
 			padding-top: 10px;
 			padding-left: 10px;
 			padding-bottom: 10px;
@@ -94,7 +93,7 @@
     <div class="carousel-item p-4{% if forloop.first %} active{% endif %}">
 	<span class="text-secondary quote-icon float-left m-2"><i class="fas fa-quote-left"></i></span>
 	<blockquote class="blockquote text-center m-2">
-		<p class="mb-0">{{ reco.comment|truncatechars:255 }}</p>
+		<p class="mb-5">{{ reco.comment|truncatechars:255 }}</p>
 		<footer class="blockquote-footer">{{ reco.reviewer_name }}, about 
 			{% if reco.profile.user %}
 				<a class="text-primary" href="{% url 'profiles:detail_username' reco.profile.user.username %}">{{ reco.profile.name }}</a>

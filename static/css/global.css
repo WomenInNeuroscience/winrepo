@@ -168,7 +168,6 @@ form fieldset legend {
 /* The dropdown container */
 .dropdown {
     display: inline-block;
-    overflow: hidden;
 }
 
 /* Default settings of top button of dropdown menu*/

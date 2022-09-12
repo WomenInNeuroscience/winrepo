@@ -58,25 +58,23 @@
 				<li class="nav-item {% block nav-recommend-classes %}{% endblock nav-recommend-classes %}">
 					<a class="nav-link h6" href="{% url 'profiles:recommend' %}">Recommend</a>
 				</li>
-				<li class="nav-item {% block nav-resources-classes %}{% endblock nav-resources-classes %}">
-          			<div class="dropdown">
-             			<button class="dropbtn nav-link h6">Resources
-               				<i class="fa fa-caret-down"></i>  <!--small triangle-->
-             			</button>
-            			<div class="dropdown-content">
-					    	<a href="{% url 'profiles:publications' %}">Publications</a>
-					    	<a href="{% url 'profiles:faq' %}">FAQ</a>
-              				<a href="{% url 'profiles:tips' %}">Tips</a>
-            			</div>
-          			</div>
+				<li class="nav-item dropdown {% block nav-resources-classes %}{% endblock nav-resources-classes %}">
+					<a href="#" class="nav-link h6 dropdown-toggle" id="navbar-resources" data-bs-toggle="dropdown">
+						Resources
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbar-resources">
+						<a class="dropdown-item" href="{% url 'profiles:publications' %}">Publications</a>
+						<a class="dropdown-item" href="{% url 'profiles:faq' %}">FAQ</a>
+						<a class="dropdown-item" href="{% url 'profiles:tips' %}">Tips</a>
+					</div>
 				</li>
 				<li class="nav-item {% block nav-about-classes %}{% endblock nav-about-classes %}">
 					<a class="nav-link h6" href="{% url 'profiles:about' %}">About</a>
 				</li>
 				{% if user.is_authenticated %}
-					<li class="nav-item dropdown me-auto {% block nav-user-classes %}{% endblock nav-user-classes %}">
-						<a href="#" class="nav-link h6 dropdown-toggle" data-toggle="dropdown">{{ user.first_name }}</a>
-						<div class="dropdown-menu dropdown-menu-right">
+					<li class="nav-item dropdown {% block nav-user-classes %}{% endblock nav-user-classes %}">
+						<a href="#" class="nav-link h6 dropdown-toggle" id="navbar-account" data-bs-toggle="dropdown">{{ user.first_name }}</a>
+						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar-account">
 							<a href="{% url 'profiles:user' %}" class="dropdown-item">My Account</a>
 							<div class="dropdown-divider"></div>
 							<a href="{% url 'profiles:logout' %}" class="dropdown-item">Logout</a>
@@ -93,7 +91,7 @@
 				{% endif %}
 			</ul>
 		</div>
-		<button class="navbar-toggler ms-auto" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+		<button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
 			aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
