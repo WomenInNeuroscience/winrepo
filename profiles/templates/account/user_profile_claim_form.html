@@ -13,7 +13,7 @@
 <div class="container-fluid">
 	<div class="row no-gutters">
 		<div class="col-12">
-			<h2 class="text-primary font-weight-bold">Search for your Profile</h2>
+			<h2 class="text-primary fw-bold">Search for your Profile</h2>
 			<p>
 				Do you know if you already have a profile at Women in Neuroscience?
 				Use the form below to check it out.
@@ -24,7 +24,7 @@
 					<div class="offset-md-1 offset-lg-2 offset-xl-2 col-12 col-md-10 col-lg-8 col-xl-8">
 						<form method="GET" class="input-group bg-white rounded p-1 mx-auto">
 							<input type="text" class="form-control" placeholder="Search for your name" value="{{ search }}" aria-label="Search" name="s" autofocus>
-							<button type="submit" class="btn btn-primary pl-4 pr-4">Search</button>
+							<button type="submit" class="btn btn-primary ps-4 pe-4">Search</button>
 						</form>
 					</div>
 				</div>
@@ -38,7 +38,7 @@
 		{% for profile in profiles %}
 			<div class="row my-4 no-gutters">
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
-					<h5 class="text-primary font-weight-bold">
+					<h5 class="text-primary fw-bold">
 						{% if profile.user %}
 							<a href="{% url 'profiles:detail_username' profile.user.username %}">{{ profile.name }}</a>
 						{% else %}
@@ -60,12 +60,12 @@
 					{% endif %}
 					{{ profile.keywords }}
 				</div>
-				<div class="col-md-1 col-lg-1 mt-1 pl-4 d-none d-md-block text-primary">
+				<div class="col-md-1 col-lg-1 mt-1 ps-4 d-none d-md-block text-primary">
 					{% if profile.recommendation_set.all|length %}
 						<span><i class="fas fa-comment num-rec"></i> {{ profile.recommendation_set.all|length }}</span>
 					{% endif %}
 				</div>
-				<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 actions text-xs-left text-sm-right">
+				<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 actions text-xs-start text-sm-end">
 					<a class="btn pill-btn btn-outline-secondary w-75 m-2" href="{% url 'profiles:claim_profile' profile.id %}">Claim Profile</a>
 				</div>
 			</div>

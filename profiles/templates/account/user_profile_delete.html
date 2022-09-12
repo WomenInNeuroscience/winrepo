@@ -11,9 +11,9 @@
 <div class="container-fluid">
 	<div class="row no-gutters">
 		<div class="col-12">
-			<h2 class="text-primary font-weight-bold">Delete Public Profile</h2>
+			<h2 class="text-primary fw-bold">Delete Public Profile</h2>
 
-			<h3 class="text-primary font-weight-bold mt-5">
+			<h3 class="text-primary fw-bold mt-5">
 				<span class="text-secondary"><i class="fas fa-chevron-circle-right"></i></span>
 				Are you absolutely sure?
 			</h3>
@@ -26,7 +26,7 @@
 				<form method="post">
 					{% csrf_token %}
 					{{ form }}
-					<div class="text-right">
+					<div class="text-end">
 						<a class="btn btn-outline-danger pill-btn" href="{% url 'profiles:user' %}" role="button">
 							Cancel
 						</a>

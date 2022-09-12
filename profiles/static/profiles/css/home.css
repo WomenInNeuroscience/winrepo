@@ -5,7 +5,6 @@
 #hero-image > img{
 	width: 100%;
 	padding-top: 28px;
-	/* min-height: 200px; */
 }
 
 #home-search {
@@ -28,6 +27,11 @@
 #intro-text {
 	max-width: 800px;
 	margin: auto;
+	padding: 0;
+}
+
+#intro-text a {
+	text-decoration: none;
 }
 
 .pill-btn {
@@ -51,13 +55,11 @@
 }
 
 /* Stats */
-.donutCell
-{
+.donutCell {
 	position: relative;
 }
 
-.donutValue
-{
+.donutValue {
 	position: absolute;
 	left: 50%;
 	top: 50%;
