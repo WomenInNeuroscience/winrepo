@@ -247,8 +247,12 @@ form fieldset legend {
     background-color: #e6e6e6;
 }
 
-.link-secondary {
-  color: #CC063E;
+.link-secondary,
+.link-secondary:hover {
+  color: #CC063E !important;
+}
+
+  color: #CC063E !important;
 }
 
 .pill-btn {
