@@ -1,11 +1,11 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from adminsortable.fields import SortableForeignKey
+from adminsortable.models import SortableMixin
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+from django.db.models.manager import BaseManager
 from django.db.models.query import QuerySet
 from django.utils import timezone
-
-from django.urls import reverse
-
 from multiselectfield import MultiSelectField
 
 PHD = 'PhD student'
@@ -170,7 +170,7 @@ class UserManager(BaseUserManager):
             raise ValueError(_('The Email must be set'))
 
         extra_fields.setdefault('is_active', True)
-        
+
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -291,7 +291,7 @@ class Profile(models.Model):
         null=True, blank=True, related_name='profile'
     )
     is_public = models.BooleanField(default=True)
-    
+
     name = models.CharField(max_length=200, blank=False)
     contact_email = models.EmailField(verbose_name='Contact E-mail', blank=True)
     webpage = models.URLField(blank=True)
@@ -407,6 +407,115 @@ class Recommendation(models.Model):
         return self.comment[:50]
 
 
+class SoftDeleteQuerySet(QuerySet):
+
+    def delete(self):
+        return super().update(deleted_at=timezone.now())
+
+    def hard_delete(self):
+        return super().delete()
+
+    def alive(self):
+        return self.filter(deleted_at=None)
+
+    def dead(self):
+        return self.exclude(deleted_at=None)
+
+
+class SoftDeleteManager(BaseManager.from_queryset(SoftDeleteQuerySet)):
+
+    def __init__(self, *args, **kwargs):
+        self.alive_only = kwargs.pop('alive_only', True)
+        super().__init__(*args, **kwargs)
+
+    def get_queryset(self):
+        if self.alive_only:
+            return super().get_queryset().filter(deleted_at=None)
+        return super().get_queryset()
+
+    def hard_delete(self):
+        return self.get_queryset().hard_delete()
+
+
+class SoftDeleteModel(models.Model):
+
+    objects = SoftDeleteManager()
+    all_objects = SoftDeleteManager(alive_only=False)
+
+    deleted_at = models.DateTimeField(null=True, editable=False)
+
+
+class RecommendationQuestion(SoftDeleteModel):
+
+    last_revision = models.ForeignKey(
+                        'RecommendationQuestionRevision',
+                        on_delete=models.DO_NOTHING,
+                        related_name='last_revision',
+                        null=True,
+                    )
+
+
+class RecommendationQuestionRevision(SortableMixin):
+
+    order = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        editable=False,
+        db_index=True
+    )
+
+    question = models.ForeignKey(RecommendationQuestion,
+                                on_delete=models.CASCADE,
+                                related_name='revisions')
+
+
+    revision = models.IntegerField('Revision', db_index=True)
+    text = models.CharField(max_length=280, blank=False)
+
+    options = models.TextField(blank=False)
+    multiple = models.BooleanField(default=False)
+
+
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL,
+        related_name='recommendation_questions',
+        null=True
+    )
+
+    class Meta:
+        verbose_name = ' Recommendation Question'
+        verbose_name_plural = ' Recommendation Questions'
+        ordering = ['order']
+
+
+    def save(self, *args, **kwargs):
+        self.options = '\n'.join(filter(None, [
+            line.strip() for line in self.options.split('\n')
+        ]))
+
+        super().save(*args, **kwargs)
+        
+        self.question.last_revision = self
+        self.question.save()
+
+
+class RecommendationAnswer(models.Model):
+
+    recommendation = models.ForeignKey(Recommendation,
+                                       on_delete=models.CASCADE,
+                                       related_name='answers')
+
+    question = models.ForeignKey(RecommendationQuestionRevision,
+                                 on_delete=models.CASCADE,
+                                 related_name='answers')
+
+    answer = models.TextField(blank=False)
+
+    def __str__(self):
+        return self.answer
+
+
 class Publication(models.Model):
 
     class Type(models.TextChoices):
@@ -419,7 +528,7 @@ class Publication(models.Model):
 
     type = EnumField(
         enum=Type,
-        max_length=2, 
+        max_length=2,
         blank=False
     )
     title = models.CharField(max_length=200, blank=False)

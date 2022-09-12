@@ -35,7 +35,7 @@ from .emails import (
 from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
                     UserDeleteForm, UserForm, UserProfileDeleteForm,
                     UserProfileForm, UserPasswordChangeForm, AuthenticationForm)
-from .models import Country, Profile, Recommendation, User, Publication
+from .models import Country, Profile, Recommendation, RecommendationQuestion, User, Publication
 from .serializers import CountrySerializer, PositionsCountSerializer
 from .tokens import UserCreateToken, UserEmailChangeToken, UserPasswordResetToken
 
@@ -529,6 +529,12 @@ class CreateRecommendation(SuccessMessageMixin, FormView):
     template_name = 'profiles/recommendation_form.html'
     form_class = RecommendModelForm
     success_message = 'Your recommendation has been submitted successfully!'
+
+    def get_form_kwargs(self):
+        question = RecommendationQuestion.objects.all()
+        kwargs = super().get_form_kwargs()
+        kwargs['questions'] = question
+        return kwargs
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:

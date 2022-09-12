@@ -11,8 +11,12 @@ from django.contrib.auth.forms import (
     UsernameField
 )
 from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
 
-from .models import Profile, Recommendation, User, Publication
+from .models import (
+    Profile, Recommendation, User, Publication,
+    RecommendationQuestionRevision
+)
 
 
 class CaptchaForm(forms.Form):
@@ -283,6 +287,47 @@ class RecommendModelForm(CaptchaForm, forms.ModelForm):
             )
         }
 
+    def __init__(self, questions, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.questions = {}
+        for field in questions:
+            id = f'recommendation_question_{field.id}'
+            last_revision = field.last_revision
+            options = [
+                o.strip()
+                for o in last_revision.options.split('\n')
+                if o.strip()
+            ]
+
+            subfields = []
+            for io, option in enumerate(options):
+                subfieldsmatch = re.findall(r'\[([^\]]*)\]', option)
+                for i, sublabel in enumerate(subfieldsmatch):
+                    self.fields[f'{id}_{io}_{i}'] = forms.CharField(
+                        label=f'[{sublabel}]' if sublabel else '',
+                    )
+                    if not sublabel:
+                        options[io] = option.replace('[]', '').strip()
+                    options[io] = mark_safe(re.sub(r'\[([^\]]*)\]', r"<em>\1</em>", option))
+                    subfields.append(f'{id}_{io}_{i}')
+
+            self.questions[id] = {
+                'subfields': subfields
+            }
+
+            self.fields[id] = \
+                forms.MultipleChoiceField(
+                    label=last_revision.text,
+                    choices=[
+                        (i, choice)
+                        for i, choice in
+                        enumerate(options)
+                    ],
+                    widget=forms.CheckboxSelectMultiple()
+                )
+
+
     def clean(self):
         cleaned_data = super(RecommendModelForm, self).clean()
         profile = cleaned_data.get('profile')
@@ -347,3 +392,9 @@ class ProfileAdminForm(forms.ModelForm):
             'orcid', 'twitter', 'linkedin', 'github', 'google_scholar', 'researchgate'
         )
 
+
+class RecommendationQuestionRevisionForm(forms.ModelForm):
+
+    class Meta:
+        model = RecommendationQuestionRevision
+        fields = ('text', 'options', 'multiple')

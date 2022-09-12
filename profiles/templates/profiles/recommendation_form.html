@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% load static %}
-
 {% load crispy_forms_tags %}
 
 {% block title %}
@@ -22,29 +21,10 @@
 <div class="container-fluid">
 	<div class="row no-gutters">
 		<div class="col-12">
-			<h2 class="text-primary font-weight-bold">Recommend</h2>
+			<h2 class="text-primary fw-bold">Recommend</h2>
 			<div class="pt-2 mt-4 w-100 text-muted">
-				<form method="post">
-					{% csrf_token %}
-					{{ form.profile|as_crispy_field }}
-				    {{ form.reviewer_name|as_crispy_field }}
-					<div class="form-row">
-						<div class="form-group col-md-6 mb-0">
-				   			{{ form.reviewer_position|as_crispy_field }}
-						</div>
-						<div class="form-group col-md-6 mb-0">
-							{{ form.reviewer_institution|as_crispy_field }}
-						</div>
-					</div>
-					{{ form.seen_at_conf|as_crispy_field }}
-					{{ form.comment|as_crispy_field }}
-					{{ form.captcha }}
-
-					<div class="text-right">
-						<button type="submit" class="btn btn-primary pill-btn">
-							Submit
-						</button>
-					</div>
+				<form>
+				{{ crispy form }}
 				</form>
 			</div>
 		</div>
@@ -54,6 +34,62 @@
 {% endblock content %}
 
 {% block footer_scripts %}
-    {{ block.super }}
-    {{ form.media }}
+	{{ block.super }}
+	{{ form.media }}
+	<script>
+		{% for name, info in form.questions.items %}
+			{% if info.subfields %}
+				$('[id^="id_{{name}}"').change(function() {
+					const val = $(this).val();
+					const checked = $(this).is(':checked');
+					const subfields = $(`[id^="div_id_{{name}}_${val}_"]`);
+					console.log(`[id^="div_id_{{name}}_${val}_"]`, subfields);
+					if (subfields.length > 0) {
+						if (checked) {
+							subfields.show();
+						} else {
+							subfields.hide();
+						}
+					}
+				}).trigger('change');
+			{% endif %}
+		{% endfor %}
+	</script>
 {% endblock footer_scripts %}
+
+{% comment %}
+<form method="post">
+	{% csrf_token %}
+	{{ form.profile | as_crispy_field }}
+	{{ form.reviewer_name | as_crispy_field }}
+	<div class="form-row">
+		<div class="form-group col-md-6 mb-0">
+			   {{ form.reviewer_position | as_crispy_field }}
+		</div>
+		<div class="form-group col-md-6 mb-0">
+			{{ form.reviewer_institution | as_crispy_field }}
+		</div>
+	</div>
+
+	{% for name, info in form.questions.items %}
+	<fieldset id="formset_id_{{name}}">
+		{{ form | getitemobj:name | as_crispy_field }}
+		{% if info.subfields %}
+			{% for subname in info.subfields %}
+				{{ form | getitemobj:subname | as_crispy_field }}
+			{% endfor %}
+		{% endif %}
+	</fieldset>
+	{% endfor %}
+
+	{{ form.seen_at_conf | as_crispy_field }}
+	{{ form.comment | as_crispy_field }}
+	{{ form.captcha }}
+
+	<div class="text-end">
+		<button type="submit" class="btn btn-primary pill-btn">
+			Submit
+		</button>
+	</div>
+</form>
+{% endcomment %}
