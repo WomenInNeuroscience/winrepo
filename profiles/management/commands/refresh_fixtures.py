@@ -3,7 +3,11 @@ from django.core import management
 from django.core.management.base import BaseCommand, CommandError
 
 import winrepo.settings as settings
-from profiles.models import Country, User, Profile, Recommendation, Publication
+from profiles.models import (
+    Country, User, Profile, Publication,
+    Recommendation, RecommendationQuestion,
+    RecommendationQuestionRevision, RecommendationAnswer,
+)
 from profiles.models import (
     STRUCTURE_CHOICES,
     MODALITIES_CHOICES,
@@ -275,6 +279,46 @@ class Command(BaseCommand):
                 )
                 pub.save()
 
+
+        question = RecommendationQuestion()
+        question.save()
+        revision = RecommendationQuestionRevision(
+            question=question,
+            text="How did you get in contact with the person you want to recommend?",
+
+            options="""
+I saw them giving a talk at [conference/university]
+I worked with them for the organization of an event
+I collaborated with them in a scientific project
+They are a colleague or an ex-colleague of mine
+[Other]
+            """,
+            multiple=True,
+            revision=1,
+            created_by=user,
+        )
+        revision.save()
+
+        question = RecommendationQuestion()
+        question.save()
+        revision = RecommendationQuestionRevision(
+            question=question,
+            text="Why do you want to recommend this person?",
+            options="""
+They are a great speaker/communicator
+They have great knowledge of their scientific field
+Their research is innovative and exciting
+They are active in promoting diversity and inclusivity
+They are a great mentor
+They are collaborative and easy to work with
+They are committed to good scientific practice and/or open research
+[Other]
+            """,
+            multiple=True,
+            revision=2,
+            created_by=user,
+        )
+        revision.save()
 
         management.call_command(
             'dumpdata',
