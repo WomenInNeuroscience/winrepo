@@ -82,10 +82,10 @@
 	</div>
 </div>
 
-<div id="reco-carousel" class="container-fluid carousel bg-light slide" data-ride="carousel" data-interval="60000">
+<div id="reco-carousel" class="container-fluid carousel bg-light slide" data-bs-ride="carousel" data-bs-interval="10000">
   <ol class="carousel-indicators">
 	{% for reco in recommendations_sample %}
-    <li data-target="#reco-carousel" data-slide-to="{{ forloop.counter0 }}"{% if forloop.first %} class="active"{% endif %}></li>
+    <li data-bs-target="#reco-carousel" data-bs-slide-to="{{ forloop.counter0 }}"{% if forloop.first %} class="active"{% endif %}></li>
 	{% endfor %}
   </ol>
   <div class="carousel-inner m-auto">
@@ -105,11 +105,11 @@
     </div>
   {% endfor %}
   </div>
-  <a class="carousel-control-prev" href="#reco-carousel" role="button" data-slide="prev">
+  <a class="carousel-control-prev" href="#reco-carousel" role="button" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
   </a>
-  <a class="carousel-control-next" href="#reco-carousel" role="button" data-slide="next">
+  <a class="carousel-control-next" href="#reco-carousel" role="button" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="sr-only">Next</span>
   </a>
