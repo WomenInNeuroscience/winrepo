@@ -13,7 +13,7 @@
 <div class="container-fluid">
 	<div class="row no-gutters">
 		<div class="col-12">
-			<h2 class="text-primary font-weight-bold">Create your Account</h2>
+			<h2 class="text-primary fw-bold">Create your Account</h2>
 			<p class="text-center mt-4">Sign-up using your social accounts or fill the form below:</p>
 			<div class="text-center mb-4">
 				<a href="{% url 'google_login' %}" class="px-4"><span class="iconify" data-icon="akar-icons:google-fill" data-inline="false"></span></a>
@@ -37,7 +37,7 @@
 					{{ form.password1|as_crispy_field }}
 					{{ form.password2|as_crispy_field }}
 					{{ form.captcha }}
-					<div class="text-right">
+					<div class="text-end">
 						<a class="btn btn-outline-danger pill-btn" href="{% url 'profiles:user' %}" role="button">
 							Cancel
 						</a>

@@ -12,17 +12,17 @@
 {% block full_page_content %}
 	<div id="list-search" class="w-100 bg-primary text-white">
 		<form method="get">
-			<div id="search-container" class="form-row mx-0 py-2">
+			<div id="search-container" class="form-row mx-0 py-1">
 				<div class="col-12 col-sm-6 offset-sm-3">
 					<div id="search-form" class="input-group bg-white rounded">
-						<div class="input-group-prepend p-1 w-100">
+						<div class="d-flex p-1 w-100">
 							<input id="search" class="form-control" type="search" placeholder="Enter keywords, e.g. 'Attention MEG France'" name="s" autofocus {% if request.GET.s %}value="{{ request.GET.s }}"  onfocus="var temp_value=this.value; this.value=''; this.value=temp_value"{% endif %}/>
-							<input id="search-btn" type="submit" value="Search" class="btn btn-secondary pl-4 pr-4 rounded mx-auto">
+							<input id="search-btn" type="submit" value="Search" class="btn btn-secondary ps-4 pe-4 rounded mx-auto">
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="form-row mx-0 py-2">
+			<div class="row mx-0 py-2">
 				<div id="underrepresented-countries" class="col-12 col-sm-9 offset-sm-3 col-lg-3 offset-lg-3">
 					<div class="form-check custom-control custom-checkbox">
 						<input type="checkbox" class="custom-control-input" id="underrepresented-only" name="ur" {% if request.GET.ur %}checked{% endif %}>
@@ -43,14 +43,14 @@
 {% block content %}
 	{% if profiles %}
 		<div class="pb-3 no-gutters entries-number">
-			<span id="search-message"> <span class="text-secondary font-weight-bold"> {{ page_obj.paginator.count }}</span> entries found. </span>
+			<span id="search-message"> <span class="text-secondary fw-bold"> {{ page_obj.paginator.count }}</span> entries found. </span>
 		</div>
 		<div id="results-table" class="infinite-container">
 			{% for profile in profiles %}
 				<div class="table-entry infinite-item">
-					<div class="row my-4 no-gutters">
+					<div class="d-sm-flex my-4 no-gutters">
 						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
-							<h5 class="text-primary font-weight-bold">
+							<h5 class="text-primary fw-bold">
 								{% if profile.user %}
 									<a href="{% url 'profiles:detail_username' profile.user.username %}">{{ profile.name }}</a>
 								{% else %}
@@ -63,7 +63,7 @@
 							<p class="m-1"><i class="fas fa-university"></i> <span>{{ profile.institution }}</span></p>
 							<p class="m-1"><i class="fas fa-map-marker-alt"></i> <span>{{ profile.country }}</span></p>
 						</div>
-						<div class="col-md-1 col-lg-2 keywords-list mt-1 d-none d-lg-block">
+						<div class="col-lg-3 keywords-list flex-fill mt-1 d-none d-lg-block">
 							{%if profile.modalities %}
 								{{ profile.modalities }},
 							{% endif %}
@@ -72,12 +72,12 @@
 							{% endif %}
 							{{ profile.keywords }}
 						</div>
-						<div class="col-md-1 col-lg-1 mt-1 pl-4 d-none d-md-block text-primary">
+						<div class="col-md-1 col-lg-1 mt-1 ps-4 d-none d-md-block text-primary">
 							{% if profile.recommendation_set.all|length %}
 								<span><i class="fas fa-comment num-rec"></i> {{ profile.recommendation_set.all|length }}</span>
 							{% endif %}
 						</div>
-						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 actions text-xs-left text-sm-right">
+						<div class="actions text-xs-start text-sm-end">
 							<a class="btn pill-btn btn-outline-secondary w-75 m-2" href="{% url 'profiles:detail' profile.id %}">View Profile</a>
 							<a class="btn pill-btn btn-outline-secondary w-75 m-2" href="{% url 'profiles:recommend_profile' profile.id %}">Recommend</a>
 						</div>

@@ -20,14 +20,14 @@
 <div class="container-fluid">
 	<div class="row no-gutters">
 		<div class="col-12">
-			<h2 class="text-primary font-weight-bold">Edit Account</h2>
+			<h2 class="text-primary fw-bold">Edit Account</h2>
 			<div class="pt-2 mt-4 w-100 text-muted">
 				<form method="post">
 					{% csrf_token %}
 					{{ form.username|as_crispy_field }}
 					{{ form.name|as_crispy_field }}
 					{{ form.email|as_crispy_field }}
-					<div class="text-right">
+					<div class="text-end">
 						<a class="btn btn-outline-danger pill-btn" href="{% url 'profiles:user' %}" role="button">
 							Cancel
 						</a>

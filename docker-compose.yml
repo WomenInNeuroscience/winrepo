@@ -1,0 +1,25 @@
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'winrepo'
+      MYSQL_USER: 'winrepo'
+      MYSQL_PASSWORD: 'winrepo'
+      MYSQL_ROOT_PASSWORD: 'winrepo'
+      MYSQL_TCP_PORT: '33306'
+    ports:
+      - '33306:33306'
+    expose:
+      - '33306'
+  
+  winrepo:
+    build: .
+    ports:
+      - '8000:8000'
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+    command: python manage.py runserver 0.0.0.0:8000
+
