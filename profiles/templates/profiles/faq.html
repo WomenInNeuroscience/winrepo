@@ -92,11 +92,6 @@
                         through social login via Google, Twitter or GitHub. Once you validate the reCAPTCHA Verification and 
                         create your account, an email will be sent to the provided email address in order to activate the account. 
                         Please, check your spam box in case you do not see the activation email in your inbox.</p>
-
-					<p>Please note that anyone can create an account. Yet, the only feature currently available is the 
-                        creation of a public profile in the repository, if (and only if) you self-identify as a woman 
-                        active in the research field of neuroscience. More features will be available in the near future 
-                        through our user accounts and we will be encouraging anyone by then to sign-up. So, <a href="https://twitter.com/WINRePo1">stay tuned</a>!</p>
                 {% endblock answer %}
                 {% endblockinclude %}
 
@@ -114,7 +109,19 @@
                             Make sure that you also agree with our data-storing terms 
                             (see <a href="#gdpr" data-bs-toggle="collapse" data-bs-target="#gdpr" aria-expanded="true" aria-controls="gdpr">here</a>).</p>
                     {% endblock answer %}
-                {% endblockinclude %}
+				{% endblockinclude %}
+
+						                {% blockinclude "fragments/faq_card.html" with question_id="who" %}
+                {% block question %}
+                    Who can create an account and profile in the repository?
+                {% endblock question %}
+                {% block answer %}
+					<p>Anyone can create an account in the repository. Yet, the only feature currently available is the 
+						creation of a public profile, if (and only if) you self-identify as a woman active in the research
+						field of neuroscience. More features will be available in the near future through our user accounts
+						and we will be encouraging anyone by then to sign-up. So, <a href="https://twitter.com/WINRePo1">stay tuned</a>!</p>
+					{% endblock answer %}
+				{% endblockinclude %}
 
                 {% blockinclude "fragments/faq_card.html" with question_id="edit" %}
                     {% block question %}
