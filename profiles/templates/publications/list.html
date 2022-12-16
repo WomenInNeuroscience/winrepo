@@ -13,14 +13,14 @@
 	<h2 class="text-primary fw-bold mb-4">Publications</h2>
 
 	<p>List of references regarding diversity, biases, and inclusivity studies and opinion pieces, among others.</p>
-	
+
 	<form method="get" action="">
 		<input type="hidden" id="t" name="t" value="{{ t }}" />
 		<div class="form-row mx-0 py-2">
 			<div class="col-12 col-sm-8 offset-sm-2">
 				<div id="search-form" class="input-group bg-white rounded border border-primary">
 					<div class="d-flex p-1 w-100">
-						<input id="search" class="form-control" type="search" placeholder="Enter keywords to search for publications" name="s" autofocus {% if request.GET.s %}value="{{ request.GET.s }}"{% endif %}/>
+						<input id="search" class="form-control" type="search" placeholder="Enter keywords to search for publications" name="s" autofocus {% if request.GET.s %}value="{{ request.GET.s }}"{% endif %} />
 						<input id="search-btn" type="submit" value="Search" class="btn btn-secondary ps-4 pe-4 rounded mx-auto">
 					</div>
 				</div>
@@ -28,7 +28,7 @@
 		</div>
 		<div class="form-row mx-0 py-2 d-flex justify-content-center">
 			{% for type_id, type in types %}
-				<input type="submit" value="{{ type }}" onclick="document.getElementById('t').value = '{{ type_id }}'" class="btn {% if t == type_id %}btn-secondary{% else %}btn-primary{% endif %} m-1" />
+				<input type="submit" value="{{ type }}" onclick="document.getElementById('t').value = '{% if t == type_id %}{% else %}{{ type_id }}{% endif %}'" class="btn {% if t == type_id %}btn-secondary{% else %}btn-primary{% endif %} m-1" />
 			{% endfor %}
 		</div>
 	</form>
@@ -97,7 +97,7 @@
 		</div>
 
 	{% else %}
-		<p>No matching entries.</p>
+		<p class="p-4 text-center">No matching entries.</p>
 	{% endif %}
 	<a href="#" id="back-to-top" title="Back to top" class="btn"><i class="fas fa-chevron-circle-up"></i></a>
 {% endblock content %}

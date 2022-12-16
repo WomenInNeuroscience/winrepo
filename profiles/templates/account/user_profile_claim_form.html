@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load crispy_forms_tags %}
+{% load profile_url %}
 
 {% block title %}
 	{{ block.super }} - Profile Search
@@ -39,11 +40,7 @@
 			<div class="row my-4 no-gutters">
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
 					<h5 class="text-primary fw-bold">
-						{% if profile.user %}
-							<a href="{% url 'profiles:detail_username' profile.user.username %}">{{ profile.name }}</a>
-						{% else %}
-							<a href="{% url 'profiles:detail' profile.id %}">{{ profile.name }}</a>
-						{% endif %}
+						<a href="{{ profile | profile_url }}">{{ profile.name }}</a>
 					</h5>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 details-grey text-muted">

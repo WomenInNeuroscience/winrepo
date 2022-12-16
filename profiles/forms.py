@@ -262,8 +262,7 @@ class RecommendModelForm(CaptchaForm, forms.ModelForm):
 
         help_texts = {
             'profile': _('Name of the person you would like to recommend'),
-            'reviewer_position': _('Please choose the \'closest\' title from '
-                                   'the proposed options.'),
+            'reviewer_position': _('Please choose the option closest to your title.'),
             'comment': _('Describe here why you recommend this person for '
                          'conference invitations or collaborations. If you '
                          'attended one of her talks, add details on the event '

@@ -239,9 +239,10 @@ class ProfileManager(models.Manager):
         super().__init__(*args, **kwargs)
 
     def get_queryset(self):
+        qs = super().get_queryset()
         if self.alive_only:
-            return ProfileQuerySet(self.model).filter(deleted_at=None)
-        return ProfileQuerySet(self.model)
+            return qs.filter(deleted_at=None)
+        return qs
 
     def hard_delete(self):
         return self.get_queryset().hard_delete()
@@ -260,11 +261,14 @@ class ProfileQuerySet(QuerySet):
     def dead(self):
         return self.exclude(deleted_at=None)
 
+    def public(self):
+        return self.filter(is_public=True)
+
 
 class Profile(models.Model):
 
-    objects = ProfileManager()
-    all_objects = ProfileManager(alive_only=False)
+    objects = ProfileManager.from_queryset(ProfileQuerySet)()
+    all_objects = ProfileManager.from_queryset(ProfileQuerySet)(alive_only=False)
 
     @classmethod
     def get_position_choices(cls):

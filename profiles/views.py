@@ -642,8 +642,6 @@ class PublicationsList(ListView):
             search_terms = list(filter(None, s.split(' ')))
 
             for st in search_terms:
-                st_regex = re.compile(f'.*{st}.*', re.IGNORECASE)
-
                 st_conditions = [
                     Q(title__icontains=st),
                     Q(authors__icontains=st),
@@ -660,7 +658,7 @@ class PublicationsList(ListView):
 class ProfilesAutocomplete(Select2QuerySetView):
 
     def get_queryset(self):
-        profiles = Profile.objects.all()
+        profiles = Profile.objects.filter(is_public=True)
         if self.q:
             qs = ~Q(pk=None)
             search_terms = filter(None, self.q.strip().split(' '))

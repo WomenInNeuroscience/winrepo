@@ -32,7 +32,7 @@ class UserAdmin(admin.ModelAdmin):
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('name', 'position', 'institution', 'published_at')
-    search_fields = ('name', 'institution', 'email', 'is_public')
+    search_fields = ('name', 'institution', 'is_public')
     form = ProfileAdminForm
 
 

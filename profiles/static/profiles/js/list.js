@@ -26,7 +26,7 @@
       });
     }
 
-    var infinite = new Waypoint.Infinite({
+    new Waypoint.Infinite({
       element: $('.infinite-container')[0],
       onBeforePageLoad: function() {
         $('.loading').show();
