@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.apps import apps
 
-from .models import User, Profile, Recommendation, Country, Publication
-from .forms import PublicationAdminForm, UserAdminForm, ProfileAdminForm
+from .models import User, Profile, Recommendation, Country, Publication, Event
+from .forms import PublicationAdminForm, UserAdminForm, ProfileAdminForm, EventAdminForm
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -61,6 +61,21 @@ class PublicationAdmin(admin.ModelAdmin):
         initial['created_by'] = request.user
         return initial
 
+class EventAdmin(admin.ModelAdmin):
+    form = EventAdminForm
+
+    def has_add_permission(self, request):
+        return request.user.is_staff
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_module_permission(self, request):
+        return request.user.is_staff
+
 
 admin.site.site_header = 'WiNRepo Admin'
 
@@ -73,3 +88,4 @@ admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Recommendation, RecommendationAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Publication, PublicationAdmin)
+admin.site.register(Event, EventAdmin)

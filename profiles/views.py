@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import datetime, date, time, timedelta
+import heapq
 import random
 import re
-import time
+import time as _time
 from functools import reduce
 from operator import and_, or_
 
@@ -20,7 +21,7 @@ from django.utils.decorators import method_decorator
 from django.utils.http import  url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import TemplateView, DetailView,  CreateView, FormView, ListView
+from django.views.generic import TemplateView, DetailView, CreateView, FormView, ListView, View
 from django.views.generic.edit import ModelFormMixin
 from rest_framework import viewsets
 from dal.autocomplete import Select2QuerySetView
@@ -35,7 +36,7 @@ from .emails import (
 from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
                     UserDeleteForm, UserForm, UserProfileDeleteForm,
                     UserProfileForm, UserPasswordChangeForm, AuthenticationForm)
-from .models import Country, Profile, Recommendation, User, Publication
+from .models import Country, Profile, Recommendation, User, Publication, Event
 from .serializers import CountrySerializer, PositionsCountSerializer
 from .tokens import UserCreateToken, UserEmailChangeToken, UserPasswordResetToken
 
@@ -476,7 +477,7 @@ class UserPasswordResetView(FormView):
             token = UserPasswordResetToken.generate(user)
             user_reset_password_email(self.request, user, token).send()
         except User.DoesNotExist:
-            time.sleep(4)
+            _time.sleep(4)
 
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
@@ -653,6 +654,121 @@ class PublicationsList(ListView):
         return Publication.objects \
             .filter(q_st) \
             .order_by('-published_at')
+
+
+class EventsView(TemplateView):
+    template_name = 'events/list.html'
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        s = self.request.GET.get('s', '')
+        t = self.request.GET.get('t', '')
+        context.update({
+            "s": s,
+            "t": t,
+            "types": Event.Type.choices,
+        })
+
+        after = self.request.GET.get('after', None)
+        if after is None:
+            after = datetime.combine(
+                date.today() - timedelta(days=1),
+                time.min, tzinfo=timezone.utc
+            )
+        else:
+            after = datetime.fromisoformat(after).date()
+            after = datetime.combine(after, time.min, tzinfo=timezone.utc)
+
+        after_id = int(self.request.GET.get('after_id', 0))
+
+        q_st = ~Q(pk=None)  # always true
+        t = self.request.GET.get('t')  # filter by type
+        if t:
+            q_st = q_st & Q(type=t)
+
+        s = self.request.GET.get('s')  # filter by search terms
+        if s:
+            # split search terms and filter empty words (if successive spaces)
+            search_terms = list(filter(None, s.split(' ')))
+
+            for st in search_terms:
+                st_conditions = [
+                    Q(title__icontains=st),
+                    Q(description__icontains=st),
+                    Q(location__icontains=st),
+                 ]
+
+                q_st = q_st & reduce(or_, st_conditions)
+
+        events = Event.objects.filter(end_date__gt=after).filter(q_st).order_by('id')
+        generators = [
+            (
+                event,
+                iter(event.recurrence.between(
+                    after,
+                    datetime.combine(
+                        event.end_date.date(), time.max, tzinfo=timezone.utc
+                    ),
+                    dtstart=datetime.combine(
+                        event.start_date, time.min, tzinfo=timezone.utc
+                    ),
+                    inc=True
+                ))
+                if event.recurrence else iter([datetime.combine(
+                    event.start_date, time.min, tzinfo=timezone.utc
+                )])
+            )
+            for event in events
+        ]
+
+        occurrences = []
+        occurrences_gen = []
+        for event, ruleset in generators:
+            try:
+                occ = None
+                while occ is None:
+                    occ = next(ruleset)
+                    if occ.date() == after.date() and event.pk <= after_id:
+                        occ = None
+                heapq.heappush(occurrences_gen, (occ, (event, ruleset)))
+            except StopIteration:
+                pass
+
+        while occurrences_gen and len(occurrences) < self.paginate_by:
+            (event, ruleset) = occurrences_gen[0][1]
+
+            try:
+                occ = None
+                while occ is None:
+                    occ = next(ruleset)
+                    if occ.date() == after.date() and event.pk <= after_id:
+                        occ = None
+                next_occurrence = heapq.heapreplace(
+                    occurrences_gen, (occ, (event, ruleset))
+                )[0]
+            except StopIteration:
+                next_occurrence = heapq.heappop(occurrences_gen)[0]
+
+            if next_occurrence is None:
+                continue
+
+            occurrences.append({
+                "event": event,
+                "start_date": datetime.combine(
+                    next_occurrence.date(), event.start_date.timetz()
+                ),
+                "end_date": datetime.combine(
+                    next_occurrence.date(), event.end_date.timetz()
+                ),
+            })
+
+        context.update({
+            "occurrences": occurrences,
+        })
+
+        return context
 
 
 class ProfilesAutocomplete(Select2QuerySetView):

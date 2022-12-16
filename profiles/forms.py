@@ -2,7 +2,7 @@ import re
 from urllib import parse
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
-from dal.autocomplete import ModelSelect2
+from dal.autocomplete import ModelSelect2, ModelSelect2Multiple
 from django import forms
 from django.contrib.auth.forms import (
     AuthenticationForm as _AuthenticationForm,
@@ -12,7 +12,7 @@ from django.contrib.auth.forms import (
 )
 from django.utils.translation import gettext_lazy as _
 
-from .models import Profile, Recommendation, User, Publication
+from .models import Profile, Recommendation, User, Publication, Event
 
 
 class CaptchaForm(forms.Form):
@@ -346,3 +346,22 @@ class ProfileAdminForm(forms.ModelForm):
             'orcid', 'twitter', 'linkedin', 'github', 'google_scholar', 'researchgate'
         )
 
+
+class EventAdminForm(forms.ModelForm):
+
+     class Meta:
+        model = Event
+        fields = (
+            'type', 'title', 'description', 'location',
+            'start_date', 'end_date', 'recurrence', 'speakers',
+        )
+
+        widgets = {
+            'speakers': ModelSelect2Multiple(
+                url='profiles:profiles_autocomplete',
+                attrs={
+                    'data-minimum-input-length': 3,
+                    'data-placeholder': 'Search Profiles...',
+                },
+            )
+        }

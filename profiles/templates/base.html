@@ -3,6 +3,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<script>
+		// Ensure that the timezone cookie is set to the user's timezone
+		const tz_cookie = (document.cookie.match(/^(?:.*;)?\s*django_timezone\s*=\s*([^;]+)(?:.*)?$/)||[,null])[1]
+		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		if (tz_cookie == null || tz_cookie != timezone) {
+			document.cookie = "django_timezone=" + timezone;
+			location.reload();
+		}
+	</script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-135954731-1"></script>
 	<script>
@@ -64,6 +73,7 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbar-resources">
 						<a class="dropdown-item" href="{% url 'profiles:publications' %}">Publications</a>
+						<a class="dropdown-item" href="{% url 'profiles:events' %}">Events</a>
 						<a class="dropdown-item" href="{% url 'profiles:faq' %}">FAQ</a>
 						<a class="dropdown-item" href="{% url 'profiles:tips' %}">Tips</a>
 					</div>

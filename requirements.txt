@@ -18,7 +18,12 @@ pyflakes==2.3.1
 pyjwt==2.3.0
 pylint-django==2.4.2
 pylint==2.7.2
+python-dateutil>=2.1
 python-decouple==3.4
 pytz==2021.1
+pytz>=2013.9
 six==1.15.0
 smmap2==3.0.1
+markdown==3.1.1
+django-recurrence==1.11.1
+martor==1.6.15

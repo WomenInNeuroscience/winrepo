@@ -46,6 +46,8 @@ urlpatterns = [
     path('repo/<str:user__username>/recommend/', views.CreateRecommendation.as_view(), name='recommend_profile_username'),
     path('repo/<str:user__username>/claim/', views.ProfileClaim.as_view(), name='claim_profile_username'),
 
+    path('events/', views.EventsView.as_view(), name='events'),
+
     path('publications/', views.PublicationsList.as_view(), name='publications'),
     path('faq/', TemplateView.as_view(
         template_name='profiles/faq.html',
@@ -81,6 +83,7 @@ urlpatterns = [
     path('login/forgot/confirm', views.UserPasswordResetConfirmView.as_view(), name='forgot_confirm'),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('martor/', include('martor.urls')),
 
     path('', include(router.urls)),
 #     path('api/', include('rest_framework.urls', namespace='rest_framework')),
