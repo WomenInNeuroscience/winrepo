@@ -326,6 +326,16 @@ class Command(BaseCommand):
         )
         event.save()
 
+        event = Event(
+            created_at=datetime.combine(event_starts, time(hour=9)),
+            created_by=user,
+            start_date='2023-07-22 14:00:00+00:00',
+            end_date='2023-07-26 23:00:00+00:00',
+            title="OHBM",
+            type=Event.Type.CONFERENCE,
+        )
+        event.save()
+
 
         management.call_command(
             'dumpdata',

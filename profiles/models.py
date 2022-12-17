@@ -472,7 +472,7 @@ class Event(models.Model):
 
     start_date = models.DateTimeField()  # mostly for filtering
     end_date = models.DateTimeField(null=True)  # mostly for filtering
-    recurrence = recurrence.fields.RecurrenceField(include_dtstart=False, null=True)
+    recurrence = recurrence.fields.RecurrenceField(include_dtstart=False, blank=True, null=True)
 
     speakers = models.ManyToManyField(Profile, related_name='events', blank=True)
 
@@ -487,3 +487,6 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['start_date']
+
+    def __lt__(self, other):
+        return self.start_date < other.start_date

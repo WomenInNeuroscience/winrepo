@@ -716,9 +716,17 @@ class EventsView(TemplateView):
                     ),
                     inc=True
                 ))
-                if event.recurrence else iter([datetime.combine(
-                    event.start_date, time.min, tzinfo=timezone.utc
-                )])
+                if event.recurrence else 
+                iter([
+                    d for d in
+                    [
+                        datetime.combine(
+                            event.start_date + timedelta(n), time.min, tzinfo=timezone.utc
+                        )
+                        for n in range(int((event.end_date - event.start_date).days))
+                    ]
+                    if d > after
+                ])
             )
             for event in events
         ]
