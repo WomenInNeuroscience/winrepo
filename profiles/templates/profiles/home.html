@@ -1,38 +1,11 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load profile_url %}
 
 {% block css %}
 	{{ block.super }}
 	<link rel="stylesheet" type="text/css" href="{% static 'profiles/css/home.css' %}?v=3" />
-	<style>
-		* {
-  			box-sizing: border-box;
-		}
-		.column {
-  			float: left;
-		}
-		.row:before {
-  			content: "";
-  			display: table;
-  			clear: both;
-		}
-		#twitter-widget-holder{ 
-			height: 300px;
-			padding-top: 10px;
-			padding-left: 10px;
-			padding-bottom: 10px;
-			background:#fff; 
-			border-radius:3px; 
-			box-shadow:2px 2px 3px rgba(0,0,0,.1);
-			overflow: hidden; 
-		}
-		.scrollable {
-    		overflow-y: auto !important;
-    		overflow-x: hidden !important;
-    		height: 280px;
-		}
-	</style>
 {% endblock css%}
 
 {% block nav-home-classes %}active{% endblock nav-home-classes %}
@@ -95,11 +68,7 @@
 	<blockquote class="blockquote text-center m-2">
 		<p class="mb-5">{{ reco.comment|truncatechars:255 }}</p>
 		<footer class="blockquote-footer">{{ reco.reviewer_name }}, about 
-			{% if reco.profile.user %}
-				<a class="text-primary" href="{% url 'profiles:detail_username' reco.profile.user.username %}">{{ reco.profile.name }}</a>
-			{% else %}
-				<a class="text-primary" href="{% url 'profiles:detail' reco.profile.id %}">{{ reco.profile.name }}</a>
-			{% endif %}
+			<a class="text-primary" href="{{ reco.profile | profile_url }}">{{ reco.profile.name }}</a>
 		</footer>
 	</blockquote>
     </div>
@@ -180,7 +149,7 @@
 	</div>
 </div>
 
-<div class="container-fluid" id="stats">
+<div class="container-fluid mb-4">
 	<div class=row>
 		<div class="offset-md-1 offset-xl-2 col-12 col-md-5 col-lg-4 col-xl-4 col-xxl-4 p-5">
 			<h2 class="text-secondary">Going to a conference soon?</h2>

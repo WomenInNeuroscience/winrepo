@@ -3,6 +3,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<script>
+		// Ensure that the timezone cookie is set to the user's timezone
+		const tz_cookie = (document.cookie.match(/^(?:.*;)?\s*django_timezone\s*=\s*([^;]+)(?:.*)?$/)||[,null])[1]
+		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		if (tz_cookie == null || tz_cookie != timezone) {
+			document.cookie = "django_timezone=" + timezone;
+			location.reload();
+		}
+	</script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-135954731-1"></script>
 	<script>
@@ -47,7 +56,7 @@
 			</picture>
 			{% comment %}<img src="{% static 'images/logo_fill_triangles_wb.png' %}" alt="Winrepo Logo" height="38">{% endcomment %}
 		</a>
-		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+		<div class="collapse navbar-collapse pt-4 pt-md-0" id="navbarNavAltMarkup">
 			<ul class="nav navbar-nav ms-auto">
 				<li class="nav-item {% block nav-home-classes %}{% endblock nav-home-classes %}">
 					<a class="nav-link h6" href="{% url 'profiles:home' %}">Home</a>
@@ -64,6 +73,7 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbar-resources">
 						<a class="dropdown-item" href="{% url 'profiles:publications' %}">Publications</a>
+						<a class="dropdown-item" href="{% url 'profiles:events' %}">Events</a>
 						<a class="dropdown-item" href="{% url 'profiles:faq' %}">FAQ</a>
 						<a class="dropdown-item" href="{% url 'profiles:tips' %}">Tips</a>
 					</div>
@@ -98,7 +108,6 @@
 	</nav>
 
 	{% block full_page_content %}
-		<div class="full_page w-100 bg-white"></div>
 	{% endblock full_page_content %}
 
 	{% block page_container %}
@@ -122,7 +131,7 @@
 	{% endblock page_container %}
 
 	{% block footer %}
-	<footer class="page-footer font-small bg-primary text-white p-4 mt-4">
+	<footer class="page-footer font-small bg-primary text-white p-4 mt-auto">
 		<div class="d-flex flex-wrap justify-content-center">
 			<div class="col-12 col-md-6 d-flex flex-column justify-content-center">
 				<span class="fw-bold mx-1 align-middle">Women in Neuroscience Repository</span>
@@ -159,7 +168,6 @@
 		<script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" crossorigin="anonymous"></script>
 	{% endblock header_scripts %}
 	<script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
-
 	{% block footer_scripts %}
 		{% bootstrap_javascript %}
 	{% endblock footer_scripts %}

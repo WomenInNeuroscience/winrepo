@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load param_replace %}
+{% load profile_url %}
 
 {% block title %}
 	{{ block.super }} - Repository
@@ -22,18 +23,14 @@
 					</div>
 				</div>
 			</div>
-			<div class="row mx-0 py-2">
-				<div id="underrepresented-countries" class="col-12 col-sm-9 offset-sm-3 col-lg-3 offset-lg-3">
-					<div class="form-check custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="underrepresented-only" name="ur" {% if request.GET.ur %}checked{% endif %}>
-						<label class="custom-control-label" for="underrepresented-only">Under-represented Countries Only</label>
-					</div>
+			<div class="mx-0 py-2 d-flex justify-content-center flex-wrap">
+				<div class="flex-shrink-1 form-check m-0 px-2">
+					<input type="checkbox" id="underrepresented-only" name="ur" {% if request.GET.ur %}checked{% endif %}>
+					<label for="underrepresented-only">Under-represented Countries Only</label>
 				</div>
-				<div id="senior-positions" class="col-12 col-sm-9 offset-sm-3 col-lg-3 offset-lg-0">
-					<div class="form-check custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="senior-only" name="senior"{% if request.GET.senior %} checked{% endif %}>
-						<label class="custom-control-label" for="senior-only">Senior Positions Only</label>
-					</div>
+				<div class="flex-shrink-1 form-check m-0 px-2">
+					<input type="checkbox" id="senior-only" name="senior"{% if request.GET.senior %} checked{% endif %}>
+					<label for="senior-only">Senior Positions Only</label>
 				</div>
 			</div>
 		</form>
@@ -51,11 +48,7 @@
 					<div class="d-sm-flex my-4 no-gutters">
 						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
 							<h5 class="text-primary fw-bold">
-								{% if profile.user %}
-									<a href="{% url 'profiles:detail_username' profile.user.username %}">{{ profile.name }}</a>
-								{% else %}
-									<a href="{% url 'profiles:detail' profile.id %}">{{ profile.name }}</a>
-								{% endif %}
+								<a href="{{ profile | profile_url }}">{{ profile.name }}</a>
 							</h5>
 						</div>
 						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 details-grey text-muted">
@@ -95,7 +88,7 @@
 		</div>
 
 	{% else %}
-		<p>No matching entries.</p>
+		<p class="p-4 text-center">No matching entries.</p>
 	{% endif %}
 
 	<a href="#" id="back-to-top" title="Back to top" class="btn"><i class="fas fa-chevron-circle-up"></i></a>

@@ -2,8 +2,14 @@ import random
 from django.core import management
 from django.core.management.base import BaseCommand, CommandError
 
+import recurrence
+from recurrence import Recurrence, Rule
+
+import pytz
+from datetime import datetime, date, time, timedelta
+
 import winrepo.settings as settings
-from profiles.models import Country, User, Profile, Recommendation, Publication
+from profiles.models import Country, User, Profile, Recommendation, Publication, Event
 from profiles.models import (
     STRUCTURE_CHOICES,
     MODALITIES_CHOICES,
@@ -274,6 +280,61 @@ class Command(BaseCommand):
                     created_by=user,
                 )
                 pub.save()
+
+
+
+        RULE = Rule(recurrence.WEEKLY)
+        PATTERN = Recurrence(
+            rrules=[RULE]
+        )
+
+
+        timezone = pytz.timezone("UTC")
+        event_starts = date.today() + timedelta(days=3)
+
+        event = Event(
+            created_at=datetime.combine(event_starts, time(hour=9, tzinfo=timezone)),
+            created_by=user,
+            start_date=datetime.combine(event_starts, time(hour=4, tzinfo=timezone)),
+            end_date=datetime.combine(event_starts + timedelta(weeks=20), time(hour=11, tzinfo=timezone)),
+            title="Weekly Meeting",
+            type=Event.Type.PANEL_DISCUSSION,
+            description="The board weekly meeting",
+            location="https://zoom.us/j/123456789",
+            recurrence=PATTERN,
+        )
+        event.save()
+
+        event = Event(
+            created_at=datetime.combine(event_starts, time(hour=9, tzinfo=timezone)),
+            created_by=user,
+            start_date=datetime.combine(event_starts, time(hour=9, tzinfo=timezone)),
+            end_date=datetime.combine(event_starts + timedelta(weeks=2), time(hour=11, tzinfo=timezone)),
+            title="Overlapping Recurrent Meeting",
+            type=Event.Type.TALK,
+            recurrence=PATTERN,
+        )
+        event.save()
+
+        event = Event(
+            created_at=datetime.combine(event_starts, time(hour=9)),
+            created_by=user,
+            start_date=datetime.combine(event_starts, time(hour=9)),
+            end_date=datetime.combine(event_starts, time(hour=19)),
+            title="One Time Conference",
+            type=Event.Type.CONFERENCE,
+        )
+        event.save()
+
+        event = Event(
+            created_at=datetime.combine(event_starts, time(hour=9)),
+            created_by=user,
+            start_date='2023-07-22 14:00:00+00:00',
+            end_date='2023-07-26 23:00:00+00:00',
+            title="OHBM",
+            type=Event.Type.CONFERENCE,
+        )
+        event.save()
 
 
         management.call_command(

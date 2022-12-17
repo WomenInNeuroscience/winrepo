@@ -1,11 +1,10 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+import recurrence.fields
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.db.models.query import QuerySet
 from django.utils import timezone
-
-from django.urls import reverse
-
+from martor.models import MartorField
 from multiselectfield import MultiSelectField
 
 PHD = 'PhD student'
@@ -239,9 +238,10 @@ class ProfileManager(models.Manager):
         super().__init__(*args, **kwargs)
 
     def get_queryset(self):
+        qs = super().get_queryset()
         if self.alive_only:
-            return ProfileQuerySet(self.model).filter(deleted_at=None)
-        return ProfileQuerySet(self.model)
+            return qs.filter(deleted_at=None)
+        return qs
 
     def hard_delete(self):
         return self.get_queryset().hard_delete()
@@ -260,11 +260,14 @@ class ProfileQuerySet(QuerySet):
     def dead(self):
         return self.exclude(deleted_at=None)
 
+    def public(self):
+        return self.filter(is_public=True)
+
 
 class Profile(models.Model):
 
-    objects = ProfileManager()
-    all_objects = ProfileManager(alive_only=False)
+    objects = ProfileManager.from_queryset(ProfileQuerySet)()
+    all_objects = ProfileManager.from_queryset(ProfileQuerySet)(alive_only=False)
 
     @classmethod
     def get_position_choices(cls):
@@ -445,3 +448,45 @@ class Publication(models.Model):
 
     class Meta:
         ordering = ['-published_at']
+
+
+class Event(models.Model):
+
+    class Type(models.TextChoices):
+        TALK = 'TA', 'Talk'
+        CONFERENCE = 'CO', 'Conference'
+        PANEL_DISCUSSION = 'PD', 'Panel Discussion'
+
+
+    def __str__(self):
+        return self.title
+
+    type = EnumField(
+        enum=Type,
+        max_length=2, 
+        blank=False
+    )
+    title = models.CharField(max_length=200, blank=False)
+    description = MartorField(help_text='Markdown supported', blank=True, null=True)
+    location = MartorField(help_text='Markdown supported', blank=True, null=True)
+
+    start_date = models.DateTimeField()  # mostly for filtering
+    end_date = models.DateTimeField(null=True)  # mostly for filtering
+    recurrence = recurrence.fields.RecurrenceField(include_dtstart=False, blank=True, null=True)
+
+    speakers = models.ManyToManyField(Profile, related_name='events', blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL,
+        related_name='events',
+        null=True
+    )
+
+    class Meta:
+        ordering = ['start_date']
+
+    def __lt__(self, other):
+        return self.start_date < other.start_date

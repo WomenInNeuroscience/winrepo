@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'django_extensions',
+    'martor',
 
     'allauth',
     'allauth.account',
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
 
     'profiles',
+    'recurrence',
     'django.contrib.admin',
 ]
 
@@ -50,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'profiles.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'winrepo.urls'
@@ -201,6 +204,8 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 SELECT2_CSS = ''
+
+MARTOR_ENABLE_LABEL = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
