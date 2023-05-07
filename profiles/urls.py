@@ -25,6 +25,9 @@ sitemaps = {
 }
 
 app_name = 'profiles'
+academic_advice_updated_at = datetime.fromtimestamp(
+    os.path.getmtime('profiles/templates/profiles/academic_advice.html')
+)
 tips_updated_at = datetime.fromtimestamp(
     os.path.getmtime('profiles/templates/profiles/tips.html')
 )
@@ -59,6 +62,10 @@ urlpatterns = [
         template_name='profiles/about.html',
         extra_context={'updated_at': about_updated_at}
     ), name='about'),
+    path('academic_advice/', TemplateView.as_view(
+        template_name='profiles/academic_advice.html',
+        extra_context={'updated_at': about_updated_at}
+    ), name='academic_advice'),
 
     path('profiles-autocomplete/', views.ProfilesAutocomplete.as_view(), name='profiles_autocomplete'),
     path('countries-autocomplete/', views.CountriesAutocomplete.as_view(), name='countries_autocomplete'),
