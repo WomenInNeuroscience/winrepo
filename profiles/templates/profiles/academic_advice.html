@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block css %} 
+    {{ block.super }}
+    <style media="screen">
+        .anchor::before{
+            display: block; 
+            content: " ";
+            margin-top: -60px; 
+            height: 60px; 
+            visibility: hidden; 
+            pointer-events: none;
+        }
+
+        a:hover { 
+            color: #C71585;
+        }
+
+        #toc_container {
+            background: #f9f9f9 none repeat scroll 0 0;
+            border: 1px solid #aaa;
+            display: table;
+            font-size: 95%;
+            margin-bottom: 1em;
+            padding: 20px;
+            padding-right: 55px;
+            padding-top: 35px;
+            width: auto;
+        }
+
+        .toc_title {
+            font-weight: 700;
+            text-align: center;
+        }
+
+        #toc_container li, #toc_container ul, #toc_container ul li {
+            list-style: outside none none !important;
+        }
+    </style>
+{% endblock css %}
+
+{% block title %} {{ block.super }} - Resources {% endblock title %}
+
+{% block nav-resources-classes %}active{% endblock nav-resources-classes %}
+
+{% block content %}
+    <h2 class="text-primary fw-bold mb-4"> 
+    Academic Advice</h2>
+
+    <p style="text-align:justified; padding: 1em 0 0 0">
+		List of resources provided during our Panels of Discussion that took place during the Fall of 2022.</p>
+
+    <!-- <p style="text-align:justified; padding: 0 0 1em 0">
+		 Here are some tips that may help you increase the diversity at your 
+		 events. While this list mostly refers to diversity in terms of gender, 
+		 we would like to emphasize that diversity across different axes is 
+		 desired, including (but not limited to) geographical location, ethnicity, 
+		 disability, seniority or academia <i>vs.</i> 
+		 industry<sup><a href="#footnote">1</a></sup>. Please note that none of 
+		 the suggestions in this document are a panacea, hence the impact of 
+		 diversity measures should be constantly re-evaluated. 
+		 </p> -->
+
+    <div id="toc_container">
+        <p class="toc_title">Contents</p>
+            <ul class="toc_list">
+                <li style="padding: 0.5em 0 0.25em 0"><a href="#First_Point_Header">
+					1 Academic funding: navigating the ocean of grants </a></li>
+				<ol>
+                    Panelists
+                </ol>
+				<ol>
+                    Why look for grants?
+                </ol>
+				<ol>
+                    How to find opportunities?
+                </ol>
+				<ol>
+                    List of Resources
+                </ol>
+                <li style="padding: 0.5em 0 0.25em 0"><a href="#Second_Point_Header">
+					2 Finding an academic position: navigating the job market </a></li>
+				<ol>
+                    Panelists
+                </ol>
+				<ol>
+                    The application package
+                </ol>
+				<ol>
+                    Networking and word of mouth
+                </ol>
+				<ol>
+                    Knowing your target department
+                </ol>
+                <li style="padding: 0.5em 0 0.25em 0"><a href="#Third_Point_Header">
+					3 Finding work-life balance</a></li>
+				<ol>
+                    Panelists
+                </ol>
+            </ul>
+    </div>
+
+    <h3 class="text-primary fw-bold mb-4 anchor" 
+	style="padding: 2.5em 0 0 0" id="First_Point_Header"> 
+	Academic funding: navigating the ocean of grants</h3>
+
+	<h4><b>Panelists:</b></h4>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 30px">
+        <li>Liuba Papeo, Director of Research, CNRS (France)</li>
+        <li>Graziana Gatto, Group Leader, Uniklinik Köln (Germany)</li>
+        <li>Victoria Abraira, Assistant Professor, Rutgers (USA)</li>
+		<li>Anais Lorens, Assistant Project Scientist, UC Berkeley (USA)</li>
+		<li>Stephanie Noble, Postdoctoral Researcher, Yale University (USA)</li>
+		<li>Ileana Jelescu, Assistant Professor, Université de Lausanne (Switzerland)</li>
+		<li>Julia Kam, Assistant Professor, University of Calgary (Canada)</li>
+    </ul>
+
+	<h4><b>Why look for grants?</b></h4>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 30px">
+        <li>Grants and fellowships are as important to your career as publications.</li>
+        <li>If your position relies on soft money, grants are particularly important.</li>
+        <li>When transitioning from tenure-track to a tenured position, grants are essential. Be sure to check how your department handles promotions.</li>
+    </ul>
+
+	<h4><b>How to find opportunities?</b></h4>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 30px">
+        <li>Your university should be able to help. Talk to the grant or research office at your university about possible opportunities and available resources. Alternatively, talk to the program officers of the funding bodies (such as NIH).</li>
+		<li>Use your network! If you don’t have a network yet, use your advisor’s network. Don’t be afraid to ask for help!</li>
+        <li>Google! There are lots of online resources. See below for a list to start from.</li>
+    </ul>
+
+	<h4><b>List of Resources:</b></h4>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 20px">
+        <li><a href="https://www.ogrants.org/grants-01-all.html">Open Grants</a></li>
+        <li><a href="https://www.ffg.at/europa/heu/erc/published-proposals">Published ERC proposals</a></li>
+        <li><a href="https://futurepislack.wordpress.com/">Future PI Slack</a> – a great resource for postdocs, including grants</li>
+		<li><a href="http://www.embo.org/funding/">EMBO fellowship</a></li>
+		<li><a href="https://www.fondationfyssen.fr/en/study-grants/aim-award/">Fyssen</a></li>
+		<li><a href="https://www.forwomeninscience.com/">L'Oreal</a></li>
+		<li><a href="https://www.hfsp.org/funding/hfsp-funding/research-grants">PI Human Frontier</a></li>
+    </ul>
+
+	<h5><b>For international postdocs and faculty in the US:</b></h5>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 20px">
+        <li><a href="https://fulbrightscholars.org/">Fulbright fellowships</a></li>
+        <li><a href="https://grants.nih.gov/grants/guide/pa-files/PAR-21-220.html">K99</a> and <a href="https://grants.nih.gov/grants/funding/r01.htm">R01</a> NIH grants (and see <a href="https://grants.nih.gov/grants/guide/notice-files/NOT-OD-20-031.html">DEI information</a>)</li>
+        <li><a href="https://www.simonsfoundation.org/funding-opportunities/simons-foundation-independence-awards/">Simons Foundation</a></li>
+		<li><a href="https://www.grants.gov/learn-grants/grant-making-agencies/department-of-defense.html">US Department of Defense</a></li>
+		<li>Apply for a <a href="https://www.uscis.gov/green-card">green card</a>! It is easier to apply for grants as an American citizen, but this can be expensive (involving a lawyer), stressful, and competitive. The best path is through sponsorship by your employer. This can cost around  $10k, and you’ll need to demonstrate in your application that you are the most uniquely qualified person for the job.</li>
+    </ul>
+
+	<h5><b>For international postdocs and faculty in Europe:</b></h5>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 30px">
+        <li><a href="https://www.dfg.de/en/research_funding/index.html">DFG</a> (German Research Foundation) offers some international projects.</li>
+        <li>The Einstein Foundation (in Berlin) offers opportunities for both <a href="https://www.einsteinfoundation.de/en/">fellowships</a> and <a href="https://www.einsteinfoundation.de/en/programmes/einstein-professorship/">professorships</a> through multiple <a href="https://www.einsteinfoundation.de/en/programmes/">programs</a>.</li>
+        <li>The Humboldt Foundation also offers <a href="https://www.research-in-germany.org/en/research-funding/funding-programmes/avh-humboldt-research-fellowship-for-experienced-researchers.html">fellowships</a> for international scholars.</li>
+		<li><a href="https://marie-sklodowska-curie-actions.ec.europa.eu/">Marie-Curie Fellowships</a> (up to 8 years after PhD)</li>
+		<li>ERC offers <a href="https://erc.europa.eu/apply-grant/starting-grant">starting</a> (up to 7 years after PhD) and <a href="https://erc.europa.eu/apply-grant/consolidator-grant">consolidator</a> (up to 12y after PhD) grants, as long as the research is carried out in Europe.</li>
+		<li><a href="https://cordis.europa.eu/programme/id/H2020_MSCA-ITN-2020">Innovative Training Networks</a></li>
+		<li>Note: personnel can be much less expensive in Europe compared to the US, so costs can be lower. Make sure to check the minimum salary for your country; for instance, many EU or US scholarships would not be enough to cover the full salary of a postdoc in Switzerland.</li>
+    </ul>
+
+
+    <h3 class="text-primary fw-bold mb-4 anchor" id="Second_Point_Header" style="padding: 2.5em 0 0 0">
+		Finding an academic position: navigating the job market</h3>
+
+	<h4><b>Panelists:</b></h4>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 30px">
+        <li>Athina Tzovara | @AthinaTzovara | Assistant Professor in Bern (Switzerland)</li>
+        <li>Jet Vonk | @JetMJVonk | Assistant Professor at UCSF, San Francisco (USA)</li>
+        <li>Laura Gwilliams | @GwilliamsL | Assistant Professor at New York University, New York (USA)</li>
+		<li>Yulia Oganian | @YuliaOganian | Junior group leader in Tubingen (Germany)</li>
+		<li>Francesca Branzi | @fbranzi84 | Lecturer in Liverpool (UK)</li>
+		<li>Rose Bruffaerts | @RoseBruffaerts | Assistant Professor in Antwerp (Belgium)</li>
+    </ul>
+
+	<h4><b>The application package</b></h4>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 30px">
+        <li><b><u>What makes a good CV</u>?</b> There are lots of variables, and the fit between candidate and department can matter more than any other variable.</li>
+		<li><b><u>Prepare early</u></b> so that you have a great starting point that you can easily adapt for new job openings. Get feedback from colleagues and revise your materials.</li>
+        <li><b><u>For letters of recommendation</u></b>, prepare a targeted template well in advance that you can use as a starting point for different jobs.</li>
+    </ul>
+
+	<h4><b>Networking and word of mouth</b></h4>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 30px">
+        <li><b><u>Be on the lookout</u></b> for opportunities and advice. Let everyone know you are on the job market, by working it into every conversation you have. You never know who might have some advice or know of a job opening.</li>
+		<li><b><u>Collaborate</u></b> with people outside your immediate group in order to build a network.</li>
+        <li><b><u>Find good mentors</u>:</b> their support, advice, and connections can be invaluable.</li>
+    </ul>
+
+	<h4><b>Knowing your target department</b></h4>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 30px">
+        <li><b><u>Contact people</u></b> in the department you’re applying to. Find research overlaps and opportunities for collaboration.</li>
+		<li><b><u>Learn as much as you can</u></b> about the grants you’ll be applying for and the courses you’ll teach.</li>
+        <li><b><u>Evaluate</u></b> how well you’d be able to implement your ideas in that department.</li>
+    </ul>
+
+    <h3 class="text-primary fw-bold mb-4 anchor" 
+		id="Third_Point_Header">Finding work-life balance</h3>
+
+	<h4><b>Panelists:</b></h4>
+
+	<ul class="toc_list" style="margin-top: -2px; margin-bottom: 30px">
+        <li>Darinka Trübutschek | @DTruebutschek | Max Plank (Germany) | 1 kid</li>
+        <li>Maryam Ziaei | @MaryamZiae | Kavli Institute (Norway) | 1 kid</li>
+        <li>Stephanie Ries | @sriescornou | San Diego (USA) | 2 kids</li>
+		<li>Maria Ivanova | UC Berkeley (USA) | 2 kids</li>
+		<li>Deborah Marciano | @DeborahMarcian0 | UC Berkeley (USA) | 4 kids</li>
+		<li>Inês Almeida | @inestalmeida | Coimbra (Portugal) | 1 kid</li>
+    </ul>
+
+	<p style="text-align:justified;"><b><u>Academia can complicate achieving work-life balance</u>.</b> Apart from a heavy workload, an academic career often comes with stressors such as precarity, having to move often, and mentors who have not experienced the same issues and thus may not be able to empathize. In addition, COVID-19 and its effects threw off what little balance academics had achieved, with disproportionate effects on women and minorities. Some career stages can be more stressful than others – for example, a postdoc can be more uncertain and precarious, while a permanent position can allow for better life planning.</p>
+
+	<p style="text-align:justified;"><b><u>Academic institutions and their resources can be leveraged to improve your work-life balance</u>.</b> If resources are not available, ask! Make yourself heard and ask that institutions and conferences provide facilities such as nurseries, lactation rooms, and on-site childcare.
+		Any parental leave should be taken in consideration when you’re being assessed for jobs – so make sure to list it under “career breaks” at the start of your CV.</p>
+
+	<p style="text-align:justified";><b><u>Nothing will change unless people hold institutions accountable</u></b> and demand reasonable standards of support. This includes choosing wisely who you work with! At the interview stage, carefully assess expectations, attitudes and work culture. Remember that an interview works both ways: you are assessing the department and interviewers as much as they are assessing you.</p>
+
+	<p style="text-align:justified;"><b><u>While working towards institutional changes, leverage other sources of support</u>.</b> Parent support groups can be a helpful resource. Having a supportive partner also helps, though resolving work-life tensions should not be left entirely to families. It is also essential to carve some time out for yourself and activities that improve your well-being, such as work or creative hobbies. Get rid of the guilt that can unconsciously lurk in the background: work never ends and it’s important to set healthy boundaries.</p>
+
+	<p class="mt-5 text-center text-muted">
+        Last update at: {{ updated_at | date:"F Y" }}
+	</p>
+    
+{% endblock content %}
