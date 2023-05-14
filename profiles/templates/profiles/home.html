@@ -36,22 +36,24 @@
 		html,
 		body {
 			margin: 0
-			border: 0
 		}
 		.banner {
-			background: #009579
+			background: #ffffff
 		}
 		.banner__content{
-			padding: 50px;
-			max-width: 500px; <!--width of the text box -->
+			margin: 0;
+			border: 0;
+			padding: 40px;
+			max-width: 1000px; <!--width of the text box -->
 			margin: 0 auto; <!--center the text box -->
 			display: flex;
-			align-items: center;
+			vertical-align: center;
 		}
 		.banner__text {
 			flex-grow: 1;
 			line-height: 1.4;
-			font-family: 'Quicksand', sans-serif;
+			font-family: 'Quicksand', calibri;
+			font-size: 30px;
 		}
 		.banner__close {
 			background: none;
@@ -60,7 +62,28 @@
 		}
 		.banner__text,
 		.banner__close > span {
-			color: #ffffff;
+			margin: 0;
+			border: 0;
+			padding: 0;
+			color:  #CC063E ;
+		}
+		/* Bottom left text */
+		.bottom-left {
+			position: absolute;
+			bottom: 815px;
+			left: 20px;
+		}
+		.button-pos {
+			position: absolute;
+			bottom: 820px;
+			left: 1800px;
+		}
+		.material-symbols-outlined {
+			font-variation-settings:
+				'FILL' 0,
+				'wght' 700,
+				'GRAD' 200,
+				'opsz' 48
 		}
     </style>
 {% endblock css%}
@@ -75,12 +98,14 @@
 <div class="banner">
 	<div class="banner__content">
 		<div class="banner__text">
-			Bottom Left
+			<div class="bottom-left"><b>We are currently looking for new collaborators to work with us on the website and repository development. To reach out, fill in <a href="https://docs.google.com/forms/d/e/1FAIpQLScWtUKWdYt2yIFiSueYqGKoGbxJ-pqm8KHVoEvJrlhksbKmHQ/viewform">this form</a>.</b></div>
 		</div>
 		<button class="banner__close" type="button">
-			<span class="material-symbols-outlined">
-				close
-			</span>
+			<div class="button-pos">
+				<span class="material-symbols-outlined">
+					close
+				</span>
+			</div>
 		</button>
 	</div>
 </div>
@@ -91,6 +116,8 @@
 	});
 </script>
 
+<div></div><div></div>
+
 <div class="container-fluid p-0">
 <picture id="hero-image">
 	<source srcset="{% static 'profiles/images/banner2-1600.webp' %}" type="image/webp">
@@ -98,12 +125,14 @@
 	<img src="{% static 'profiles/images/banner2.jpg' %}" alt="Header Image">
 </picture>
 </div>
+
 <div class="container-fluid" id="home-search">
 	<form action="{% url 'profiles:index' %}" method="get" class="input-group bg-white rounded p-1 mx-auto">
 		<input type="text" id="search-input" class="form-control" placeholder="Enter search keywords here..." aria-label="Search" name="s" autofocus>
 		<button type="submit" id="search-btn" class="btn btn-secondary bg-secondary ps-4 pe-4">Search</button>
 	</form>
 </div>
+
 <div class="container-fluid bg-primary text-white pt-5 pb-5" id="intro-container">
 	<div class="row no-gutters p-4">
 		<div class="col-md-4 offset-md-4 text-center">
