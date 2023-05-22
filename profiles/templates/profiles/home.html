@@ -39,13 +39,12 @@
 		}
 		.banner {
 			background: #ffffff
+			background-position-y: 100px;
 		}
 		.banner__content{
-			margin: 0;
-			border: 0;
-			padding: 40px;
-			max-width: 1000px; <!--width of the text box -->
-			margin: 0 auto; <!--center the text box -->
+			padding-top: 100px;
+			max-width: 1800px;
+			margin: 0 auto;
 			display: flex;
 			vertical-align: center;
 		}
@@ -60,31 +59,19 @@
 			border: none;
 			cursor: pointer;
 		}
-		.banner__text,
-		.banner__close > span {
-			margin: 0;
-			border: 0;
-			padding: 0;
+		.banner__text{
 			color:  #CC063E ;
 		}
-		/* Bottom left text */
-		.bottom-left {
-			position: absolute;
-			bottom: 815px;
-			left: 20px;
+		.banner__close > span {
+			color: black ;
 		}
-		.button-pos {
-			position: absolute;
-			bottom: 820px;
-			left: 1800px;
-		}
-		.material-symbols-outlined {
-			font-variation-settings:
-				'FILL' 0,
-				'wght' 700,
-				'GRAD' 200,
-				'opsz' 48
-		}
+			.material-symbols-outlined {
+				font-variation-settings:
+					'FILL' 0,
+					'wght' 700,
+					'GRAD' 200,
+					'opsz' 48
+			}
     </style>
 {% endblock css%}
 
@@ -97,15 +84,11 @@
 
 <div class="banner">
 	<div class="banner__content">
-		<div class="banner__text">
-			<div class="bottom-left"><b>We are currently looking for new collaborators to work with us on the website and repository development. To reach out, fill in <a href="https://docs.google.com/forms/d/e/1FAIpQLScWtUKWdYt2yIFiSueYqGKoGbxJ-pqm8KHVoEvJrlhksbKmHQ/viewform">this form</a>.</b></div>
-		</div>
+		<div class="banner__text"><b>We are currently looking for new collaborators to work with us on the website and repository development. To reach out, fill in <a href="https://docs.google.com/forms/d/e/1FAIpQLScWtUKWdYt2yIFiSueYqGKoGbxJ-pqm8KHVoEvJrlhksbKmHQ/viewform">this form</a>.</b></div>
 		<button class="banner__close" type="button">
-			<div class="button-pos">
-				<span class="material-symbols-outlined">
-					close
-				</span>
-			</div>
+			<span class="material-symbols-outlined">
+				close
+			</span>
 		</button>
 	</div>
 </div>
