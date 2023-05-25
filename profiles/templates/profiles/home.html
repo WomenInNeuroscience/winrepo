@@ -3,8 +3,9 @@
 {% load static %}
 
 {% block css %}
-	{{ block.super }}
-	<link rel="stylesheet" type="text/css" href="{% static 'profiles/css/home.css' %}?v=3" />
+{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'profiles/css/home.css' %}?v=3" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 	<style>
 		* {
   			box-sizing: border-box;
@@ -32,7 +33,46 @@
     		overflow-x: hidden !important;
     		height: 280px;
 		}
-	</style>
+		html,
+		body {
+			margin: 0
+		}
+		.banner {
+			background: #ffffff
+			background-position-y: 100px;
+		}
+		.banner__content{
+			padding-top: 100px;
+			max-width: 1800px;
+			margin: 0 auto;
+			display: flex;
+			vertical-align: center;
+		}
+		.banner__text {
+			flex-grow: 1;
+			line-height: 1.4;
+			font-family: 'Quicksand', calibri;
+			font-size: 30px;
+		}
+		.banner__close {
+			background: none;
+			border: none;
+			cursor: pointer;
+		}
+		.banner__text{
+			color:  #CC063E ;
+		}
+		.banner__close > span {
+			color: black ;
+		}
+			.material-symbols-outlined {
+				font-variation-settings:
+					'FILL' 0,
+					'wght' 700,
+					'GRAD' 200,
+					'opsz' 48
+			}
+    </style>
 {% endblock css%}
 
 {% block nav-home-classes %}active{% endblock nav-home-classes %}
@@ -41,19 +81,41 @@
 {% endblock page_container %}
 
 {% block full_page_content %}
-<div class="container-fluid p-0">
-	<picture id="hero-image">
-		<source srcset="{% static 'profiles/images/banner2-1600.webp' %}" type="image/webp">
-		<source srcset="{% static 'profiles/images/banner2.jpg' %}" type="image/jpeg"> 
-		<img src="{% static 'profiles/images/banner2.jpg' %}" alt="Header Image">
-	</picture>
+
+<div class="banner">
+	<div class="banner__content">
+		<div class="banner__text"><b>We are currently looking for new collaborators to work with us on the website and repository development. To reach out, fill in <a href="https://docs.google.com/forms/d/e/1FAIpQLScWtUKWdYt2yIFiSueYqGKoGbxJ-pqm8KHVoEvJrlhksbKmHQ/viewform">this form</a>.</b></div>
+		<button class="banner__close" type="button">
+			<span class="material-symbols-outlined">
+				close
+			</span>
+		</button>
+	</div>
 </div>
+<!--Java script code to make the button work-->
+<script>
+	document.querySelector(".banner__close").addEventListener("click", function() {
+		this.closest(".banner").style.display = "none";
+	});
+</script>
+
+<div></div><div></div>
+
+<div class="container-fluid p-0">
+<picture id="hero-image">
+	<source srcset="{% static 'profiles/images/banner2-1600.webp' %}" type="image/webp">
+	<source srcset="{% static 'profiles/images/banner2.jpg' %}" type="image/jpeg"> 
+	<img src="{% static 'profiles/images/banner2.jpg' %}" alt="Header Image">
+</picture>
+</div>
+
 <div class="container-fluid" id="home-search">
 	<form action="{% url 'profiles:index' %}" method="get" class="input-group bg-white rounded p-1 mx-auto">
 		<input type="text" id="search-input" class="form-control" placeholder="Enter search keywords here..." aria-label="Search" name="s" autofocus>
 		<button type="submit" id="search-btn" class="btn btn-secondary bg-secondary ps-4 pe-4">Search</button>
 	</form>
 </div>
+
 <div class="container-fluid bg-primary text-white pt-5 pb-5" id="intro-container">
 	<div class="row no-gutters p-4">
 		<div class="col-md-4 offset-md-4 text-center">
