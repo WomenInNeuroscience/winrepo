@@ -152,7 +152,7 @@ class Command(BaseCommand):
         user = User.objects.create_user(
             username='admin',
             name='Admin',
-            email='admin@winrepo.org',
+            email='womeninneurosciencerepository@gmail.com',
             password='admin',
             is_staff=True,
             is_superuser=True,
