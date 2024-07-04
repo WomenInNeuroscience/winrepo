@@ -96,7 +96,7 @@ $(document).ready(function() {
             const selection = chart.getSelection();
             if (selection.length > 0) {
                 const country = data.getValue(selection[0].row, 0);
-                window.location.href = '/list?s=' + encodeURIComponent(country);
+                window.location.href = '/repo/?s=' + encodeURIComponent(country);
             }
         });
 
