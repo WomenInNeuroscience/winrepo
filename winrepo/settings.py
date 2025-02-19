@@ -1,5 +1,8 @@
 import os
+import time
 from decouple import config
+
+STATIC_VERSION = int(time.time())  # Unique timestamp to force reload
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
