@@ -65,13 +65,40 @@
 		.banner__close > span {
 			color: black ;
 		}
-			.material-symbols-outlined {
-				font-variation-settings:
-					'FILL' 0,
-					'wght' 700,
-					'GRAD' 200,
-					'opsz' 48
-			}
+		.material-symbols-outlined {
+			font-variation-settings:
+				'FILL' 0,
+				'wght' 700,
+				'GRAD' 200,
+				'opsz' 48
+		}
+		bsky-widget {
+			min-height: 387px;
+			width: 500px;
+			--bsky-background: #fff;
+			--bsky-primary: #1185fe;
+			--bsky-primary-hover: #4ca2fe;
+			--bsky-text-on-primary: #fff;
+			--bsky-text-on-background: #0b0f14;
+			--bsky-text-on-background-subtle: #42576c;
+			--bsky-text-large: 1.4rem;
+			--bsky-text-large-line-height: 1.8rem;
+			--bsky-text-medium: 1rem;
+			--bsky-text-small: 0.9rem;
+			font-family: Arial, Helvetica, sans-serif, -apple-system, sans-serif;
+			display: inline-block;
+			box-shadow: 1px 1px 8px 1px #0002;
+			border-radius: 8px;
+                }
+		.posts-container {
+		    margin-top: 20px;
+		}
+		.post {
+		    border: 1px solid #ddd;
+		    padding: 10px;
+		    margin-bottom: 10px;
+		    border-radius: 5px;
+		}
     </style>
 {% endblock css%}
 
@@ -243,23 +270,26 @@
 </div>
 
 <div class="container-fluid" id="stats">
-	<div class=row>
-		<div class="offset-md-1 offset-xl-2 col-12 col-md-5 col-lg-4 col-xl-4 col-xxl-4 p-5">
-			<h2 class="text-secondary">Going to a conference soon?</h2>
-			<p class="text-dark text-justify">Download our slide and insert it at the end of your presentation!
-				It will raise awareness on the issue of gender equity in neuroscience and show that there are resources to
-				help conference organizers. In addition, it will encourage researchers to submit recommendations of their peers.</p>
-			<a href="{% static 'images/slide_nov2022.pdf' %}" id="download-slide" class="btn pill-btn slide-btn text-white btn-secondary" style="margin-left:170px" download="WiNRepo_Slide">Download slide</a>
-		</div>
-		<div class="col-12 col-md-5 col-lg-4 p-3">
-			<div id="twitter-widget-holder">
-				<section class="scrollable">
-					<a class="twitter-timeline" href="https://twitter.com/WINRePo1?ref_src=twsrc%5Etfw" data-tweet-limit="5">Tweets by WINRePo1</a>
-					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
-				</section>
-			</div>
-		</div>
-	</div>
+  <div class=row>
+    <div class="offset-md-1 offset-xl-2 col-12 col-md-5 col-lg-4 col-xl-4 col-xxl-4 p-5">
+	    <h2 class="text-secondary">Going to a conference soon?</h2>
+	    <p class="text-dark text-justify">Download our slide and insert it at the end of your presentation!
+		    It will raise awareness on the issue of gender equity in neuroscience and show that there are resources to
+		    help conference organizers. In addition, it will encourage researchers to submit recommendations of their peers.</p>
+	    <a href="{% static 'images/slide_nov2022.pdf' %}" id="download-slide" class="btn pill-btn slide-btn text-white btn-secondary" style="margin-left:170px" download="WiNRepo_Slide">Download slide</a>
+    </div>		
+    <div class="col-12 col-md-5 col-lg-4 p-3">
+      <div id="bluesky-widget-holder">
+	  <section class="scrollable">
+	      <!-- Bluesky Profile Widget -->
+	      <bsky-widget handle="winrepo.bsky.social"></bsky-widget>
+	      <script src="https://unpkg.com/bsky-widget@~0.1/dist/index.js" type="module"></script>
+	      <!-- Container for Latest Posts -->
+	      <div class="posts-container" id="posts-container"></div>
+	  </section>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock full_page_content %}
@@ -269,4 +299,5 @@
 	<script src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="{% static 'profiles/js/home-graphs.js' %}?v=1"></script>
 	<script src="{% static 'profiles/js/home-gtag.js' %}?v=1"></script>
-{% endblock footer_scripts %}
+	{% endblock footer_scripts %}
+
