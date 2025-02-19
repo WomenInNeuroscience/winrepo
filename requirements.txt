@@ -1,24 +1,37 @@
+# Ensure the correct Python version is used
+# python_version == "3.10.12"
+
+# Upgrade essential tools before installing other dependencies
+pip>=23.0.0
+setuptools>=75.8.0
+wheel>=0.40.0
+
+# Security and Code Quality
 bandit==1.7.4
-coverage==5.5
-crispy-bootstrap5==0.6
+flake8==3.9.0
+pyflakes==2.3.1
+pylint-django==2.4.2
+pylint==2.7.2
+
+# Django Framework and Extensions
+Django==3.2
+djangorestframework==3.12.4
 django-admin-sortable==2.3.0
-django-allauth==0.45.0
+django-allauth==0.51.0
 django-autocomplete-light==3.8.2
 django-bootstrap5==22.1
 django-crispy-forms==1.14.0
+crispy-bootstrap5==0.6
 django-extensions==3.1.1
 django-multiselectfield==0.1.12
 django-recaptcha==2.0.6
 django-robots==4.0
 django-sendgrid-v5==1.1.1
-Django==3.2
-djangorestframework==3.12.4
-flake8==3.9.0
-pyflakes==2.3.1
-pyjwt==2.3.0
-pylint-django==2.4.2
-pylint==2.7.2
+
+# Utility and Environment Management
 python-decouple==3.4
 pytz==2021.1
 six==1.15.0
 smmap2==3.0.1
+pyjwt==2.3.0
+coverage==5.5
