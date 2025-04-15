@@ -117,3 +117,9 @@ section .section-title {
     height: 8rem;
     border-radius: 50%;
 }
+
+.pronouns {
+    display: block;
+    font-size: 0.9em;
+    color: #555;
+}
