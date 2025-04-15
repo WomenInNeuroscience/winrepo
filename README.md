@@ -52,7 +52,7 @@ To report a bug, suggest a new feature, add information or any other type of enh
   <li>No new dependency</li>
 </ol>
 
-### Background
+## Background
 
 This project builds upon work originally developed in the [WiNRepo repository by Gregory Fryns](https://github.com/gregoryfryns/winrepo). This legacy repository includes the initial implementation of the WiNRepo website that informed its current version. Major changes include:
 
