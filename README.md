@@ -51,3 +51,12 @@ To report a bug, suggest a new feature, add information or any other type of enh
   <li>Low redundancy</li>
   <li>No new dependency</li>
 </ol>
+
+### Background
+
+This project builds upon work originally developed in the [WiNRepo repository by Gregory Fryns](https://github.com/gregoryfryns/winrepo). This legacy repository includes the initial implementation of the WiNRepo website that informed its current version. Major changes include:
+
+<ol>
+  <li>a user account functionality, enabling user registration, login, and update of user's profile in the repository.</li>
+  <li>a separate 'Resources' tab alongside the existing FAQ, featuring Publications, Tips, and Academic Advice.</li>
+</ol>
