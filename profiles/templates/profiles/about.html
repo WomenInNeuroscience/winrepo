@@ -538,6 +538,35 @@
                         </div>
                     </div>
 		</div>
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                <div class="mainflip">
+                    <div class="frontside">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <p>
+                                    <picture>
+                                        <source srcset="{% static 'profiles/images/Pic_TD-280.webp' %}" type="image/webp">
+                                        <source srcset="{% static 'profiles/images/Pic_TD-280.jpg' %}" type="image/jpeg">
+                                        <img src="{% static 'profiles/images/Pic_TD-280.jpg' %}" alt="Thuy Dao">
+                                    </picture>
+                                </p>
+                                <h4 class="card-title">Thuy Dao<br><span class="pronouns">(she/her)</span></h4>
+                                <p class="card-text"><b>Research</b></p>
+                                <p class="card-text">PhD Student at the University of Queensland, Brisbane, Australia</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backside">
+                        <div class="card">
+                            <div class="card-body text-center mt-4">
+                                <p class="card-text">Thuy is a PhD student at the University of Queensland, developing open-source software to enable reproducible and accessible neuroimaging. Her work focuses on affording a yacht in 5 years.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
             </div>
         </div>
     </section>
