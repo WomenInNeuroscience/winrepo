@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 1200px;">
+  <h1>Transparency Reporting Scale Calculator</h1>
+
+  <p>This interactive tool implements the <i>Transparency Reporting Scale</i>
+  (TRS), a 15-item framework developed to assess how transparently research
+  funders report data relevant to evaluating equity in funding. The TRS covers
+  five domains—Accessibility and <a href="https://doi.org/10.1038/sdata.2016.18">FAIR principles</a>, Gender/DEI and demographics, Temporal information, Funding, and Field specificity. By selecting which criteria are met based on publicly available information, users can calculate an overall transparency score and rating, and identify areas for improvement. The tool is designed to support funders, researchers, and policymakers in promoting standardised, transparent reporting practices that enable meaningful assessment of equity in research funding. <!-- For more information see the paper "Clarke et al., (2026). Girls just wanna have funds: A new Transparent Reporting Scale for evaluating grant data reporting from funding agencies". --></p>
+
+  <p>
+    This tool is hosted externally and embedded here for convenience. It may
+    take up to 5 seconds to load. Otherwise, open it directly:
+    <a href="https://funders-project.onrender.com/" target="_blank" rel="noopener">
+      https://funders-project.onrender.com/
+    </a>
+  </p>
+
+  <div style="width: 100%; height: 85vh; border: 1px solid #ddd;">
+    <iframe
+      src="https://funders-project.onrender.com/"
+      title="Transparency Reporting Scale Calculator"
+      style="width: 100%; height: 100%; border: 0;"
+      loading="lazy"
+      referrerpolicy="no-referrer"
+      allow="clipboard-read; clipboard-write"
+    ></iframe>
+  </div>
+</div>
+{% endblock %}

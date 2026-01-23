@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count, Q
 from django.http.response import Http404
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -700,3 +700,7 @@ class TopPositionsViewSet(viewsets.ReadOnlyModelViewSet):
         .annotate(profiles_count=Count('id')) \
         .order_by('-profiles_count')
     serializer_class = PositionsCountSerializer
+
+
+def transparency_calculator(request):
+    return render(request, "profiles/transparency_calculator.html")

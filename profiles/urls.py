@@ -1,3 +1,4 @@
+
 import os
 from datetime import datetime
 from django.urls import path, include
@@ -37,6 +38,9 @@ faq_updated_at = datetime.fromtimestamp(
 about_updated_at = datetime.fromtimestamp(
     os.path.getmtime('profiles/templates/profiles/about.html')
 )
+transparency_calculator_updated_at = datetime.fromtimestamp(
+    os.path.getmtime('profiles/templates/profiles/transparency_calculator.html')
+)
 
 urlpatterns = [
     path('', views.Home.as_view(), name='home'),
@@ -66,6 +70,10 @@ urlpatterns = [
         template_name='profiles/academic_advice.html',
         extra_context={'updated_at': about_updated_at}
     ), name='academic_advice'),
+    path('transparency_calculator/', TemplateView.as_view(
+        template_name='profiles/transparency_calculator.html',
+        extra_context={'updated_at': about_updated_at}
+    ), name='transparency_calculator'),
 
     path('profiles-autocomplete/', views.ProfilesAutocomplete.as_view(), name='profiles_autocomplete'),
     path('countries-autocomplete/', views.CountriesAutocomplete.as_view(), name='countries_autocomplete'),
