@@ -68,11 +68,11 @@ urlpatterns = [
     ), name='about'),
     path('academic_advice/', TemplateView.as_view(
         template_name='profiles/academic_advice.html',
-        extra_context={'updated_at': about_updated_at}
+        extra_context={'updated_at': academic_advice_updated_at}
     ), name='academic_advice'),
     path('transparency_calculator/', TemplateView.as_view(
         template_name='profiles/transparency_calculator.html',
-        extra_context={'updated_at': about_updated_at}
+        extra_context={'updated_at': transparency_calculator_updated_at}
     ), name='transparency_calculator'),
 
     path('profiles-autocomplete/', views.ProfilesAutocomplete.as_view(), name='profiles_autocomplete'),
