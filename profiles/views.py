@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import logging
 import random
 import re
 import time
@@ -7,8 +8,13 @@ from operator import and_, or_
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import login, logout, update_session_auth_hash, views as auth_views
-from django.contrib.auth.forms import (PasswordResetForm, SetPasswordForm)
+from django.contrib.auth import (
+    login,
+    logout,
+    update_session_auth_hash,
+    views as auth_views,
+)
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count, Q
@@ -17,12 +23,19 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.utils.http import  url_has_allowed_host_and_scheme
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import TemplateView, DetailView,  CreateView, FormView, ListView
+from django.views.generic import (
+    CreateView,
+    DetailView,
+    FormView,
+    ListView,
+    TemplateView,
+)
 from django.views.generic.edit import ModelFormMixin
 from rest_framework import viewsets
+
 from dal.autocomplete import Select2QuerySetView
 
 from .emails import (
@@ -30,14 +43,36 @@ from .emails import (
     user_create_confirm_email,
     user_reset_password_email,
     user_update_email,
-    user_update_email_email
+    user_update_email_email,
 )
-from .forms import (ProfileClaimForm, RecommendModelForm, UserCreateForm,
-                    UserDeleteForm, UserForm, UserProfileDeleteForm,
-                    UserProfileForm, UserPasswordChangeForm, AuthenticationForm)
-from .models import Country, Profile, Recommendation, User, Publication
+from .forms import (
+    AuthenticationForm,
+    ProfileClaimForm,
+    RecommendModelForm,
+    UserCreateForm,
+    UserDeleteForm,
+    UserForm,
+    UserPasswordChangeForm,
+    UserProfileDeleteForm,
+    UserProfileForm,
+)
+from .models import Country, Profile, Publication, Recommendation, User
 from .serializers import CountrySerializer, PositionsCountSerializer
-from .tokens import UserCreateToken, UserEmailChangeToken, UserPasswordResetToken
+from .tokens import (
+    UserCreateToken,
+    UserEmailChangeToken,
+    UserPasswordResetToken,
+)
+
+logger = logging.getLogger(__name__)
+
+
+def safe_send_email(email_message, log_message):
+    """Send an email without breaking the request on backend failure."""
+    try:
+        email_message.send()
+    except Exception:
+        logger.exception(log_message)
 
 
 class Home(ListView):
@@ -46,9 +81,11 @@ class Home(ListView):
     model = Recommendation
 
     def get_queryset(self):
-        top_reco = Recommendation.objects.filter(profile__deleted_at__isnull=True).order_by('-id')[:100]
-        nb_samples = 6
+        top_reco = Recommendation.objects.filter(
+            profile__deleted_at__isnull=True
+        ).order_by('-id')[:100]
 
+        nb_samples = 6
         if len(top_reco) == 0:
             sample = []
         else:
@@ -76,17 +113,12 @@ class ListProfiles(ListView):
         q_st = Q(is_public=True, deleted_at__isnull=True)
 
         if s is not None:
-            # split search terms and filter empty words (if successive spaces)
+            # split search terms and filter empty words
+            # (if successive spaces)
             search_terms = list(filter(None, s.split(' ')))
-
             for st in search_terms:
                 st_regex = re.compile(f'.*{st}.*', re.IGNORECASE)
 
-                # matching_positions = list(
-                #   code
-                #   for code, name in Profile.get_position_choices()
-                #   if st_regex.match(name)
-                # )
                 matching_structures = list(
                     Q(brain_structure__contains=code)
                     for code, name in Profile.get_structure_choices()
@@ -115,14 +147,14 @@ class ListProfiles(ListView):
                     Q(brain_structure__icontains=st),
                     Q(country__name__icontains=st),
                     Q(keywords__icontains=st),
-                 ] + matching_structures \
-                   + matching_modalities \
-                   + matching_methods \
-                   + matching_domains
+                ] + matching_structures \
+                    + matching_modalities \
+                    + matching_methods \
+                    + matching_domains
 
                 q_st = and_(reduce(or_, st_conditions), q_st)
 
-        #  create filter on under-represented countries
+        # create filter on under-represented countries
         if is_underrepresented:
             q_ur = Q(country__is_under_represented=True)
         else:
@@ -130,19 +162,25 @@ class ListProfiles(ListView):
 
         # create filter on senior profiles
         if is_senior:
-            senior_profiles_keywords = ('Senior', 'Lecturer', 'Professor',
-                                        'Director', 'Principal')
-            # position must contain one of the words(case insensitive)
-            q_senior = reduce(or_, (Q(position__icontains=x)
-                                    for x
-                                    in senior_profiles_keywords))
+            senior_profiles_keywords = (
+                'Senior',
+                'Lecturer',
+                'Professor',
+                'Director',
+                'Principal',
+            )
+            # position must contain one of the words (case insensitive)
+            q_senior = reduce(
+                or_,
+                (Q(position__icontains=x) for x in senior_profiles_keywords),
+            )
         else:
             q_senior = ~Q(pk=None)  # always true
 
         # apply filters
-        profiles_list = Profile.objects \
-            .filter(q_st, q_ur, q_senior) \
-            .order_by('-published_at')
+        profiles_list = Profile.objects.filter(
+            q_st, q_ur, q_senior
+        ).order_by('-published_at')
 
         return profiles_list
 
@@ -168,16 +206,19 @@ class LoginView(auth_views.LoginView):
             )
             if url_is_safe:
                 request.session['next'] = next
-                request.session['next_expiration'] = datetime.timestamp(datetime.now() + timedelta(minutes=15))
+                request.session['next_expiration'] = datetime.timestamp(
+                    datetime.now() + timedelta(minutes=15)
+                )
         return super().dispatch(request, *args, **kwargs)
 
     def get_redirect_url(self):
         if self.request.session.get('next') and \
-            self.request.session.get('next_expiration'):
-
-            if datetime.timestamp(datetime.now()) < self.request.session['next_expiration']:
+                self.request.session.get('next_expiration'):
+            if datetime.timestamp(
+                datetime.now()
+            ) < self.request.session['next_expiration']:
                 return self.request.session.get('next')
-        
+
         if self.request.session.get('first_login', False):
             return reverse('profiles:user_profile')
 
@@ -190,21 +231,25 @@ class UserProfileView(TemplateView):
 
 class UserProfileClaimView(LoginRequiredMixin, TemplateView):
     template_name = "account/user_profile_claim_form.html"
+
     def get(self, request, *args, **kwargs):
         try:
             self.request.user.profile
             return redirect('profiles:user_profile_edit')
         except Profile.DoesNotExist:
             pass
+
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self, search=None):
         profiles = Profile.objects.all()
         qs = Q(user__isnull=True)
+
         if search:
             terms = filter(None, search.strip().split(' '))
             for term in terms:
                 qs &= Q(name__icontains=term)
+
         profiles = profiles.filter(qs)
         return profiles[:5]
 
@@ -218,7 +263,12 @@ class UserProfileClaimView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class UserProfileEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, FormView):
+class UserProfileEditView(
+    LoginRequiredMixin,
+    SuccessMessageMixin,
+    ModelFormMixin,
+    FormView,
+):
     template_name = "account/user_profile_form.html"
     form_class = UserProfileForm
     success_message = 'Your profile has been saved successfully!'
@@ -239,8 +289,16 @@ class UserProfileEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixi
 
     def form_valid(self, form):
         if self.object._state.adding is False and \
-            any(f in form.changed_data for f in form.base_fields):
-            profile_update_email(self.request, self.request.user, self.object).send()
+                any(f in form.changed_data for f in form.base_fields):
+            safe_send_email(
+                profile_update_email(
+                    self.request,
+                    self.request.user,
+                    self.object,
+                ),
+                'Failed to send profile update email.',
+            )
+
         form.save(self.request.user)
         return super().form_valid(form)
 
@@ -249,7 +307,6 @@ class UserProfileEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixi
 
 
 class UserProfileDeleteView(LoginRequiredMixin, FormView):
-
     form_class = UserProfileDeleteForm
     template_name = 'account/user_profile_delete.html'
     success_message = 'Your profile has been deleted successfully!'
@@ -260,7 +317,6 @@ class UserProfileDeleteView(LoginRequiredMixin, FormView):
             profile = user.profile
             profile.user = None
             profile.delete()
-
             user.profile = None
             user.save()
         except Profile.DoesNotExist:
@@ -271,15 +327,24 @@ class UserProfileDeleteView(LoginRequiredMixin, FormView):
     def get_success_url(self):
         return reverse('profiles:user')
 
+
 class UserView(LoginRequiredMixin, TemplateView):
     template_name = "account/user.html"
 
 
-class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, FormView):
+class UserEditView(
+    LoginRequiredMixin,
+    SuccessMessageMixin,
+    ModelFormMixin,
+    FormView,
+):
     template_name = "account/user_form.html"
     form_class = UserForm
     success_message = 'Your account has been updated successfully!'
-    email_success_message = 'Your account has been updated successfully! Please check your email for the verification link.'
+    email_success_message = (
+        'Your account has been updated successfully! '
+        'Please check your email for the verification link.'
+    )
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.request.user
@@ -288,8 +353,7 @@ class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, Form
     def form_valid(self, form):
         # if any info was updated, send email
         if any(f in form.changed_data for f in form.base_fields):
-
-            # if email was changed, logout and goes through the
+            # if email was changed, logout and go through the
             # email verification process
             if 'email' in form.changed_data:
                 # get the original user, so we have the original email
@@ -298,35 +362,55 @@ class UserEditView(LoginRequiredMixin, SuccessMessageMixin, ModelFormMixin, Form
                     user=original_user,
                     # send the new email via token, so we update
                     # the email upon verification
-                    email=form.cleaned_data['email']
+                    email=form.cleaned_data['email'],
                 )
 
-                # send confirmation email to the new address
-                user_update_email_email(self.request, form.instance, token).send()
+                try:
+                    # send confirmation email to the new address
+                    user_update_email_email(
+                        self.request,
+                        form.instance,
+                        token,
+                    ).send()
+                except Exception:
+                    logger.exception(
+                        'Failed to send email-change confirmation email.'
+                    )
+                    form.add_error(
+                        'email',
+                        'We could not send the verification email right now. '
+                        'Please try again later.'
+                    )
+                    return self.form_invalid(form)
 
                 # logout the user
                 logout(self.request)
-
                 self.request.session['user_confirmation_token'] = token
 
                 # deactivate account until email is verified
                 self.object = original_user
                 form.instance.is_active = False
                 form.instance.email = original_user.email
-
                 self.success_message = self.email_success_message
                 form.changed_data.remove('email')  # do not save email change
 
             # send email to old address
-            user_update_email(self.request, self.object).send()
-        
+            safe_send_email(
+                user_update_email(self.request, self.object),
+                'Failed to send account update email.',
+            )
+
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('profiles:user')
 
 
-class UserChangePasswordView(LoginRequiredMixin, SuccessMessageMixin, FormView):
+class UserChangePasswordView(
+    LoginRequiredMixin,
+    SuccessMessageMixin,
+    FormView,
+):
     form_class = UserPasswordChangeForm
     template_name = "account/user_change_password.html"
     success_message = 'Your password has been updated successfully!'
@@ -371,7 +455,6 @@ class UserDeleteView(LoginRequiredMixin, FormView):
             pass
 
         user.delete()
-
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -402,57 +485,79 @@ class UserCreateConfirmView(TemplateView):
     template_name = 'registration/signup_confirm.html'
     success_message = 'Your e-mail is confirmed! Please, sign-in!'
     same_session_success_message = 'Your e-mail is confirmed!'
-    same_session_success_profile_message = 'Your e-mail is confirmed! Please, if you identify yourself as a woman, set-up your public profile!'
-    error_message = 'There was an error with your activation. Please, try again.'
+    same_session_success_profile_message = (
+        'Your e-mail is confirmed! Please, if you identify yourself as a '
+        'woman, set-up your public profile!'
+    )
+    error_message = 'There was an error with your activation.\nPlease, try again.'
 
     def get(self, request, *args, **kwargs):
         token = request.GET.get('token')
-        if token:  # if there's a token
-
+        if token:
+            # if there's a token
             payload = UserCreateToken.check(token)
-            if payload:  # if the token is valid
-
+            if payload:
+                # if the token is valid
                 user = User.objects.get(pk=payload['sub'])
                 user.is_active = True  # activate user
-                if 'email' in payload:  # e-mail update flow
+
+                if 'email' in payload:
+                    # e-mail update flow
                     user.email = payload['email']
                 user.save()
 
-                if Profile.objects.filter(contact_email=user.email, user__isnull=True).exists():
-                    profile = Profile.objects.get(contact_email=user.email, user__isnull=True)
+                if Profile.objects.filter(
+                    contact_email=user.email,
+                    user__isnull=True,
+                ).exists():
+                    profile = Profile.objects.get(
+                        contact_email=user.email,
+                        user__isnull=True,
+                    )
                     profile.user = user  # assign user to profile if email matches
                     profile.save()
 
                 same_session_confirmation = False
                 if 'user_confirmation_token' in request.session:
-                    same_session_confirmation = request.session['user_confirmation_token'] == token
+                    same_session_confirmation = (
+                        request.session['user_confirmation_token'] == token
+                    )
                     del request.session['user_confirmation_token']
-                
+
                 if same_session_confirmation:
                     # Same session confirmations are cool to direct login
-                    login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
+                    login(
+                        request,
+                        user,
+                        backend=settings.AUTHENTICATION_BACKENDS[0],
+                    )
                     if Profile.objects.filter(user=user).exists():
-                        messages.success(self.request, self.same_session_success_profile_message)
+                        messages.success(
+                            self.request,
+                            self.same_session_success_profile_message,
+                        )
                     else:
-                        messages.success(self.request, self.same_session_success_message)
+                        messages.success(
+                            self.request,
+                            self.same_session_success_message,
+                        )
                     return redirect(self.get_redirect_url())
                 else:
                     # Not same session, so request for login
                     messages.success(self.request, self.success_message)
                     return redirect('profiles:login')
 
-            messages.error(self.request, self.error_message)
-            return redirect('profiles:login')
-
-        return super().get(request, *args, **kwargs)
+        messages.error(self.request, self.error_message)
+        return redirect('profiles:login')
 
     def get_redirect_url(self):
         if self.request.session.get('next') and \
-            self.request.session.get('next_expiration'):
-
-            if datetime.timestamp(datetime.now()) < self.request.session['next_expiration']:
+                self.request.session.get('next_expiration'):
+            if datetime.timestamp(
+                datetime.now()
+            ) < self.request.session['next_expiration']:
                 return self.request.session.get('next')
-        
+
         if self.request.session.get('first_login', False):
             return reverse('profiles:user_profile')
 
@@ -462,7 +567,10 @@ class UserCreateConfirmView(TemplateView):
 class UserPasswordResetView(FormView):
     form_class = PasswordResetForm
     template_name = 'registration/reset_password.html'
-    success_message = 'If your e-mail address is in our registry, you will receive an e-mail soon on how to reset your password.'
+    success_message = (
+        'If your e-mail address is in our registry, you will receive an '
+        'e-mail soon on how to reset your password.'
+    )
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -489,16 +597,20 @@ class UserPasswordResetConfirmView(FormView):
     form_class = SetPasswordForm
     template_name = 'registration/reset_password_confirm.html'
     success_message = 'Your password has been resetted! Please, sign-in!'
-    error_message = 'There was an error with your password reset. Please, try again.'
+    error_message = (
+        'There was an error with your password reset.\nPlease, try again.'
+    )
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         self.user = None
         token = request.GET.get('token')
-        if token:  # if there's a token
+        if token:
+            # if there's a token
             payload = UserPasswordResetToken.check(token)
-            if payload:  # if the token is valid
+            if payload:
+                # if the token is valid
                 self.user = User.objects.get(pk=payload['sub'])
 
         return super().dispatch(request, *args, **kwargs)
@@ -539,14 +651,17 @@ class CreateRecommendation(SuccessMessageMixin, FormView):
                     return redirect('profiles:detail', pk=profile_id)
             except Profile.DoesNotExist:
                 pass
+
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
         recommendation = form.save()
         self.profile_id = recommendation.profile.id
+
         if self.request.user.is_authenticated:
             recommendation.reviewer = self.request.user
             recommendation.save()
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -558,8 +673,10 @@ class CreateRecommendation(SuccessMessageMixin, FormView):
         if profile_id is not None:
             profile = get_object_or_404(Profile, pk=profile_id)
             initial.update({'profile': profile})
+
         if self.request.user.is_authenticated:
             initial.update({'reviewer_name': self.request.user.name})
+
         return initial
 
 
@@ -567,7 +684,6 @@ class ProfileClaim(SuccessMessageMixin, FormView, LoginRequiredMixin):
     template_name = 'profiles/claim_form.html'
     form_class = ProfileClaimForm
     success_message = 'Your claim has been submitted successfully!'
-
     profile = None
 
     def dispatch(self, request, *args, **kwargs):
@@ -589,7 +705,6 @@ class ProfileClaim(SuccessMessageMixin, FormView, LoginRequiredMixin):
             return redirect('profiles:detail', pk=profile_id)
 
         self.profile = get_object_or_404(Profile, pk=profile_id)
-
         if self.profile.user:
             return redirect('profiles:detail', pk=profile_id)
 
@@ -638,63 +753,62 @@ class PublicationsList(ListView):
 
         s = self.request.GET.get('s')
         if s:
-            # split search terms and filter empty words (if successive spaces)
+            # split search terms and filter empty words
+            # (if successive spaces)
             search_terms = list(filter(None, s.split(' ')))
-
             for st in search_terms:
                 st_regex = re.compile(f'.*{st}.*', re.IGNORECASE)
-
                 st_conditions = [
                     Q(title__icontains=st),
                     Q(authors__icontains=st),
                     Q(description__icontains=st),
-                 ]
-
+                ]
                 q_st = q_st & reduce(or_, st_conditions)
 
-        return Publication.objects \
-            .filter(q_st) \
-            .order_by('-published_at')
+        return Publication.objects.filter(q_st).order_by('-published_at')
 
 
 class ProfilesAutocomplete(Select2QuerySetView):
-
     def get_queryset(self):
         profiles = Profile.objects.all()
+
         if self.q:
             qs = ~Q(pk=None)
             search_terms = filter(None, self.q.strip().split(' '))
             for st in search_terms:
                 qs &= (
-                    Q(name__icontains=st) | Q(institution__icontains=st)
+                    Q(name__icontains=st) |
+                    Q(institution__icontains=st)
                 )
             profiles = profiles.filter(qs)
+
         return profiles
 
 
 class CountriesAutocomplete(Select2QuerySetView):
-
     def get_queryset(self):
         countries = Country.objects.all()
+
         if self.q:
             qs = ~Q(pk=None)
             search_terms = filter(None, self.q.split(' '))
             for st in search_terms:
                 qs &= Q(name__icontains=st)
             countries = countries.filter(qs)
+
         return countries
 
 
 class RepresentedCountriesViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Country.objects.annotate(profiles_count=Count('profiles')) \
-                              .filter(profiles_count__gt=0)
+    queryset = Country.objects.annotate(
+        profiles_count=Count('profiles')
+    ).filter(profiles_count__gt=0)
     serializer_class = CountrySerializer
     authentication_classes = []
 
 
 class TopPositionsViewSet(viewsets.ReadOnlyModelViewSet):
     authentication_classes = []
-
     queryset = Profile.objects.all() \
         .values('position') \
         .annotate(profiles_count=Count('id')) \
