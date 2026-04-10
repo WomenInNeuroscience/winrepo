@@ -23,4 +23,4 @@ jobs:
           mkdir -p "${HOME}/.ssh"
           ssh -o StrictHostKeyChecking=no \
             "${{ secrets.PYTHONANYWHERE_USERNAME }}@ssh.pythonanywhere.com" \
-            "cd ~/winrepo && bash tools/refresh_env.sh"
+            "cd ~/winrepo-prod && bash tools/refresh_env.sh"
