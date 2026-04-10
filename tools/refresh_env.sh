@@ -13,8 +13,19 @@ set -eu
 BASEDIR=$(realpath "$(dirname "$0")/..")
 cd "${BASEDIR}"
 
+echo "==> Loading environment..."
+set -a
+source .env
+set +a
+
+echo "==> Activating virtualenv..."
+source "${HOME}/.virtualenvs/winrepo-prod/bin/activate"
+
 echo "==> Pulling latest code..."
 git pull
+
+echo "==> Installing dependencies..."
+pip install -q -r requirements.txt
 
 echo "==> Collecting static files..."
 python manage.py collectstatic --noinput
