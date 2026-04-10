@@ -105,3 +105,8 @@ class SmokeTests(TestCase):
     def test_recommend_page(self):
         r = self.client.get(reverse('profiles:recommend_profile', args=[self.profile.id]))
         self.assertEqual(r.status_code, 200)
+
+    def test_sitemap(self):
+        r = self.client.get('/sitemap.xml')
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('xml', r['Content-Type'])

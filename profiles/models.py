@@ -362,6 +362,11 @@ class Profile(models.Model):
     def grad_month_labels(self):
         return dict(MONTHS_CHOICES).get(self.grad_month)
 
+    def get_absolute_url(self):
+        if self.user:
+            return reverse('profiles:detail_username', args=[self.user.username])
+        return reverse('profiles:detail', args=[self.pk])
+
 
 class RecommendationQuerySet(QuerySet):
     pass
