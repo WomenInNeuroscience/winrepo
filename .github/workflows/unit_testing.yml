@@ -29,9 +29,9 @@ jobs:
 
     - name: Prepare project
       run: |
-        python manage.py makemigrations
         python manage.py migrate
 
     - name: Test
       run: |
-        python ./manage.py test
+        coverage run --source=profiles manage.py test
+        coverage report --fail-under=50

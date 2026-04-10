@@ -174,3 +174,21 @@
     </div>
 </div>
 {% endblock content %}
+
+{% block footer_scripts %}
+	{{ block.super }}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var hash = window.location.hash;
+			if (!hash) return;
+			var id = hash.replace('#heading-', '');
+			var collapse = document.getElementById(id);
+			if (collapse) {
+				new bootstrap.Collapse(collapse, {show: true});
+				collapse.addEventListener('shown.bs.collapse', function () {
+					document.getElementById('heading-' + id).scrollIntoView({behavior: 'smooth'});
+				}, {once: true});
+			}
+		});
+	</script>
+{% endblock footer_scripts %}
