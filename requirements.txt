@@ -28,6 +28,9 @@ django-recaptcha==2.0.6
 django-robots==6.1
 django-sendgrid-v5==1.1.1
 
+# MySQL (production)
+mysqlclient>=2.1
+
 # Utility and Environment Management
 python-decouple==3.4
 pytz==2021.1
