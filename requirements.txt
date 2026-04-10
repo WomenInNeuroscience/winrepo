@@ -25,7 +25,7 @@ crispy-bootstrap5==0.6
 django-extensions==3.1.1
 django-multiselectfield==0.1.12
 django-recaptcha==2.0.6
-django-robots==4.0
+django-robots==6.1
 django-sendgrid-v5==1.1.1
 
 # Utility and Environment Management
