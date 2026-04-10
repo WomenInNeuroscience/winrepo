@@ -14,9 +14,10 @@ BASEDIR=$(realpath "$(dirname "$0")/..")
 cd "${BASEDIR}"
 
 echo "==> Loading environment..."
-set -a
-source .env
-set +a
+while IFS='=' read -r key value; do
+  [[ -z "$key" || "$key" == \#* ]] && continue
+  export "$key"="$value"
+done < .env
 
 echo "==> Activating virtualenv..."
 source "${HOME}/.virtualenvs/winrepo-prod/bin/activate"
