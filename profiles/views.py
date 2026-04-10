@@ -57,7 +57,9 @@ from .forms import (
     UserProfileForm,
 )
 from .models import Country, Profile, Publication, Recommendation, User
-from .serializers import CountrySerializer, PositionsCountSerializer
+from .serializers import (
+    CountrySerializer, PositionsCountSerializer, ProfileSearchSerializer,
+)
 from .tokens import (
     UserCreateToken,
     UserEmailChangeToken,
@@ -814,6 +816,18 @@ class TopPositionsViewSet(viewsets.ReadOnlyModelViewSet):
         .annotate(profiles_count=Count('id')) \
         .order_by('-profiles_count')
     serializer_class = PositionsCountSerializer
+
+
+class ProfileSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """All public profiles with fields needed for client-side search."""
+    authentication_classes = []
+    pagination_class = None
+    serializer_class = ProfileSearchSerializer
+    queryset = Profile.objects.filter(
+        is_public=True, deleted_at__isnull=True,
+    ).select_related('country', 'user').annotate(
+        recommendation_count=Count('recommendations'),
+    ).order_by('-published_at')
 
 
 def transparency_calculator(request):

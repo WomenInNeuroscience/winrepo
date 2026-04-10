@@ -15,6 +15,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'api/countries', views.RepresentedCountriesViewSet)
 router.register(r'api/positions', views.TopPositionsViewSet)
+router.register(r'api/profiles', views.ProfileSearchViewSet)
 
 
 sitemaps = {
