@@ -32,13 +32,15 @@ class UserAdmin(admin.ModelAdmin):
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('name', 'position', 'institution', 'published_at')
-    search_fields = ('name', 'institution', 'email', 'is_public')
+    search_fields = ('name', 'institution', 'contact_email')
+    list_filter = ('is_public', 'position')
     form = ProfileAdminForm
 
 
 class PublicationAdmin(admin.ModelAdmin):
     list_display = ('type', 'title', 'authors', 'published_at', 'doi', '_created_by')
-    search_fields = ('type', 'title', 'authors', 'published_at', 'doi', '_created_by')
+    search_fields = ('title', 'authors', 'doi', 'created_by__name')
+    list_filter = ('type',)
     form = PublicationAdminForm
 
     def has_add_permission(self, request):

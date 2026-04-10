@@ -43,7 +43,7 @@
 {% block content %}
 	{% if profiles %}
 		<div class="pb-3 no-gutters entries-number">
-			<span id="search-message"> <span class="text-secondary fw-bold"> {{ page_obj.paginator.count }}</span> entries found. </span>
+			<span id="search-message"> <span id="search-count" class="text-secondary fw-bold"> {{ page_obj.paginator.count }}</span> entries found. </span>
 		</div>
 		<div id="results-table" class="infinite-container">
 			{% for profile in profiles %}
@@ -106,4 +106,5 @@
 	<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
 	<script src="{% static 'js/infinite.min.js' %}"></script>
 	<script src="{% static 'profiles/js/list.js' %}?v=2"></script>
+	<script src="{% static 'profiles/js/live-search.js' %}?v=1"></script>
 {% endblock footer_scripts %}

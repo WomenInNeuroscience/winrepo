@@ -53,7 +53,7 @@ class ProfilesSitemap(sitemaps.Sitemap):
     priority = 0.5
 
     def items(self):
-        return Profile.objects.all()
+        return Profile.objects.filter(is_public=True)
 
     def lastmod(self, obj):
         return obj.updated_at

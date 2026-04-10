@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 import logging
 import random
+
+logger = logging.getLogger(__name__)
 import re
 import time
 from functools import reduce
@@ -57,7 +59,9 @@ from .forms import (
     UserProfileForm,
 )
 from .models import Country, Profile, Publication, Recommendation, User
-from .serializers import CountrySerializer, PositionsCountSerializer
+from .serializers import (
+    CountrySerializer, PositionsCountSerializer, ProfileSearchSerializer,
+)
 from .tokens import (
     UserCreateToken,
     UserEmailChangeToken,
@@ -474,7 +478,15 @@ class UserCreateView(CreateView):
         valid = super().form_valid(form)
         token = UserCreateToken.generate(self.object)
         self.request.session['user_confirmation_token'] = token
-        user_create_confirm_email(self.request, self.object, token).send()
+        try:
+            user_create_confirm_email(self.request, self.object, token).send()
+        except Exception:
+            logger.exception('Failed to send signup confirmation email to %s', self.object.email)
+            messages.error(
+                self.request,
+                'Your account was created but we could not send the '
+                'confirmation email. Please contact us for assistance.',
+            )
         return valid
 
     def get_success_url(self):
@@ -814,6 +826,18 @@ class TopPositionsViewSet(viewsets.ReadOnlyModelViewSet):
         .annotate(profiles_count=Count('id')) \
         .order_by('-profiles_count')
     serializer_class = PositionsCountSerializer
+
+
+class ProfileSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """All public profiles with fields needed for client-side search."""
+    authentication_classes = []
+    pagination_class = None
+    serializer_class = ProfileSearchSerializer
+    queryset = Profile.objects.filter(
+        is_public=True, deleted_at__isnull=True,
+    ).select_related('country', 'user').annotate(
+        recommendation_count=Count('recommendations'),
+    ).order_by('-published_at')
 
 
 def transparency_calculator(request):

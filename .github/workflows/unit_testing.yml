@@ -1,13 +1,16 @@
 name: Unit testing
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_call:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Python 3.10
       uses: actions/setup-python@v5
@@ -26,27 +29,9 @@ jobs:
 
     - name: Prepare project
       run: |
-        python manage.py makemigrations
         python manage.py migrate
 
     - name: Test
       run: |
-        python ./manage.py test
-
-    # - name: Deploy
-    #   env:
-    #     SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-    #   run: |
-    #     ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-    #     ssh-add - <<< "${{ secrets.PYTHONANYWHERE_ACCESS }}"
-    #     mkdir -p ${HOME}/.ssh
-    #     echo "PYTHONANYWHERE_ACCESS=${PYTHONANYWHERE_ACCESS}" >> ${HOME}/.ssh/environment
-    #     echo "PYTHONANYWHERE_ADDRESS=${PYTHONANYWHERE_ADDRESS}" >> ${HOME}/.ssh/environment
-    #     echo "PYTHONANYWHERE_DOMAIN=${PYTHONANYWHERE_DOMAIN}" >> ${HOME}/.ssh/environment
-    #     echo "PYTHONANYWHERE_TOKEN=${PYTHONANYWHERE_TOKEN}" >> ${HOME}/.ssh/environment
-    #     echo "PYTHONANYWHERE_USERNAME=${PYTHONANYWHERE_USERNAME}" >> ${HOME}/.ssh/environment
-    #     ssh -T -o StrictHostKeyChecking=no "${{ secrets.PYTHONANYWHERE_ADDRESS }}" || CODE=$?
-    #     if [ $CODE -eq 254 ]
-    #     then
-    #       echo "Not a paid-for PythonAnywhere account"
-    #     fi
+        coverage run --source=profiles manage.py test
+        coverage report --fail-under=50

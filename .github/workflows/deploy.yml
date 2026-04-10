@@ -1,0 +1,26 @@
+name: Deploy to PythonAnywhere
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    uses: ./.github/workflows/unit_testing.yml
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy via SSH
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.PYTHONANYWHERE_SSH_KEY }}"
+          mkdir -p "${HOME}/.ssh"
+          ssh -o StrictHostKeyChecking=no \
+            "${{ secrets.PYTHONANYWHERE_USERNAME }}@ssh.pythonanywhere.com" \
+            "cd ~/winrepo-prod && bash tools/refresh_env.sh"
