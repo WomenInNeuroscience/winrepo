@@ -14,20 +14,36 @@
 
 set -eu
 
+# Load environment from .env (safe parser — avoids shell-expansion issues
+# with values containing $, backticks, etc., e.g. winrepo$winrepo_prod).
+BASEDIR=$(realpath "$(dirname "$0")/..")
+if [[ -f "${BASEDIR}/.env" ]]; then
+  while IFS='=' read -r key value; do
+    [[ -z "$key" || "$key" == \#* ]] && continue
+    export "$key"="$value"
+  done < "${BASEDIR}/.env"
+fi
+
 KEEP_DAYS=30
 BACKUP_DIR="${HOME}/backups"
 TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
-BACKUP_FILE="${BACKUP_DIR}/${DB_NAME}_${TIMESTAMP}.sql.gz"
+# Sanitize DB_NAME for filename (replace $ with _)
+SAFE_DB_NAME="${DB_NAME//\$/_}"
+BACKUP_FILE="${BACKUP_DIR}/${SAFE_DB_NAME}_${TIMESTAMP}.sql.gz"
 
 mkdir -p "${BACKUP_DIR}"
 
 echo "==> Backing up ${DB_NAME}..."
+# --no-tablespaces: PythonAnywhere users lack PROCESS privilege
+# --column-statistics=0: MySQL 8 client vs older server compatibility
 mysqldump \
   -h "${DB_HOST}" \
   -u "${DB_USER}" \
   -p"${DB_PASSWORD}" \
   --single-transaction \
   --routines \
+  --no-tablespaces \
+  --column-statistics=0 \
   "${DB_NAME}" \
   | gzip > "${BACKUP_FILE}"
 
