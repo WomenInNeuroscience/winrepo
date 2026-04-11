@@ -38,6 +38,10 @@
 					</div>
 					{{ form.seen_at_conf|as_crispy_field }}
 					{{ form.comment|as_crispy_field }}
+					<div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
+						<label for="id_website">Website (leave blank)</label>
+						{{ form.website }}
+					</div>
 					{{ form.captcha }}
 
 					<div class="text-right">

@@ -36,6 +36,10 @@
 					{{ form.email|as_crispy_field }}
 					{{ form.password1|as_crispy_field }}
 					{{ form.password2|as_crispy_field }}
+					<div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
+						<label for="id_website">Website (leave blank)</label>
+						{{ form.website }}
+					</div>
 					{{ form.captcha }}
 					<div class="text-end">
 						<a class="btn btn-outline-danger pill-btn" href="{% url 'profiles:user' %}" role="button">

@@ -15,8 +15,46 @@ from django.utils.translation import gettext_lazy as _
 from .models import Profile, Recommendation, User, Publication
 
 
+# Domains observed being used by signup-spam bots on WiNRepo.
+# Extend this list as new abuse patterns are detected.
+DISPOSABLE_EMAIL_DOMAINS = frozenset({
+    'minitts.net',
+    'triol.site',
+    'prostpro.fun',
+    'gismail.online',
+    'domhost.website',
+    'cloudmails.site',
+    'tarogad.online',
+    'apacheodyssey.com',
+    'acetylcholgh.ru',
+    'rambler.ru',
+    'mnmnm.biz',
+    'bluroo.com',
+    'geruestbau.com',
+    'hornishbros.com',
+    'registry.godaddy',
+})
+
+
 class CaptchaForm(forms.Form):
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox, label=False)
+    # Honeypot: hidden field that humans leave empty but bots tend to fill.
+    # Real users never see it (hidden via CSS in the template). If a value
+    # comes through, we reject the submission silently as "spam".
+    website = forms.CharField(
+        required=False,
+        label='',
+        widget=forms.TextInput(attrs={
+            'tabindex': '-1',
+            'autocomplete': 'off',
+            'aria-hidden': 'true',
+        }),
+    )
+
+    def clean_website(self):
+        if self.cleaned_data.get('website'):
+            raise forms.ValidationError('Spam detected.')
+        return ''
 
 
 class AuthenticationForm(_AuthenticationForm):
@@ -211,6 +249,16 @@ class ProfileClaimForm(CaptchaForm, forms.Form):
 class UserCreateForm(CaptchaForm, UserCreationForm):
     username = forms.SlugField(required=True)
     email = forms.EmailField(required=True)
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '')
+        domain = email.rsplit('@', 1)[-1].lower() if '@' in email else ''
+        if domain in DISPOSABLE_EMAIL_DOMAINS:
+            raise forms.ValidationError(
+                'This email provider is not allowed. '
+                'Please use a permanent address.'
+            )
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)
