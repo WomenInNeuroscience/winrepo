@@ -100,6 +100,11 @@ class Home(ListView):
 
         return sample
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
+        return context
+
 
 class ListProfiles(ListView):
     template_name = 'profiles/list.html'

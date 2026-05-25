@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from ..models import User, Profile, Country
@@ -27,6 +27,18 @@ class SmokeTests(TestCase):
     def test_home(self):
         r = self.client.get(reverse('profiles:home'))
         self.assertEqual(r.status_code, 200)
+
+    @override_settings(GOOGLE_MAPS_API_KEY='testmapskey123')
+    def test_home_injects_maps_api_key(self):
+        # value is escapejs-encoded; an alphanumeric key passes through unchanged
+        r = self.client.get(reverse('profiles:home'))
+        self.assertContains(r, 'window.WINREPO_MAPS_API_KEY = "testmapskey123";')
+
+    @override_settings(GOOGLE_MAPS_API_KEY='')
+    def test_home_renders_without_maps_api_key(self):
+        r = self.client.get(reverse('profiles:home'))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, 'window.WINREPO_MAPS_API_KEY = "";')
 
     def test_repo_list(self):
         r = self.client.get(reverse('profiles:index'))

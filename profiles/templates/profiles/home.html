@@ -296,6 +296,7 @@
 
 {% block footer_scripts %}
 	{{ block.super }}
+	<script>window.WINREPO_MAPS_API_KEY = "{{ google_maps_api_key|escapejs }}";</script>
 	<script src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="{% static 'profiles/js/home-graphs.js' %}?v=1"></script>
 	<script src="{% static 'profiles/js/home-gtag.js' %}?v=1"></script>

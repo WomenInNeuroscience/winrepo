@@ -110,7 +110,7 @@ $(document).ready(function() {
         $.get('/api/positions/?format=json', function(data) { return preparePiecharts(data); });
     }
 
-    google.charts.load('current', { 'packages': ['corechart', 'geochart'], 'mapsApiKey': '' });
+    google.charts.load('current', { 'packages': ['corechart', 'geochart'], 'mapsApiKey': window.WINREPO_MAPS_API_KEY || '' });
     google.charts.setOnLoadCallback(init);
 
     //create trigger to resizeEnd event

@@ -10,6 +10,9 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ENV = config('ENV', default='Local')
 
+# Google Maps JS API key used by the home page geochart (front-end, referrer-restricted).
+GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')
+
 ALLOWED_HOSTS = \
     ['*'] \
     if DEBUG else \
