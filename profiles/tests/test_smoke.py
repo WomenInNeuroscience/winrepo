@@ -68,9 +68,19 @@ class SmokeTests(TestCase):
         r = self.client.get(reverse('profiles:faq'))
         self.assertEqual(r.status_code, 200)
 
-    def test_about(self):
-        r = self.client.get(reverse('profiles:about'))
+    def test_people(self):
+        r = self.client.get(reverse('profiles:people'))
         self.assertEqual(r.status_code, 200)
+
+    def test_sponsors(self):
+        r = self.client.get(reverse('profiles:sponsors'))
+        self.assertEqual(r.status_code, 200)
+
+    def test_about_redirects_to_people(self):
+        # The old /about/ URL is kept as a permanent redirect to /people/.
+        r = self.client.get(reverse('profiles:about'))
+        self.assertEqual(r.status_code, 301)
+        self.assertEqual(r['Location'], reverse('profiles:people'))
 
     def test_publications(self):
         r = self.client.get(reverse('profiles:publications'))

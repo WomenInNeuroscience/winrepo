@@ -27,11 +27,26 @@ class FaqSitemap(sitemaps.Sitemap):
 
 
 class AboutSitemap(sitemaps.Sitemap):
+    # The former "About" page is now the "People" page (under the About menu).
+    # We keep the class name so existing imports/registrations stay valid, but
+    # point it at the canonical 'profiles:people' URL instead of the old
+    # 'profiles:about' (which now only 301-redirects to People).
     priority = 0.5
     changefreq = 'yearly'
 
     def items(self):
-        return ['profiles:about']
+        return ['profiles:people']
+
+    def location(self, item):
+        return reverse(item)
+
+
+class SponsorsSitemap(sitemaps.Sitemap):
+    priority = 0.5
+    changefreq = 'yearly'
+
+    def items(self):
+        return ['profiles:sponsors']
 
     def location(self, item):
         return reverse(item)

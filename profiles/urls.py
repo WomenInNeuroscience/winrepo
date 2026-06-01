@@ -1,15 +1,15 @@
-
 import os
 from datetime import datetime
 from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic import TemplateView
+from django.views.generic.base import RedirectView
 from django.contrib.auth.views import LogoutView
 
 from rest_framework import routers
 
 from .sitemaps import HomeSitemap, FaqSitemap, AboutSitemap, \
-     ListSitemap, ProfilesSitemap
+     SponsorsSitemap, ListSitemap, ProfilesSitemap
 from . import views
 
 router = routers.DefaultRouter()
@@ -23,6 +23,7 @@ sitemaps = {
     'list': ListSitemap,
     'faq': FaqSitemap,
     'about': AboutSitemap,
+    'sponsors': SponsorsSitemap,
     'profiles': ProfilesSitemap,
 }
 
@@ -36,8 +37,11 @@ tips_updated_at = datetime.fromtimestamp(
 faq_updated_at = datetime.fromtimestamp(
     os.path.getmtime('profiles/templates/profiles/faq.html')
 )
-about_updated_at = datetime.fromtimestamp(
-    os.path.getmtime('profiles/templates/profiles/about.html')
+people_updated_at = datetime.fromtimestamp(
+    os.path.getmtime('profiles/templates/profiles/people.html')
+)
+sponsors_updated_at = datetime.fromtimestamp(
+    os.path.getmtime('profiles/templates/profiles/sponsors.html')
 )
 transparency_calculator_updated_at = datetime.fromtimestamp(
     os.path.getmtime('profiles/templates/profiles/transparency_calculator.html')
@@ -63,10 +67,16 @@ urlpatterns = [
         template_name='profiles/tips.html',
         extra_context={'updated_at': tips_updated_at}
     ), name='tips'),
-    path('about/', TemplateView.as_view(
-        template_name='profiles/about.html',
-        extra_context={'updated_at': about_updated_at}
-    ), name='about'),
+    path('people/', TemplateView.as_view(
+        template_name='profiles/people.html',
+        extra_context={'updated_at': people_updated_at}
+    ), name='people'),
+    path('sponsors/', TemplateView.as_view(
+        template_name='profiles/sponsors.html',
+        extra_context={'updated_at': sponsors_updated_at}
+    ), name='sponsors'),
+    # Keep the old /about/ URL working: permanently redirect it to /people/.
+    path('about/', RedirectView.as_view(pattern_name='profiles:people', permanent=True), name='about'),
     path('academic_advice/', TemplateView.as_view(
         template_name='profiles/academic_advice.html',
         extra_context={'updated_at': academic_advice_updated_at}
