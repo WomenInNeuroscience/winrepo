@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 from decouple import config
 
@@ -9,6 +10,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ENV = config('ENV', default='Local')
+
+# True while running the Django test suite (manage.py test).
+TESTING = 'test' in sys.argv
 
 # Google Maps JS API key used by the home page geochart (front-end, referrer-restricted).
 GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')
@@ -221,6 +225,17 @@ SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
 SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=0, cast=int)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True, cast=bool)
 SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', default=True, cast=bool)
+
+# --- Rate limiting (django-ratelimit) ---
+# Protects the login endpoint from brute force. Disabled automatically under
+# the test runner so it can't interfere with other tests; the dedicated
+# rate-limit tests re-enable it explicitly. Acts as a kill-switch in prod:
+# set RATELIMIT_ENABLE=false if it ever causes trouble. Counters use Django's
+# default (local-memory) cache — per-process, but enough to blunt brute force.
+RATELIMIT_ENABLE = config('RATELIMIT_ENABLE', default=not TESTING, cast=bool)
+# Per-IP limit on login POSTs. Generous enough for shared/NAT'd networks
+# (universities) while still bounding password-guessing.
+LOGIN_RATELIMIT = config('LOGIN_RATELIMIT', default='10/m')
 
 SITE_ID = config('SITE_ID', cast=int, default=1)
 ROBOTS_CACHE_TIMEOUT = 60 * 60 * 24

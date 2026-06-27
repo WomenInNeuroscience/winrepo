@@ -36,6 +36,7 @@ from django.views.generic import (
     TemplateView,
 )
 from django.views.generic.edit import ModelFormMixin
+from django_ratelimit.decorators import ratelimit
 from rest_framework import viewsets
 
 from dal.autocomplete import Select2QuerySetView
@@ -203,6 +204,16 @@ class ProfileDetail(DetailView):
     query_pk_and_slug = True
 
 
+def _login_ratelimit_rate(group, request):
+    # Read the rate from settings at call time so it can be tuned via env
+    # (LOGIN_RATELIMIT) and overridden in tests.
+    return settings.LOGIN_RATELIMIT
+
+
+@method_decorator(
+    ratelimit(key='ip', rate=_login_ratelimit_rate, method='POST', block=False),
+    name='post',
+)
 class LoginView(auth_views.LoginView):
     form_class = AuthenticationForm
 
@@ -220,6 +231,17 @@ class LoginView(auth_views.LoginView):
                     datetime.now() + timedelta(minutes=15)
                 )
         return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # The ratelimit decorator (block=False) sets request.limited; surface a
+        # friendly message and re-render instead of authenticating.
+        if getattr(request, 'limited', False):
+            messages.error(
+                request,
+                'Too many login attempts. Please wait a moment and try again.',
+            )
+            return self.form_invalid(self.get_form())
+        return super().post(request, *args, **kwargs)
 
     def get_redirect_url(self):
         return resolve_post_auth_redirect(
