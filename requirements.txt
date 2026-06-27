@@ -24,9 +24,9 @@ django-crispy-forms==1.14.0
 crispy-bootstrap5==0.6
 django-extensions==3.1.1
 django-multiselectfield==0.1.12
+django-ratelimit==4.1.0
 django-recaptcha==2.0.6
 django-robots==6.1
-django-sendgrid-v5==1.1.1
 
 # MySQL (production)
 mysqlclient>=2.1

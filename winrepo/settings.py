@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 from decouple import config
 
@@ -9,6 +10,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ENV = config('ENV', default='Local')
+
+# True while running the Django test suite (manage.py test).
+TESTING = 'test' in sys.argv
 
 # Google Maps JS API key used by the home page geochart (front-end, referrer-restricted).
 GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')
@@ -185,9 +189,10 @@ RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_DOMAIN = config('RECAPTCHA_DOMAIN')
 
+# Email is sent over plain SMTP. Production uses Brevo's relay
+# (smtp-relay.brevo.com:587, TLS); set EMAIL_HOST/PORT/USER/PASSWORD in the
+# environment. Local dev leaves these empty and prints to the console.
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
-SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 EMAIL_HOST = config('EMAIL_HOST', default='')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
@@ -199,6 +204,40 @@ EMAIL_TIMEOUT = config('EMAIL_TIMEOUT', default=60, cast=int)
 EMAIL_FROM = config('DEFAULT_FROM_EMAIL')
 EMAIL_REPLY_TO = config('DEFAULT_REPLY_TO_EMAIL')
 EMAIL_SUBJECT_PREFIX = 'WiNRepo - '
+
+# --- Security headers (Django deployment checklist) ---
+# Always on — safe in both dev and prod, no HTTPS dependency:
+SECURE_CONTENT_TYPE_NOSNIFF = True       # X-Content-Type-Options: nosniff
+SECURE_REFERRER_POLICY = 'same-origin'   # Referrer-Policy
+X_FRAME_OPTIONS = 'DENY'                  # clickjacking (middleware already enabled)
+
+# HTTPS hardening — only outside local dev (DEBUG) so http://localhost keeps
+# working. winrepo.org is served over HTTPS; PythonAnywhere terminates TLS at
+# its proxy and forwards X-Forwarded-Proto, which we trust here.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+# HSTS and the HTTP->HTTPS redirect are env-gated (default off) so they can be
+# switched on deliberately once verified on PythonAnywhere — an unverified
+# SSL redirect behind a proxy can cause a redirect loop, and HSTS is a
+# hard browser commitment for its full duration.
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=0, cast=int)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True, cast=bool)
+SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', default=True, cast=bool)
+
+# --- Rate limiting (django-ratelimit) ---
+# Protects the login endpoint from brute force. Disabled automatically under
+# the test runner so it can't interfere with other tests; the dedicated
+# rate-limit tests re-enable it explicitly. Acts as a kill-switch in prod:
+# set RATELIMIT_ENABLE=false if it ever causes trouble. Counters use Django's
+# default (local-memory) cache — per-process, but enough to blunt brute force.
+# Force-disabled under the test runner (regardless of env) so it can't make
+# other tests flaky; the dedicated rate-limit tests re-enable it explicitly.
+RATELIMIT_ENABLE = config('RATELIMIT_ENABLE', default=True, cast=bool) and not TESTING
+# Per-IP limit on login POSTs. Generous enough for shared/NAT'd networks
+# (universities) while still bounding password-guessing.
+LOGIN_RATELIMIT = config('LOGIN_RATELIMIT', default='10/m')
 
 SITE_ID = config('SITE_ID', cast=int, default=1)
 ROBOTS_CACHE_TIMEOUT = 60 * 60 * 24

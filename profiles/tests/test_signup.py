@@ -1,6 +1,7 @@
 from http import HTTPStatus
 from unittest.mock import patch
 
+from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
 
@@ -21,10 +22,16 @@ class SignupEmailFailureTests(TestCase):
         }
 
     def test_signup_sends_email(self):
-        """Normal signup sends a confirmation email."""
+        """Normal signup dispatches a confirmation email to the new address.
+
+        Backend-agnostic: asserts the message actually reaches the outbox, so
+        the SendGrid->Brevo backend swap is provably non-breaking.
+        """
         response = self.client.post(reverse('profiles:signup'), data=self._signup_data())
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertTrue(User.objects.filter(email='new@test.com').exists())
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('new@test.com', mail.outbox[0].to)
 
     @patch('profiles.views.user_create_confirm_email')
     def test_signup_survives_email_failure(self, mock_email):
@@ -110,3 +117,15 @@ class SignupDisposableEmailTests(TestCase):
         )
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertTrue(User.objects.filter(email='real@stanford.edu').exists())
+
+    def test_allows_rambler(self):
+        """rambler.ru is a mainstream webmail provider, not disposable —
+        blocking it rejects legitimate researchers."""
+        response = self.client.post(
+            reverse('profiles:signup'),
+            data=self._signup_data('researcher@rambler.ru'),
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertTrue(
+            User.objects.filter(email='researcher@rambler.ru').exists()
+        )
