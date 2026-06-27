@@ -201,6 +201,27 @@ EMAIL_FROM = config('DEFAULT_FROM_EMAIL')
 EMAIL_REPLY_TO = config('DEFAULT_REPLY_TO_EMAIL')
 EMAIL_SUBJECT_PREFIX = 'WiNRepo - '
 
+# --- Security headers (Django deployment checklist) ---
+# Always on — safe in both dev and prod, no HTTPS dependency:
+SECURE_CONTENT_TYPE_NOSNIFF = True       # X-Content-Type-Options: nosniff
+SECURE_REFERRER_POLICY = 'same-origin'   # Referrer-Policy
+X_FRAME_OPTIONS = 'DENY'                  # clickjacking (middleware already enabled)
+
+# HTTPS hardening — only outside local dev (DEBUG) so http://localhost keeps
+# working. winrepo.org is served over HTTPS; PythonAnywhere terminates TLS at
+# its proxy and forwards X-Forwarded-Proto, which we trust here.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+# HSTS and the HTTP->HTTPS redirect are env-gated (default off) so they can be
+# switched on deliberately once verified on PythonAnywhere — an unverified
+# SSL redirect behind a proxy can cause a redirect loop, and HSTS is a
+# hard browser commitment for its full duration.
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=0, cast=int)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True, cast=bool)
+SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', default=True, cast=bool)
+
 SITE_ID = config('SITE_ID', cast=int, default=1)
 ROBOTS_CACHE_TIMEOUT = 60 * 60 * 24
 
