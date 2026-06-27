@@ -117,3 +117,15 @@ class SignupDisposableEmailTests(TestCase):
         )
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertTrue(User.objects.filter(email='real@stanford.edu').exists())
+
+    def test_allows_rambler(self):
+        """rambler.ru is a mainstream webmail provider, not disposable —
+        blocking it rejects legitimate researchers."""
+        response = self.client.post(
+            reverse('profiles:signup'),
+            data=self._signup_data('researcher@rambler.ru'),
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertTrue(
+            User.objects.filter(email='researcher@rambler.ru').exists()
+        )
