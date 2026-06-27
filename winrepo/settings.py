@@ -232,7 +232,9 @@ SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', default=True, cast=bool)
 # rate-limit tests re-enable it explicitly. Acts as a kill-switch in prod:
 # set RATELIMIT_ENABLE=false if it ever causes trouble. Counters use Django's
 # default (local-memory) cache — per-process, but enough to blunt brute force.
-RATELIMIT_ENABLE = config('RATELIMIT_ENABLE', default=not TESTING, cast=bool)
+# Force-disabled under the test runner (regardless of env) so it can't make
+# other tests flaky; the dedicated rate-limit tests re-enable it explicitly.
+RATELIMIT_ENABLE = config('RATELIMIT_ENABLE', default=True, cast=bool) and not TESTING
 # Per-IP limit on login POSTs. Generous enough for shared/NAT'd networks
 # (universities) while still bounding password-guessing.
 LOGIN_RATELIMIT = config('LOGIN_RATELIMIT', default='10/m')
