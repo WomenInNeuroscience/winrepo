@@ -1,4 +1,3 @@
-from datetime import datetime
 from allauth.utils import email_address_exists
 from django.conf import settings
 from django.shortcuts import redirect, resolve_url
@@ -7,6 +6,8 @@ from allauth.account.adapter import DefaultAccountAdapter, get_adapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.exceptions import ImmediateHttpResponse
 from allauth.socialaccount import providers
+
+from .redirects import resolve_post_auth_redirect
 
 
 class AccountAdapter(DefaultAccountAdapter):
@@ -34,18 +35,9 @@ class AccountAdapter(DefaultAccountAdapter):
 
     def get_login_redirect_url(self, request):
         assert request.user.is_authenticated
-
-        # TODO deduplicate code with views.py
-        if request.session.get('next') and \
-            request.session.get('next_expiration'):
-
-            if datetime.timestamp(datetime.now()) < request.session['next_expiration']:
-                return request.session.get('next')
-
-        if self.request.session.get('first_login', False):
-            return resolve_url('profiles:user_profile')
-
-        return resolve_url(settings.LOGIN_REDIRECT_URL)
+        return resolve_post_auth_redirect(
+            request.session, resolve_url(settings.LOGIN_REDIRECT_URL)
+        )
 
     def respond_user_inactive(self, request, user):
         messages.warning(request, "Your account is inactive. Please check your email for the activation link.")

@@ -59,6 +59,7 @@ from .forms import (
     UserProfileForm,
 )
 from .models import Country, Profile, Publication, Recommendation, User
+from .redirects import resolve_post_auth_redirect
 from .serializers import (
     CountrySerializer, PositionsCountSerializer, ProfileSearchSerializer,
 )
@@ -221,17 +222,9 @@ class LoginView(auth_views.LoginView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_redirect_url(self):
-        if self.request.session.get('next') and \
-                self.request.session.get('next_expiration'):
-            if datetime.timestamp(
-                datetime.now()
-            ) < self.request.session['next_expiration']:
-                return self.request.session.get('next')
-
-        if self.request.session.get('first_login', False):
-            return reverse('profiles:user_profile')
-
-        return super().get_redirect_url()
+        return resolve_post_auth_redirect(
+            self.request.session, super().get_redirect_url()
+        )
 
 
 class UserProfileView(TemplateView):
@@ -568,17 +561,9 @@ class UserCreateConfirmView(TemplateView):
         return redirect('profiles:login')
 
     def get_redirect_url(self):
-        if self.request.session.get('next') and \
-                self.request.session.get('next_expiration'):
-            if datetime.timestamp(
-                datetime.now()
-            ) < self.request.session['next_expiration']:
-                return self.request.session.get('next')
-
-        if self.request.session.get('first_login', False):
-            return reverse('profiles:user_profile')
-
-        return reverse('profiles:user')
+        return resolve_post_auth_redirect(
+            self.request.session, reverse('profiles:user')
+        )
 
 
 class UserPasswordResetView(FormView):
