@@ -185,9 +185,10 @@ RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_DOMAIN = config('RECAPTCHA_DOMAIN')
 
+# Email is sent over plain SMTP. Production uses Brevo's relay
+# (smtp-relay.brevo.com:587, TLS); set EMAIL_HOST/PORT/USER/PASSWORD in the
+# environment. Local dev leaves these empty and prints to the console.
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
-SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 EMAIL_HOST = config('EMAIL_HOST', default='')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
