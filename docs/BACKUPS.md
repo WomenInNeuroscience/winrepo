@@ -105,10 +105,10 @@ If the PythonAnywhere account or app is lost entirely:
 
 The routine deploy itself is automated by `tools/refresh_env.sh` (pull, install,
 collectstatic, migrate, reload), run by the **Deploy to PythonAnywhere** GitHub
-Actions workflow. The workflow declares a `push` trigger on `main`, but pushes
-do not currently start it — deploys must be started by hand from the repo's
-**Actions** tab via **Run workflow** (`workflow_dispatch`). This is an
-organisation-level Actions setting that an org admin needs to look at.
+Actions workflow: every push to `main` runs the test suite and then deploys.
+A deploy can also be started by hand from the repo's **Actions** tab via
+**Run workflow** (`workflow_dispatch`) — useful to redeploy without a new
+commit, e.g. after changing `.env` on the server.
 
 ---
 
