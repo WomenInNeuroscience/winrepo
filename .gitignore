@@ -118,3 +118,6 @@ pylintrc
 
 # conda files
 Scripts
+
+# database dumps pulled by tools/pull_db.sh
+backups/
