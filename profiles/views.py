@@ -36,6 +36,7 @@ from django.views.generic import (
     TemplateView,
 )
 from django.views.generic.edit import ModelFormMixin
+from django_ratelimit.decorators import ratelimit
 from rest_framework import viewsets
 
 from dal.autocomplete import Select2QuerySetView
@@ -59,6 +60,7 @@ from .forms import (
     UserProfileForm,
 )
 from .models import Country, Profile, Publication, Recommendation, User
+from .redirects import resolve_post_auth_redirect
 from .serializers import (
     CountrySerializer, PositionsCountSerializer, ProfileSearchSerializer,
 )
@@ -202,6 +204,16 @@ class ProfileDetail(DetailView):
     query_pk_and_slug = True
 
 
+def _login_ratelimit_rate(group, request):
+    # Read the rate from settings at call time so it can be tuned via env
+    # (LOGIN_RATELIMIT) and overridden in tests.
+    return settings.LOGIN_RATELIMIT
+
+
+@method_decorator(
+    ratelimit(key='ip', rate=_login_ratelimit_rate, method='POST', block=False),
+    name='post',
+)
 class LoginView(auth_views.LoginView):
     form_class = AuthenticationForm
 
@@ -220,18 +232,21 @@ class LoginView(auth_views.LoginView):
                 )
         return super().dispatch(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        # The ratelimit decorator (block=False) sets request.limited; surface a
+        # friendly message and re-render instead of authenticating.
+        if getattr(request, 'limited', False):
+            messages.error(
+                request,
+                'Too many login attempts. Please wait a moment and try again.',
+            )
+            return self.form_invalid(self.get_form())
+        return super().post(request, *args, **kwargs)
+
     def get_redirect_url(self):
-        if self.request.session.get('next') and \
-                self.request.session.get('next_expiration'):
-            if datetime.timestamp(
-                datetime.now()
-            ) < self.request.session['next_expiration']:
-                return self.request.session.get('next')
-
-        if self.request.session.get('first_login', False):
-            return reverse('profiles:user_profile')
-
-        return super().get_redirect_url()
+        return resolve_post_auth_redirect(
+            self.request.session, super().get_redirect_url()
+        )
 
 
 class UserProfileView(TemplateView):
@@ -568,17 +583,9 @@ class UserCreateConfirmView(TemplateView):
         return redirect('profiles:login')
 
     def get_redirect_url(self):
-        if self.request.session.get('next') and \
-                self.request.session.get('next_expiration'):
-            if datetime.timestamp(
-                datetime.now()
-            ) < self.request.session['next_expiration']:
-                return self.request.session.get('next')
-
-        if self.request.session.get('first_login', False):
-            return reverse('profiles:user_profile')
-
-        return reverse('profiles:user')
+        return resolve_post_auth_redirect(
+            self.request.session, reverse('profiles:user')
+        )
 
 
 class UserPasswordResetView(FormView):

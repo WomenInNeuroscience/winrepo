@@ -27,7 +27,6 @@ DISPOSABLE_EMAIL_DOMAINS = frozenset({
     'tarogad.online',
     'apacheodyssey.com',
     'acetylcholgh.ru',
-    'rambler.ru',
     'mnmnm.biz',
     'bluroo.com',
     'geruestbau.com',
