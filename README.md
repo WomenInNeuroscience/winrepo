@@ -54,6 +54,11 @@ coverage report
 - Hard-reload your browser (`Ctrl+Shift+R`) to see CSS/JS changes.
 - Test responsiveness using your browser's Responsive Design Mode.
 
+## Operations
+
+- [Backups & restore runbook](docs/BACKUPS.md) — what is backed up, how to pull a
+  dump, and how to restore production.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
